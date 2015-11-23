@@ -1,0 +1,68 @@
+/* Top Navigation */
+ul.dropdown-menu li>a {
+    padding: 0;
+}
+ul.dropdown-menu li a.menu-link {
+    padding: 10px 15px;
+}
+/* Side Navigation */
+@media(min-width: 768px) {
+    .side-nav {
+        position: fixed;
+        top: 51px;
+        left: 225px;
+        bottom: 0;
+        width: 225px;
+        margin-left: -225px;
+        border-right: 1px solid #ecf0f1;
+        border-radius: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        background-color: #FFF;
+        padding-bottom: 40px;
+    }
+    .side-nav>li>a {
+        width: 225px;
+        color: #555555;
+        padding-top: 19.5px;
+        padding-bottom: 19.5px;
+    }
+    .side-nav li a:hover,
+    .side-nav li a:focus {
+        outline: none;
+        background-color: #ecf0f1;
+    }
+    .side-nav li.active>a,
+    .side-nav li.active>a:visited,
+    .side-nav li.active>a:hover,
+    .side-nav li.active>a:focus {
+        background-color: #222222;
+        color: #FFF;
+    }
+}
+.side-nav>li>ul {
+    padding: 0;
+}
+.side-nav>li>ul>li>a {
+    display: block;
+    padding: 10px 15px 10px 38px;
+    text-decoration: none;
+    color: #555555;
+}
+
+/* Main Page */
+.main-page {
+    margin: 50px 0 100px 225px;
+}
+
+/* Table */
+.table-title {
+    display: inline-block;
+    height: 36px;
+    line-height: 36px;
+    font-size: 16px;
+    font-weight: bold;
+}
+div#advertisementTable_filter #addBtn {
+    margin-left: 10px;
+}
