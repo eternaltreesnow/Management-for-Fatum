@@ -1,5 +1,6 @@
 $(function() {
     var $advertisementTable;
+    var $addBtn;
 
     var tempcolumn = [
         {"data": "No"},
@@ -150,8 +151,9 @@ $(function() {
         // dom: 'rtl<"ecg-table-paginate"p>'
     });
     $("div#advertisementTable_filter").append('<b class="table-title pull-left">广告列表</b>');
-    $("div#advertisementTable_filter").append('<a href="javascript:void(0);" id="addBtn" class="btn btn-default btn-sm">' +
+    $("div#advertisementTable_filter").append('<a href="AddAdvertisement.html"  class="btn btn-default btn-sm">' +
                                                   '<span class="glyphicon glyphicon-plus"></span>' +
                                                   '&nbsp;添加广告' +
                                               '</a>');
+
 });
