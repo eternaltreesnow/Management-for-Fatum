@@ -1,0 +1,175 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+    <head>
+        <meta http-equiv="content-type" content="text/html" charset="UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="">
+        <title>修改提现信息 | 结算管理</title>
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="../../lib/bootstrap-3.3.5-dist/cosmo/bootstrap.min.css">
+        <!-- jQuery UI -->
+        <link rel="stylesheet" href="../../lib/jquery-ui-1.11.4/jquery-ui.min.css">
+        <!-- DataTables -->
+        <link rel="stylesheet" href="../../lib/DataTables-1.10.8/css/dataTables.bootstrap.min.css">
+        <!-- Bootstrap-Datetimepicker -->
+        <link rel="stylesheet" href="../../lib/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
+        <!-- Normalize.css -->
+        <link rel="stylesheet" href="../../lib/normalize.css">
+
+        <link rel="stylesheet" href="../../static/css/frame.css">
+        <link rel="stylesheet" href="../../static/css/AddAdvertise.css">
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- Warning: Respond.js doesn't work if you view the page via file:// -->
+        <!-- [if lt IE 9]>
+            <script src="../../lib/html5shiv.min.js"></script>
+            <script src="../../lib/respond.min.js"></script>
+        <![endif] -->
+    </head>
+    <body>
+        <!-- Navigation -->
+        <div class="navbar navbar-default navbar-fixed-top header" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="container">
+                <div class="navbar-header">
+                    <a href="#" class="navbar-brand navbar-logo">
+                        <span class="navbar-logo-txt">Management Platform</span>
+                    </a>
+                </div>
+                <div class="navbar-collapse collapse" id="navbar">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown" role="presentation">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <span class="glyphicon glyphicon-user"></span>
+                                <span id="userName">{username}</span>
+                                <span class="caret"></span>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="../login.html" class="menu-link"><span class="glyphicon glyphicon-off"></span>&nbsp;退出登录</a>
+                                    </li>
+                                </ul>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Sidebar Menu Items -->
+                <div class="collapse navbar-collapse navbar-ex1-collapse">
+                    <ul class="nav side-nav">
+                        <li>
+                            <a href="../index.html">首页</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" data-toggle="collapse" data-target="#task-drop">
+                                <span>任务中心</span>
+                                <span class="caret"></span>
+                            </a>
+                            <ul id="task-drop" class="collapse">
+                                <li><a href="../TaskCenter/AdvertiseManage.html">广告管理</a></li>
+                                <li><a href="../TaskCenter/ArticleManage.html">文章管理</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" data-toggle="collapse" data-target="#article-drop">
+                                <span>文章中心</span>
+                                <span class="caret"></span>
+                            </a>
+                            <ul id="article-drop" class="collapse">
+                                <li><a href="../ArticleCenter/AdvertiseManage.html">广告管理</a></li>
+                                <li><a href="../ArticleCenter/ArticleManage.html">文章管理</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" data-toggle="collapse" data-target="#vip-drop">
+                                <span>会员信息</span>
+                                <span class="caret"></span>
+                            </a>
+                            <ul id="vip-drop" class="collapse">
+                                <li><a href="../VipCenter/VipInfo.html">基本信息</a></li>
+                                <li><a href="../VipCenter/VipCredit.html">积分信息</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" data-toggle="collapse" data-target="#account-drop">
+                                <span>结算管理</span>
+                                <span class="caret"></span>
+                            </a>
+                            <ul id="account-drop" class="">
+                                <li class="active"><a href="../BalanceCenter/CashManage.html">提现管理</a></li>
+                                <li><a href="../BalanceCenter/CheatManage.html">作弊管理</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row main-page">
+            <div class="path-navigation">
+                <ol class="breadcrumb">
+                    <li><a href="../index.html">首页</a></li>
+                    <li class="active">结算管理</li>
+                    <li><a href="CashManage.html">提现管理</a></li>
+                    <li class="active">修改提现信息</li>
+                </ol>
+            </div>
+            <div class="well container advertisement-form">
+                <form class="form-horizontal">
+                    <input type="hidden" id="cashId">
+                    <fieldset>
+                        <legend>修改提现信息</legend>
+                        <div class="form-group">
+                            <label for="inputPhone" class="col-lg-3 control-label">手机号</label>
+                            <div class="col-lg-7">
+                                <input type="text" class="form-control" id="inputPhone" placeholder="请输入手机号...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputAlipay" class="col-lg-3 control-label">支付宝账号</label>
+                            <div class="col-lg-7">
+                                <input type="text" class="form-control" id="inputAlipay" placeholder="请输入支付宝账号...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputMoney" class="col-lg-3 control-label">提现金额(元)</label>
+                            <div class="col-lg-7">
+                                <input type="text" class="form-control" id="inputMoney" placeholder="请输入积分原因...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputTime" class="col-lg-3 control-label">提现时间</label>
+                            <div class="col-lg-7">
+                                <div class="input-group date" id="datetimepicker">
+                                    <input type="text" class="form-control" id="inputTime">
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-9 col-lg-offset-3">
+                                <a href="javascript:void(0);" class="btn btn-primary" id="submitBtn">确认修改</a>
+                                <a href="CashManage.html" class="btn btn-default" id="cancerBtn">取消</a>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+
+        <!-- jQuery-2.0.3 -->
+        <script src="../../lib/jquery-2.0.3.min.js"></script>
+        <!-- Bootstrap -->
+        <script src="../../lib/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+        <!-- jQuery UI -->
+        <script src="../../lib/jquery-ui-1.11.4/jquery-ui.min.js"></script>
+        <!-- DataTables -->
+        <script src="../../lib/DataTables-1.10.8/js/jquery.dataTables.min.js"></script>
+        <script src="../../lib/DataTables-1.10.8/js/dataTables.bootstrap.min.js"></script>
+        <!-- Bootstrap-Datetimepick -->
+        <script src="../../lib/bootstrap-datetimepicker/moment/moment.js"></script>
+        <script src="../../lib/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+
+        <script src="../../static/js/BalanceCenter/EditCash.js"></script>
+    </body>
+</html>

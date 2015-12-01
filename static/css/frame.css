@@ -66,3 +66,27 @@ ul.dropdown-menu li a.menu-link {
 div#advertisementTable_filter #addBtn {
     margin-left: 10px;
 }
+
+/* Filter Container */
+.filter-container {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #E8E8E8;
+    border-radius: 2px;
+}
+.filter-container .form-inline {
+    padding: 5px 0 5px 5px;
+}
+.filter-container .form-inline:not(:first-child) {
+    border-top: 1px dashed #dedede;
+}
+.filter-container .control-label {
+    min-width: 150px;
+}
+
+/* Bootstrap-wysiwyg */
+.wysiwyg-editor {
+    min-height: 300px;
+    outline: none;
+}
