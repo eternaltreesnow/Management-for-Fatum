@@ -118,15 +118,15 @@ ul.dropdown-menu li a.menu-link {
 }
 
 /* Table */
+.table-title-container {
+    text-align: center;
+}
 .table-title {
     display: inline-block;
     height: 36px;
     line-height: 36px;
     font-size: 16px;
     font-weight: bold;
-}
-div#advertisementTable_filter #addBtn {
-    margin-left: 10px;
 }
 
 /* Filter Container */

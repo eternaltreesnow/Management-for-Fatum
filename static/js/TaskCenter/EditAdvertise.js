@@ -11,26 +11,43 @@ $(function() {
     $uploadedFile = $("#uploadedFile");
     $inputAdder = $("#inputAdder");
 
-    var $tempdata = {
-        id: "1",
-        type: "2",
-        owner: "广告主",
-        title: "标题1:",
-        nick: "别名1",
-        file: "filename1.xxxx",
-        adder: "username"
-    };
-
     /**
      * init 初始化
      */
-    $advertiseId.val($tempdata['id']);
-    $selectType.find('option[value="' + $tempdata["type"] + '"]').attr("selected", true);
-    $inputOwner.val($tempdata["owner"]);
-    $inputTitle.val($tempdata["title"]);
-    $inputNick.val($tempdata["nick"]);
-    $uploadedFile.html($tempdata["file"]);
-    $inputAdder.val($tempdata["adder"]);
+    var url = location.search;
+    if(url.indexOf("?") != -1) {
+        id = url.substr(1).split("&")[0].split("=")[1];
+        $.ajax({
+            url: "/_admin/s/:task/editadvertise",
+            type: "GET",
+            data: function(data) {
+                data.id = id;
+            },
+            dataType: "json",
+            success: function(data) {
+                if(data.error == "") {
+                    initialForm(data.advertise);
+                } else {
+                    alert(data.error);
+                }
+            },
+            error: function(data) {
+            }
+        });
+    } else {
+
+    }
+
+    function initialForm(data) {
+        $advertiseId.val(data['id']);
+        $selectType.find('option[value="' + data["type"] + '"]').attr("selected", true);
+        $inputOwner.val(data["advertiser"]);
+        $inputTitle.val(data["name"]);
+        $inputNick.val(data["alias"]);
+        $uploadedFile.html(data["image"]);
+        $inputAdder.val(data["adder"]);
+    }
+
 
     $inputOwnerHint = $("#inputOwnerHint");
     $inputTitleHint = $("#inputTitleHint");

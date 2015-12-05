@@ -2,122 +2,23 @@ $(function() {
     var $advertisementTable;
     var $linkPreview, $linkModify, $linkDelete;
     var $previewModal, $previewId, $previewContent, $previewRefresh;
+    var $searchBtn;
 
     var tempcolumn = [
-        {"data": "No"},
+        {"data": "id"},
         {"data": "type"},
         {"data": "name"},
-        {"data": "altername"},
+        {"data": "alias"},
         {"data": "status"},
         {"data": "edit"}
     ];
     var tempdata = [
         {
-            "No" : "1",
+            "id" : "1",
             "type" : "生活",
             "name" : "广告1",
-            "altername" : "ad1",
+            "alias" : "ad1",
             "status" : "上线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
-        },
-        {
-            "No" : "2",
-            "type" : "体育",
-            "name" : "广告2",
-            "altername" : "ad2",
-            "status" : "下线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
-        },
-        {
-            "No" : "3",
-            "type" : "体育",
-            "name" : "广告2",
-            "altername" : "ad2",
-            "status" : "下线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
-        },
-        {
-            "No" : "4",
-            "type" : "体育",
-            "name" : "广告2",
-            "altername" : "ad2",
-            "status" : "下线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
-        },
-        {
-            "No" : "5",
-            "type" : "体育",
-            "name" : "广告2",
-            "altername" : "ad2",
-            "status" : "下线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
-        },
-        {
-            "No" : "6",
-            "type" : "体育",
-            "name" : "广告2",
-            "altername" : "ad2",
-            "status" : "下线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
-        },
-        {
-            "No" : "7",
-            "type" : "体育",
-            "name" : "广告2",
-            "altername" : "ad2",
-            "status" : "下线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
-        },
-        {
-            "No" : "8",
-            "type" : "体育",
-            "name" : "广告2",
-            "altername" : "ad2",
-            "status" : "下线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
-        },
-        {
-            "No" : "9",
-            "type" : "体育",
-            "name" : "广告2",
-            "altername" : "ad2",
-            "status" : "下线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
-        },
-        {
-            "No" : "10",
-            "type" : "体育",
-            "name" : "广告2",
-            "altername" : "ad2",
-            "status" : "下线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
-        },
-        {
-            "No" : "11",
-            "type" : "体育",
-            "name" : "广告2",
-            "altername" : "ad2",
-            "status" : "下线",
             "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
                      '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
                      '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
@@ -128,7 +29,7 @@ $(function() {
      * 初始化表格
      * $advertisementTable 广告表格
      */
-    $advertisementTable = $("#advertisementTable");
+     $advertisementTable = $("#advertisementTable");
     $advertisementTable.DataTable({
         processing: true,
         language: {
@@ -145,17 +46,32 @@ $(function() {
             },
             "lengthMenu": '每页显示 _MENU_ 条记录'
         },
-        data: tempdata,
-        columns: tempcolumn,
         pagingType: "full_numbers",
-        dom: 'frtlp'
-        // dom: 'rtl<"ecg-table-paginate"p>'
+        dom: 'rtlp',
+        serverSide: true,
+        ajax: {
+            url: '/_admin/s/:task/advertises',
+            type: 'GET'
+        }
     });
-    $("div#advertisementTable_filter").append('<b class="table-title pull-left">广告列表</b>');
-    $("div#advertisementTable_filter").append('<a href="AddAdvertise.html"  class="btn btn-default btn-sm">' +
-                                                  '<span class="glyphicon glyphicon-plus"></span>' +
-                                                  '&nbsp;添加广告' +
-                                              '</a>');
+
+
+    $searchBtn = $("#searchBtn");
+    $searchBtn.on('click', function() {
+        var keyword = $("#searchInput").val();
+        $advertisementTable.DataTable({
+            serverSide: true,
+            ajax: {
+                url: '/_admin/s/:task/advertises',
+                type: 'GET',
+                data: function(d) {
+                    d.keyword = keyword;
+                    d.search.value = keyword;
+                    return JSON.stringify(d);
+                }
+            }
+        });
+    });
 
     $linkPreview = $('[data-link="preview"]');
     $linkModify = $('[data-link="modify"]');
@@ -223,7 +139,7 @@ $(function() {
     /**
      * [deleteAdvertisebyId 通过id删除广告]
      * @param  {String} id [广告id]
-     * @return {success} 刷新当前页面
+     * @return {success}
      * @return {error} 提示删除失败信息
      */
     function deleteAdvertisebyId(id) {
@@ -233,11 +149,11 @@ $(function() {
         $.ajax({
             async: true,
             type: "POST",
-            url: "", //补充删除广告api
+            url: "/_admin/s/:task/advertises",
             data: requestData,
             dataType: "json",
             success: function(data) {
-                location.href = "AdvertiseManage.html";
+
             },
             error: function(data) {
                 alert("删除失败，请重试...");

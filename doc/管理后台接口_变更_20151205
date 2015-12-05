@@ -1,0 +1,102 @@
+2. 广告管理相关服务
+2.1 获取广告列表
+URL: GET /_admin/s/:type/advertises
+(type: article,文章广告; task，任务广告)
+
+是否需要登录： 管理员
+
+参数:
+{
+    draw: Number,       //
+    start: Number,      //
+    length: Number,     //
+    keyword: String,    //
+}
+返回的data对象:
+{
+    "draw": Number,               //
+    "recordsTotal": Number,       //
+    "recordsFiltered": Number,    //
+    "error" : String,             //
+    "data": [
+        {
+            id: Number,         //
+            type: Number,       //
+            name: String,       //
+            alias: String,      //
+            status: Number,     //
+        },
+        {...}
+    ]
+}
+
+2.2 新建广告
+URL: POST /_admin/s/:type/advertises
+参数:
+{
+    type: Number,           // 广告分类
+    name: String,           // 广告名称
+    alias: String,          // 广告别称
+    image: File,            // 广告素材
+    advertiser: String      // 广告主
+}
+返回的data对象:
+{
+    advertise: {
+        id: Number,         // 广告id
+        type: Number,       // 广告分类
+        name: String,       // 广告名称
+        alias: String,      // 广告别称
+        image: File,        // 广告素材
+        advertiser: String  // 广告主
+        status: Number,     // 状态 1为上线，0为下线
+    }
+}
+
+2.3 编辑广告
+URL: GET /_admin/s/:task/editadvertise
+参数:
+{
+    id: Number      // 广告id
+}
+返回的data对象:
+{
+    advertise: {
+        id: Number,         // 广告id
+        type: Number,       // 广告分类
+        name: String,       // 广告名称
+        alias: String,      // 广告别称
+        image: File,        // 广告素材
+        advertiser: String  // 广告主
+        status: Number,     // 状态 1为上线，0为下线
+        adder: String       // 添加人员username
+    },
+    error: String       // 错误提示
+}
+
+2.4 修改广告
+URL: POST /_admin/s/:task/editadvertise
+参数:
+{
+    id: Number      // 广告id
+    type: Number,       // 广告分类
+    name: String,       // 广告名称
+    alias: String,      // 广告别称
+    image: File,        // 广告素材
+    advertiser: String  // 广告主
+    status: Number      // 状态 1为上线，0为下线
+}
+返回的data对象:
+{
+    advertise: {
+        id: Number,         // 广告id
+        type: Number,       // 广告分类
+        name: String,       // 广告名称
+        alias: String,      // 广告别称
+        image: File,        // 广告素材
+        advertiser: String  // 广告主
+        status: Number,     // 状态 1为上线，0为下线
+        adder: String       // 添加人员username
+    },
+    error: String       // 错误提示
+}

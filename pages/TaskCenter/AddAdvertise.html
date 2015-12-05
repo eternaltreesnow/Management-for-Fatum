@@ -111,13 +111,13 @@
                 </ol>
             </div>
             <div class="well container advertisement-form">
-                <form class="form-horizontal" id="addAdvertiseForm" action="addAdvertise">
+                <form class="form-horizontal" method="POST" id="addAdvertiseForm" action="/_admin/s/:task/advertises">
                     <fieldset>
                         <legend>添加广告</legend>
                         <div class="form-group">
                             <label for="selectType" class="col-lg-3 control-label">选择分类</label>
                             <div class="col-lg-7">
-                                <select id="selectType" name="selectType" class="form-control">
+                                <select id="selectType" name="type" class="form-control">
                                     <option value="1">分类1</option>
                                     <option value="2">分类2</option>
                                     <option value="3">分类3</option>
@@ -128,34 +128,34 @@
                         <div class="form-group">
                             <label for="inputOwner" class="col-lg-3 control-label">广告主</label>
                             <div class="col-lg-7">
-                                <input type="text" class="form-control" id="inputOwner" name="inputOwner" placeholder="请输入广告主...">
+                                <input type="text" class="form-control" id="inputOwner" name="advertiser" placeholder="请输入广告主...">
                             </div>
                             <span id="inputOwnerHint" class="col-lg-2 form-hint form-hint-nec">(*必填)</span>
                         </div>
                         <div class="form-group">
                             <label for="inputTitle" class="col-lg-3 control-label">广告名称</label>
                             <div class="col-lg-7">
-                                <input type="text" class="form-control" id="inputTitle" name="inputTitle" placeholder="请输入广告名称...">
+                                <input type="text" class="form-control" id="inputTitle" name="name" placeholder="请输入广告名称...">
                             </div>
                             <span id="inputTitleHint" class="col-lg-2 form-hint form-hint-nec">(*必填)</span>
                         </div>
                         <div class="form-group">
                             <label for="inputNick" class="col-lg-3 control-label">广告别名</label>
                             <div class="col-lg-7">
-                                <input type="text" class="form-control" id="inputNick" name="inputNick" placeholder="请输入广告别名...">
+                                <input type="text" class="form-control" id="inputNick" name="alias" placeholder="请输入广告别名...">
                             </div>
                             <span id="inputNickHint" class="col-lg-2 form-hint form-hint-opt">(选填)</span>
                         </div>
                         <div class="form-group">
                             <label for="inputFile" class="col-lg-3 control-label">广告素材</label>
                             <div class="col-lg-7">
-                                <input type="file" class="form-control" id="inputFile" name="inputFile">
+                                <input type="file" class="form-control" id="inputFile" name="image">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="inputAdder" class="col-lg-3 control-label">添加人员</label>
                             <div class="col-lg-7">
-                                <input type="text" class="form-control" id="inputAdder" name="inputAdder" disabled="disabled" value="{username}">
+                                <input type="text" class="form-control" id="inputAdder" disabled="disabled" value="{username}">
                             </div>
                         </div>
                         <div class="form-group">

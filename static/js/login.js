@@ -35,13 +35,14 @@ $(function() {
     var $loginBtn = $("#loginBtn");
     var $userName = $("#inputUsername");
     var $password = $("#inputPassword");
+    var $loginForm = $("#loginForm");
 
     $loginBtn.on('click', function() {
         var username = $userName.val();
         var password = $password.val();
-        // 验证表单后，跳转到index页面
+        // 验证表单后，提交loginForm表单
         if(checkValidateForm(username, password)) {
-            document.location = 'index.html';
+            $loginForm.submit();
         }
     });
 });

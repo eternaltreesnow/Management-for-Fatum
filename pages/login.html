@@ -23,20 +23,20 @@
     <body>
         <div class="content">
             <div class="container">
-                <form class="login-form">
+                <form class="login-form" method="POST" action="/_admin/s/login" id="loginForm">
                     <h4 class="form-header">xxxxx运维管理系统</h4>
                     <div class="form-group">
                         <label for="inputUsername" class="sr-only">用户名</label>
-                        <input type="text" id="inputUsername" class="form-control" placeholder="用户名" autofocus >
+                        <input type="text" id="inputUsername" name="username" class="form-control" placeholder="请输入用户名..." autofocus >
                     </div>
                     <div class="form-group">
                         <label for="inputPassword" class="sr-only">密码</label>
-                        <input type="password" id="inputPassword" class="form-control" placeholder="密码">
+                        <input type="password" id="inputPassword" name="password" class="form-control" placeholder="请输入密码...">
                     </div>
                     <div class="validateErrorInfo" id="validateErrorInfo"></div>
-                    <div class="checkbox">
+                    <!-- <div class="checkbox">
                         <label><input type="checkbox" value="remember-me">Remember Me</label>
-                    </div>
+                    </div> -->
                     <a href="javascript:void(0);" class="btn btn-lg btn-primary btn-block" id="loginBtn">登录</a>
                 </form>
             </div>
