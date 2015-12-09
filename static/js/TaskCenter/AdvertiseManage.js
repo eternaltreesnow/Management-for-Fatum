@@ -4,13 +4,13 @@ $(function() {
     var $previewModal, $previewId, $previewContent, $previewRefresh;
     var $searchBtn;
 
-    var tempcolumn = [
+    var column = [
         {"data": "id"},
         {"data": "type"},
         {"data": "name"},
         {"data": "alias"},
         {"data": "status"},
-        {"data": "edit"}
+        {"data": ""}
     ];
     var tempdata = [
         {
@@ -18,10 +18,7 @@ $(function() {
             "type" : "生活",
             "name" : "广告1",
             "alias" : "ad1",
-            "status" : "上线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
+            "status" : "上线"
         }
     ];
 
@@ -50,9 +47,24 @@ $(function() {
         dom: 'rtlp',
         serverSide: true,
         ajax: {
-            url: '/_admin/s/:task/advertises',
-            type: 'GET'
-        }
+            url: '/_admin/s/task/advertises',
+            type: 'GET',
+            data: function(d) {
+                delete d.columns;   // delete request parameters columns
+                delete d.order;     // delete request parameters order
+                d.limit = d.length; // reset length as limit
+                delete d.length;
+            }
+        },
+        sortClasses: false,
+        columns: column,
+        columnDefs: [ {
+            "targets" : -1,
+            "data" : null,
+            "defaultContent" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
+                               '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
+                               '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
+        }]
     });
 
 
@@ -62,7 +74,7 @@ $(function() {
         $advertisementTable.DataTable({
             serverSide: true,
             ajax: {
-                url: '/_admin/s/:task/advertises',
+                url: '/_admin/s/task/advertises',
                 type: 'GET',
                 data: function(d) {
                     d.keyword = keyword;

@@ -14,7 +14,7 @@ $(function() {
         {"data": "name"},
         {"data": "altername"},
         {"data": "status"},
-        {"data": "edit"}
+        {"data": ""}
     ];
     /**
      * [tempdata 行数据格式]
@@ -26,110 +26,70 @@ $(function() {
             "type" : "生活",
             "name" : "广告1",
             "altername" : "ad1",
-            "status" : "上线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
+            "status" : "上线"
         },
         {
             "No" : "2",
             "type" : "体育",
             "name" : "广告2",
             "altername" : "ad2",
-            "status" : "下线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
+            "status" : "下线"
         },
         {
             "No" : "3",
             "type" : "体育",
             "name" : "广告2",
             "altername" : "ad2",
-            "status" : "下线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
+            "status" : "下线"
         },
         {
             "No" : "4",
             "type" : "体育",
             "name" : "广告2",
             "altername" : "ad2",
-            "status" : "下线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
+            "status" : "下线"
         },
         {
             "No" : "5",
             "type" : "体育",
             "name" : "广告2",
             "altername" : "ad2",
-            "status" : "下线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
+            "status" : "下线"
         },
         {
             "No" : "6",
             "type" : "体育",
             "name" : "广告2",
             "altername" : "ad2",
-            "status" : "下线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
+            "status" : "下线"
         },
         {
             "No" : "7",
             "type" : "体育",
             "name" : "广告2",
             "altername" : "ad2",
-            "status" : "下线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
+            "status" : "下线"
         },
         {
             "No" : "8",
             "type" : "体育",
             "name" : "广告2",
             "altername" : "ad2",
-            "status" : "下线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
+            "status" : "下线"
         },
         {
             "No" : "9",
             "type" : "体育",
             "name" : "广告2",
             "altername" : "ad2",
-            "status" : "下线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
+            "status" : "下线"
         },
         {
             "No" : "10",
             "type" : "体育",
             "name" : "广告2",
             "altername" : "ad2",
-            "status" : "下线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
-        },
-        {
-            "No" : "11",
-            "type" : "体育",
-            "name" : "广告2",
-            "altername" : "ad2",
-            "status" : "下线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
+            "status" : "下线"
         }
     ];
 
@@ -157,8 +117,14 @@ $(function() {
         data: tempdata,
         columns: tempcolumn,
         pagingType: "full_numbers",
-        dom: 'frtlp'
-        // dom: 'rtl<"ecg-table-paginate"p>'
+        dom: 'frtlp',
+        columnDefs: [ {
+          "targets" : -1,
+          "data" : null,
+          "defaultContent" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
+                             '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
+                             '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
+        } ]
     });
     /**
      * 添加表格title, "添加广告"按钮
