@@ -5,20 +5,20 @@ $(function() {
     var $searchBtn;
 
     var column = [
-        {"data": "id"},
-        {"data": "type"},
-        {"data": "name"},
-        {"data": "alias"},
-        {"data": "status"},
-        {"data": ""}
+        {"data": "id"},         // 广告Id
+        {"data": "type"},       // 广告类型
+        {"data": "name"},       // 广告名称
+        {"data": "alias"},      // 广告别称
+        {"data": "status"},     // 广告状态
+        {"data": ""}            // 行内定义操作
     ];
     var tempdata = [
         {
             "id" : "1",
-            "type" : "生活",
+            "type" : "1",
             "name" : "广告1",
             "alias" : "ad1",
-            "status" : "上线"
+            "status" : "1"
         }
     ];
 
@@ -161,7 +161,7 @@ $(function() {
         $.ajax({
             async: true,
             type: "POST",
-            url: "/_admin/s/:task/advertises",
+            url: "/_admin/s/task/advertises",
             data: requestData,
             dataType: "json",
             success: function(data) {

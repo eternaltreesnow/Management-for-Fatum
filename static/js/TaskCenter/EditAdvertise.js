@@ -18,7 +18,7 @@ $(function() {
     if(url.indexOf("?") != -1) {
         id = url.substr(1).split("&")[0].split("=")[1];
         $.ajax({
-            url: "/_admin/s/:task/editadvertise",
+            url: "/_admin/s/task/editadvertise",
             type: "GET",
             data: function(data) {
                 data.id = id;

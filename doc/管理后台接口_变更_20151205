@@ -54,7 +54,7 @@ URL: POST /_admin/s/:type/advertises
 }
 
 2.3 编辑广告
-URL: GET /_admin/s/:task/editadvertise
+URL: GET /_admin/s/task/editadvertise
 参数:
 {
     id: Number      // 广告id
@@ -75,7 +75,7 @@ URL: GET /_admin/s/:task/editadvertise
 }
 
 2.4 修改广告
-URL: POST /_admin/s/:task/editadvertise
+URL: POST /_admin/s/task/editadvertise
 参数:
 {
     id: Number      // 广告id
