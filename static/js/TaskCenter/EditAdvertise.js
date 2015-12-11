@@ -18,7 +18,7 @@ $(function() {
     if(url.indexOf("?") != -1) {
         id = url.substr(1).split("&")[0].split("=")[1];
         $.ajax({
-            url: "/_admin/s/task/editadvertise",
+            url: "/_admin/s/task/advertise",
             type: "GET",
             data: function(data) {
                 data.id = id;
@@ -66,7 +66,7 @@ $(function() {
         var formdata = new FormData($("#editAdvertiseForm"));
         $.ajax({
             type: 'POST',
-            url: '/_admin/s/task/advertises',
+            url: '/_admin/s/task/advertises/' + $advertiseId.val(),
             // data: $("#editAdvertiseForm").serialize(),
             data: formdata,
             processData: false,         // tell jQuery not to process the data
