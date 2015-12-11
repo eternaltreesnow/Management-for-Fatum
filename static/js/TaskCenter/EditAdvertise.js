@@ -63,6 +63,22 @@ $(function() {
             $inputTitle.focus();
             return;
         }
-        $("#editAdvertiseForm").submit();
+        var formdata = new FormData($("#editAdvertiseForm"));
+        $.ajax({
+            type: 'POST',
+            url: '/_admin/s/task/advertises',
+            // data: $("#editAdvertiseForm").serialize(),
+            data: formdata,
+            processData: false,         // tell jQuery not to process the data
+            contentType: false,         // tell jQuery not to set the request header
+            success: function(data) {
+                if(data) {
+                    alert('form submitted');
+                }
+            },
+            error: function(data) {
+                alert(data.data.msg);
+            }
+        });
     });
 });

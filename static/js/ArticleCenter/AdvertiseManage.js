@@ -1,8 +1,10 @@
 $(function() {
     // 变量声明
+    var datatable;
     var $advertisementTable;
     var $linkPreview, $linkModify, $linkDelete;
     var $previewModal, $previewId, $previewContent, $previewRefresh;
+    var $searchBtn;
 
     /**
      * [tempcolumn 列数据格式]
@@ -98,7 +100,7 @@ $(function() {
      * $advertisementTable 广告表格
      */
     $advertisementTable = $("#advertisementTable");
-    $advertisementTable.DataTable({
+    datatable = $advertisementTable.DataTable({
         processing: true,
         language: {
             "search" : "内容搜索: ",
@@ -117,7 +119,7 @@ $(function() {
         data: tempdata,
         columns: tempcolumn,
         pagingType: "full_numbers",
-        dom: 'frtlp',
+        dom: 'rtlp',
         columnDefs: [ {
           "targets" : -1,
           "data" : null,
@@ -126,14 +128,12 @@ $(function() {
                              '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
         } ]
     });
-    /**
-     * 添加表格title, "添加广告"按钮
-     */
-    $("div#advertisementTable_filter").append('<b class="table-title pull-left">广告列表</b>');
-    $("div#advertisementTable_filter").append('<a href="AddAdvertise.html"  class="btn btn-default btn-sm">' +
-                                                  '<span class="glyphicon glyphicon-plus"></span>' +
-                                                  '&nbsp;添加广告' +
-                                              '</a>');
+
+    $searchBtn = $("#searchBtn");
+    $searchBtn.on('click', function() {
+        var keyword = $("#searchInput").val();
+        datatables.ajax.reload();
+    });
 
     $linkPreview = $('[data-link="preview"]');
     $linkModify = $('[data-link="modify"]');

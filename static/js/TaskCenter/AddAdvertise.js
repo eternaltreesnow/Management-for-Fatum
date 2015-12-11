@@ -30,7 +30,23 @@ $(function() {
             $inputTitle.focus();
             return;
         }
-        $("#addAdvertiseForm").submit();
+        var formdata = new FormData($("#addAdvertiseForm"));
+        $.ajax({
+            type: 'POST',
+            url: '/_admin/s/task/advertises',
+            // data: $("#addAdvertiseForm").serialize(),
+            data: formdata,
+            processData: false,         // tell jQuery not to process the data
+            contentType: false,         // tell jQuery not to set the request header
+            success: function(data) {
+                if(data) {
+                    alert('form submitted');
+                }
+            },
+            error: function(data) {
+                alert(data.data.msg);
+            }
+        });
     });
 
     $inputOwner.on('input', function() {

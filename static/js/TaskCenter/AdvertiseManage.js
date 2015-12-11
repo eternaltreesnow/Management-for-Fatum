@@ -1,4 +1,5 @@
 $(function() {
+    var datatable;
     var $advertisementTable;
     var $linkPreview, $linkModify, $linkDelete;
     var $previewModal, $previewId, $previewContent, $previewRefresh;
@@ -26,8 +27,8 @@ $(function() {
      * 初始化表格
      * $advertisementTable 广告表格
      */
-     $advertisementTable = $("#advertisementTable");
-    $advertisementTable.DataTable({
+    $advertisementTable = $("#advertisementTable");
+    datatable = $advertisementTable.DataTable({
         processing: true,
         language: {
             "search" : "内容搜索: ",
@@ -54,6 +55,9 @@ $(function() {
                 delete d.order;     // delete request parameters order
                 d.limit = d.length; // reset length as limit
                 delete d.length;
+                d.keyword = $("#searchInput").val();
+                d.search.value = $("#searchInput").val();
+                return JSON.stringify(d);
             }
         },
         sortClasses: false,
@@ -67,22 +71,9 @@ $(function() {
         }]
     });
 
-
     $searchBtn = $("#searchBtn");
     $searchBtn.on('click', function() {
-        var keyword = $("#searchInput").val();
-        $advertisementTable.DataTable({
-            serverSide: true,
-            ajax: {
-                url: '/_admin/s/task/advertises',
-                type: 'GET',
-                data: function(d) {
-                    d.keyword = keyword;
-                    d.search.value = keyword;
-                    return JSON.stringify(d);
-                }
-            }
-        });
+        datatable.ajax.reload();
     });
 
     $linkPreview = $('[data-link="preview"]');
@@ -160,7 +151,7 @@ $(function() {
         };
         $.ajax({
             async: true,
-            type: "POST",
+            type: "DELETE",
             url: "/_admin/s/task/advertises",
             data: requestData,
             dataType: "json",
