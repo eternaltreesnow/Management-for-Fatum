@@ -16,9 +16,9 @@ $(function() {
      */
     var url = location.search;
     if(url.indexOf("?") != -1) {
-        id = url.substr(1).split("&")[0].split("=")[1];
+        var id = url.substr(1).split("&")[0].split("=")[1];
         $.ajax({
-            url: "/_admin/s/task/advertise",
+            url: "/_admin/s/task/advertises",
             type: "GET",
             data: function(data) {
                 data.id = id;

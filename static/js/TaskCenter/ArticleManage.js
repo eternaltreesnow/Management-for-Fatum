@@ -1,108 +1,32 @@
 $(function() {
+    var datatable, ajaxData;
     var $articleTable;
     var $linkPreview, $linkModify, $linkDelete;
     var $previewModal, $previewId, $previewContent, $previewRefresh;
-    var $filterSearchBtn, $filterClearBtn;
-    var $selectType, $selectStatus;
+    var $searchBtn, $clearBtn;
+    var $selectType, $selectStatus, $inputKeyword;
 
-    var tempcolumn = [
-        {"data": "No"},
-        {"data": "type"},
-        {"data": "name"},
+    $selectType = $("#selectType");
+    $selectStatus = $("#selectStatus");
+    $inputKeyword = $("#inputKeyword");
+
+    var column = [
+        {"data": "id"},
+        {"data": "articleClassId"},
+        {"data": "title"},
+        {"data": "source"},
         {"data": "status"},
-        {"data": "edit"},
-        {"data": "domain"}
+        {"data": "domain"},
+        {"data": ""}
     ];
     var tempdata = [
         {
-            "No" : "1",
-            "type" : "生活",
-            "name" : "文章1",
-            "status" : "上线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>',
-             "domain" : '<a href="/article1.html">article1.html</a>'
-        },
-        {
-            "No" : "2",
-            "type" : "生活",
-            "name" : "文章2",
-            "status" : "上线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>',
-             "domain" : '<a href="/article2.html">article2.html</a>'
-        },
-        {
-            "No" : "3",
-            "type" : "生活",
-            "name" : "文章3",
-            "status" : "上线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>',
-             "domain" : '<a href="/article3.html">article3.html</a>'
-        },
-        {
-            "No" : "4",
-            "type" : "生活",
-            "name" : "文章4",
-            "status" : "上线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>',
-             "domain" : '<a href="/article4.html">article4.html</a>'
-        },
-        {
-            "No" : "5",
-            "type" : "生活",
-            "name" : "文章5",
-            "status" : "上线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>',
-             "domain" : '<a href="/article5.html">article5.html</a>'
-        },
-        {
-            "No" : "6",
-            "type" : "生活",
-            "name" : "文章6",
-            "status" : "上线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>',
-             "domain" : '<a href="/article6.html">article6.html</a>'
-        },
-        {
-            "No" : "7",
-            "type" : "生活",
-            "name" : "文章7",
-            "status" : "上线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>',
-             "domain" : '<a href="/article7.html">article7.html</a>'
-        },
-        {
-            "No" : "8",
-            "type" : "生活",
-            "name" : "文章8",
-            "status" : "上线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>',
-             "domain" : '<a href="/article8.html">article8.html</a>'
-        },
-        {
-            "No" : "9",
-            "type" : "生活",
-            "name" : "文章9",
-            "status" : "上线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>',
-             "domain" : '<a href="/article9.html">article9.html</a>'
+            "id" : "1",
+            "articleClassId" : "1",
+            "title" : "文章1",
+            "source" : "文章来源1",
+            "status" : "1",
+            "domain" : 'article1.html'
         }
     ];
 
@@ -111,7 +35,7 @@ $(function() {
      * $articleTable 文章表格
      */
     $articleTable = $("#articleTable");
-    $articleTable.DataTable({
+    datatable = $articleTable.DataTable({
         processing: true,
         language: {
             "search" : "内容搜索: ",
@@ -127,111 +51,112 @@ $(function() {
             },
             "lengthMenu": '每页显示 _MENU_ 条记录'
         },
-        data: tempdata,
-        columns: tempcolumn,
+        columns: column,
         pagingType: "full_numbers",
-        dom: 'frtlp'
-        // dom: 'rtl<"ecg-table-paginate"p>'
-    });
-    $("div#articleTable_filter").append('<b class="table-title pull-left">文章列表</b>');
-    $("div#articleTable_filter").append('<a href="AddArticle.html"  class="btn btn-default btn-sm">' +
-                                                  '<span class="glyphicon glyphicon-plus"></span>' +
-                                                  '&nbsp;添加文章' +
-                                              '</a>');
-
-    $selectType = $("#selectType");
-    $selectStatus = $("#selectStatus");
-
-    $filterSearchBtn = $("#filterSearchBtn");
-    $filterSearchBtn.on('click', function() {
-        var requestData = {
-            type: $selectType.find('option:selected').val(),
-            status: $selectStatus.find('option:selected').val()
-        };
-        $.ajax({
-            async: true,
-            type: "GET",
-            url: "searchArticleByTypeStatus", //补充搜索api
-            data: requestData,
-            dataType: "json",
-            success: function(data) {
-                // 获取搜索结果
-            },
-            error: function(data) {
-
+        dom: 'rtlp',
+        serverSide: true,
+        ajax: {
+            url: '/_admin/s/task/articles',
+            type: 'GET',
+            data: function(d) {
+                delete d.columns;
+                delete d.order;
+                d.limit = d.length;
+                delete d.length;
+                d.search.type = $selectType.val();
+                d.search.status = $selectStatus.val();
+                d.search.keyword = $inputKeyword.val();
+                d.keyword = $inputKeyword.val();
             }
+        },
+        sortClasses: false,
+        columnDefs: [{
+            "targets" : -1,
+            "data" : null,
+            "defaultContent" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
+                               '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
+                               '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
+        }],
+        initComplete: function(settings, json) {
+            bindBtnEvent();
+            ajaxData = json;
+        }
+    });
+
+    $searchBtn = $("#searchBtn");
+    $searchBtn.on('click', function() {
+        datatable.ajax.reload(function ( json ) {
+            bindBtnEvent();
+            ajaxData = json;
         });
     });
 
-    $filterClearBtn = $("#filterClearBtn");
-    $filterClearBtn.on('click', function() {
-        $selectType.find('option[value=1]').attr('selected', true);
-        $selectStatus.find('option[value=1]').attr('selected', true);
+    $clearBtn = $("#clearBtn");
+    $clearBtn.on('click', function() {
+        $selectType.find('option[value=0]').attr('selected', true);
+        $selectStatus.find('option[value=0]').attr('selected', true);
+        $inputKeyword.val('');
     });
 
-    $linkPreview = $('[data-link="preview"]');
-    $linkModify = $('[data-link="modify"]');
-    $linkDelete = $('[data-link="delete"]');
+    function bindBtnEvent() {
+        // Preview Btn
+        $linkPreview = $('[data-link="preview"]');
+        $previewModal = $("#previewModal");
+        $previewContent = $("#previewContent");
+        $previewId = $("#previewId");
+        $previewRefresh = $("#previewRefresh");
+        /**
+         * 行内"预览"按钮功能实现
+         */
+        $linkPreview.on('click', function() {
+            var $this = $(this);
+            $previewContent.html("数据加载中...");
+            $previewModal.modal('show');
+            var id = $this.parents("tr").children(":first").html();
+            $previewId.val(id);
+            getPreviewContent(ajaxData, id);
+        });
+        /**
+         * "预览"模态框"刷新"按钮功能实现
+         */
+        $previewRefresh.on('click', function() {
+            getPreviewContent(ajaxData, $previewId.val());
+        });
 
-    $previewModal = $("#previewModal");
-    $previewContent = $("#previewContent");
-    $previewId = $("#previewId");
-    $previewRefresh = $("#previewRefresh");
+        /**
+         * 行内"修改"按钮功能实现
+         */
+        $linkModify = $('[data-link="modify"]');
+        $linkModify.on('click', function() {
+            var $this = $(this);
+            var id = $this.parents("tr").children(":first").html();
+            location.href = "EditArticle.html?id=" + id;
+        });
 
-    $linkPreview.on('click', function() {
-        var $this = $(this);
-        $previewContent.html("数据加载中...");
-        $previewModal.modal('show');
-        var id = $this.parents("tr").children(":first").html();
-        $previewId.val(id);
-        var requestData = {
-            "id" : id
-        };
-        getPreviewContent(requestData);
-    });
-
-    $previewRefresh.on('click', function() {
-        var requestData = {
-            "id" : $previewId.val()
-        };
-        getPreviewContent(requestData);
-    });
-
-    /**
-     * [getPreviewContent 请求获取文章html内容]
-     * @param  {[json]} requestData [文章id]
-     * @return {success} 加载内容到modal中的previewContent
-     * @return {error} 加载请求失败提示到previewContent
-     */
-    function getPreviewContent(requestData) {
-        $.ajax({
-            async: true,
-            type: "GET",
-            url: "", //补充返回html内容api
-            data: requestData,
-            dataType: "json",
-            success: function(data) {
-                $previewContent.html(data.content);
-            },
-            error: function(data) {
-                $previewContent.html("数据加载失败, 请刷新重试...");
+        $linkDelete.on('click', function() {
+            var $this = $(this);
+            var id = $this.parents("tr").children(":first").html();
+            if(confirm("确定要删除该文章？")) {
+                deleteArticlebyId(id);
             }
         });
     }
 
-    $linkModify.on('click', function() {
-        var $this = $(this);
-        var id = $this.parents("tr").children(":first").html();
-        location.href = "EditArticle.html?id=" + id;
-    });
-
-    $linkDelete.on('click', function() {
-        var $this = $(this);
-        var id = $this.parents("tr").children(":first").html();
-        if(confirm("确定要删除该文章？")) {
-            deleteArticlebyId(id);
+    /**
+     * [getPreviewContent 请求获取文章html内容]
+     * @param  {Object} ajaxData ajax获取的表格数据
+     * @param {number} id 文章id
+     */
+    function getPreviewContent(requestData) {
+        for(var i = 0; i < ajaxData.data.length; i++) {
+            if(ajaxData.data[i].id == id) {
+                $previewContent.html(ajaxData.data[i].content);
+                return;
+            }
         }
-    });
+        $previewContent.html("无预览数据...");
+    }
+
     /**
      * [deleteArticlebyId 通过id删除文章]
      * @param  {String} id [文章id]
@@ -244,12 +169,12 @@ $(function() {
         };
         $.ajax({
             async: true,
-            type: "POST",
-            url: "", //补充删除文章api
+            type: "DELETE",
+            url: "/_admin/s/task/articles",
             data: requestData,
             dataType: "json",
             success: function(data) {
-                location.href = "ArticleManage.html";
+
             },
             error: function(data) {
                 alert("删除失败，请重试...");
