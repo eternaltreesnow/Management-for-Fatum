@@ -188,7 +188,6 @@ $(function() {
      */
     function deleteAdvertisebyId(id) {
         $.ajax({
-            async: true,
             type: "DELETE",
             url: "/_admin/s/task/advertises/" + id,
             success: function(data) {
