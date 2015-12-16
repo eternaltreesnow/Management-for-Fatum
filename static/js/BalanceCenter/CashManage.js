@@ -1,98 +1,37 @@
 $(function() {
+    var datatable;
     var $cashTable;
     var $linkCheck, $linkPass, $linkModify;
     var $checkId, $passId;
     var $checkModal, $passModal;
     var $checkModalBtn, $uncheckModalBtn, $passModalBtn, $unpassModalBtn;
 
-    var tempcolumn = [
+    $checkId = $("#checkId");
+    $checkModal = $("#checkModal");
+    $passId = $("#passId");
+    $passModal = $("#passModal");
+
+    var column = [
         {"data": "id"},
-        {"data": "phone"},
-        {"data": "alipay"},
-        {"data": "money"},
-        {"data": "date"},
-        {"data": "edit"}
+        {"data": "user.id"},
+        {"data": "user.phone"},
+        {"data": "user.alipay"},
+        {"data": "cash"},
+        {"data": "time"},
+        {"data": "profitReason"},
+        {"data": ""}
     ];
     var tempdata = [
         {
             "id" : "1",
-            "phone" : "13300000000",
-            "alipay" : "13300000000",
-            "money" : "500.00",
-            "date" : '2015/11/30 15:30',
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="check">审核</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="pass">通过</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="modify">修改</a>',
-        },
-        {
-            "id" : "2",
-            "phone" : "13300000000",
-            "alipay" : "13300000000",
-            "money" : "500.00",
-            "date" : '2015/11/30 15:30',
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="check">审核</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="pass">通过</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="modify">修改</a>',
-        },
-        {
-            "id" : "3",
-            "phone" : "13300000000",
-            "alipay" : "13300000000",
-            "money" : "500.00",
-            "date" : '2015/11/30 15:30',
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="check">审核</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="pass">通过</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="modify">修改</a>',
-        },
-        {
-            "id" : "4",
-            "phone" : "13300000000",
-            "alipay" : "13300000000",
-            "money" : "500.00",
-            "date" : '2015/11/30 15:30',
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="check">审核</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="pass">通过</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="modify">修改</a>',
-        },
-        {
-            "id" : "5",
-            "phone" : "13300000000",
-            "alipay" : "13300000000",
-            "money" : "500.00",
-            "date" : '2015/11/30 15:30',
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="check">审核</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="pass">通过</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="modify">修改</a>',
-        },
-        {
-            "id" : "6",
-            "phone" : "13300000000",
-            "alipay" : "13300000000",
-            "money" : "500.00",
-            "date" : '2015/11/30 15:30',
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="check">审核</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="pass">通过</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="modify">修改</a>',
-        },
-        {
-            "id" : "7",
-            "phone" : "13300000000",
-            "alipay" : "13300000000",
-            "money" : "500.00",
-            "date" : '2015/11/30 15:30',
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="check">审核</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="pass">通过</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="modify">修改</a>',
-        },
-        {
-            "id" : "8",
-            "phone" : "13300000000",
-            "alipay" : "13300000000",
-            "money" : "500.00",
-            "date" : '2015/11/30 15:30',
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="check">审核</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="pass">通过</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="modify">修改</a>',
+            "user" : {
+                "id" : "1",
+                "phone" : "13300000000",
+                "alipay" : "13300000000"
+            },
+            "cash" : "500.00",
+            "time" : '2015/11/30 15:30',
+            "profitReason" : "ReasonReason"
         }
     ];
 
@@ -101,7 +40,7 @@ $(function() {
      * $cashTable 广告表格
      */
     $cashTable = $("#cashTable");
-    $cashTable.DataTable({
+    datatable = $cashTable.DataTable({
         processing: true,
         language: {
             "search" : "内容搜索: ",
@@ -117,32 +56,65 @@ $(function() {
             },
             "lengthMenu": '每页显示 _MENU_ 条记录'
         },
-        data: tempdata,
-        columns: tempcolumn,
+        columns: column,
         pagingType: "full_numbers",
-        dom: 'frtlp'
+        dom: 'rtlp',
+        serverSide: true,
+        ajax: {
+            url: '/_admin/s/user_withdraw',
+            type: 'GET',
+            data: function(d) {
+                delete d.columns;
+                delete d.order;
+                d.limit = d.length;
+                delete d.length;
+                d.search.keyword = $inputKeyword.val();
+                d.keyword = $inputKeyword.val();
+            }
+        },
+        sortClasses: false,
+        columnDefs: [{
+            "targets" : -1,
+            "data" : null,
+            "defaultContent" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="check">审核</a>' +
+                               '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="pass">通过</a>' +
+                               '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="modify">修改</a>'
+        }],
+        initComplete: function(settings, json) {
+            bindBtnEvent();
+        }
     });
-    $("div#cashTable_filter").append('<b class="table-title pull-left">提现列表</b>');
 
-    $linkCheck = $('[data-link="check"]');
-    $linkPass = $('[data-link="pass"]');
-    $linkModify = $('[data-link="modify"]');
-
-    $checkId = $("#checkId");
-    $checkModal = $("#checkModal");
-    $linkCheck.on('click', function() {
-        var $this = $(this);
-        $checkId.val($this.parents("tr").children(":first").html());
-        $checkModal.modal('show');
+    $searchBtn = $("#searchBtn");
+    $searchBtn.on('click', function() {
+        datatable.ajax.reload(function ( json ) {
+            bindBtnEvent();
+        });
     });
 
-    $passId = $("#passId");
-    $passModal = $("#passModal");
-    $linkPass.on('click', function() {
-        var $this = $(this);
-        $passId.val($this.parents("tr").children(":first").html());
-        $passModal.modal('show');
-    });
+    function bindBtnEvent() {
+        $linkCheck = $('[data-link="check"]');
+        $linkPass = $('[data-link="pass"]');
+        $linkModify = $('[data-link="modify"]');
+
+        $linkCheck.on('click', function() {
+            var $this = $(this);
+            $checkId.val($this.parents("tr").children(":first").html());
+            $checkModal.modal('show');
+        });
+
+        $linkPass.on('click', function() {
+            var $this = $(this);
+            $passId.val($this.parents("tr").children(":first").html());
+            $passModal.modal('show');
+        });
+
+        $linkModify.on('click', function() {
+            var $this = $(this);
+            var id = $this.parents("tr").children(":first").html();
+            location.href = "EditCash.html?id=" + id;
+        });
+    }
 
     $checkModalBtn = $("#checkModalBtn");
     $checkModalBtn.on('click', function() {
@@ -151,9 +123,8 @@ $(function() {
             "check" : true
         };
         $.ajax({
-            async: true,
-            type: "GET",
-            url: "checkCash", //补充审核积分信息api
+            type: "POST",
+            url: "",
             data: requestData,
             dataType: "json",
             success: function(data) {
@@ -169,9 +140,8 @@ $(function() {
             "check" : false
         };
         $.ajax({
-            async: true,
-            type: "GET",
-            url: "checkCash", //补充审核积分信息api
+            type: "POST",
+            url: "",
             data: requestData,
             dataType: "json",
             success: function(data) {
@@ -187,9 +157,8 @@ $(function() {
             "check" : true
         };
         $.ajax({
-            async: true,
-            type: "GET",
-            url: "passCash", //补充通过积分信息api
+            type: "POST",
+            url: "",
             data: requestData,
             dataType: "json",
             success: function(data) {
@@ -205,9 +174,8 @@ $(function() {
             "check" : false
         };
         $.ajax({
-            async: true,
-            type: "GET",
-            url: "passCash", //补充通过积分信息api
+            type: "POST",
+            url: "",
             data: requestData,
             dataType: "json",
             success: function(data) {
@@ -215,11 +183,5 @@ $(function() {
             error: function(data) {
             }
         });
-    });
-
-    $linkModify.on('click', function() {
-        var $this = $(this);
-        var id = $this.parents("tr").children(":first").html();
-        location.href = "EditCash.html?id=" + id;
     });
 });

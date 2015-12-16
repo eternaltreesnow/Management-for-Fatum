@@ -1,36 +1,37 @@
 $(function() {
     var datatable, ajaxData;
-    var $advertisementTable;
-    var $linkPreview, $linkModify, $linkDelete;
-    var $previewModal, $previewId, $previewContent, $previewRefresh;
+    var $scheduleTable;
+    var $linkDetails, $linkModify, $linkDelete;
     var $searchBtn;
 
     var column = [
-        {"data": "id"},         // 广告Id
-        {"data": "type"},       // 广告类型
-        {"data": "name"},       // 广告名称
-        {"data": "alias"},      // 广告别称
-        {"data": "status"},     // 广告状态
+        {"data" : "id"},            // 排期Id
+        {"data" : "articleId"},     // 文章编号
+        {"data" : "advertiseId"},   // 广告编号
+        {"data" : "status"},        // 任务状态
+        {"data" : "price"},         // 单价
+        {"data" : "frequency"},     // 次数上限
+        {"data" : "usedPoint"},     // 已用点数
+        {"data" : "leftPoint"},     // 剩余点数
+        {"data" : "area"},          // 限制地区
+        {"data" : "platform"},      // 限制平台
+        {"data" : "profit"},        // 收益上限/会员
+        {"data" : "begintime"},     // 开始时间
+        {"data" : "endtime"},       // 结束时间
         {"data": ""}            // 行内定义操作
     ];
     var tempdata = [
         {
-            "id" : "1",
-            "type" : "1",
-            "name" : "广告1",
-            "alias" : "ad1",
-            "advertiser" : "d",
-            "status" : "1",
-            "image" : "imagesrc"
+
         }
     ];
 
     /**
      * 初始化表格
-     * $advertisementTable 广告表格
+     * $scheduleTable 排期表格
      */
-    $advertisementTable = $("#advertisementTable");
-    datatable = $advertisementTable.DataTable({
+    $scheduleTable = $("#scheduleTable");
+    datatable = $scheduleTable.DataTable({
         processing: true,
         language: {
             "search" : "内容搜索: ",
@@ -50,7 +51,7 @@ $(function() {
         dom: 'rtlp',
         serverSide: true,
         ajax: {
-            url: '/_admin/s/task/advertises',
+            url: '',
             type: 'GET',
             data: function(d) {
                 delete d.columns;   // delete request parameters columns
@@ -66,7 +67,7 @@ $(function() {
         columnDefs: [ {
             "targets" : -1,
             "data" : null,
-            "defaultContent" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
+            "defaultContent" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="details">详情</a>' +
                                '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
                                '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
         }],
@@ -85,28 +86,15 @@ $(function() {
     });
 
     function bindBtnEvent() {
-        // Preview Btn
-        $linkPreview = $('[data-link="preview"]');
-        $previewModal = $("#previewModal");
-        $previewContent = $("#previewContent");
-        $previewId = $("#previewId");
-        $previewRefresh = $("#previewRefresh");
+        // Details Btn
+        $linkDetails = $('[data-link="details"]');
+        $detailsModal = $("#previewModal");
         /**
-         * 行内"预览"按钮功能实现
+         * 行内"详情"按钮功能实现
          */
-        $linkPreview.on('click', function() {
+        $linkDetails.on('click', function() {
             var $this = $(this);
-            $previewContent.html("数据加载中...");
-            $previewModal.modal('show');
             var id = $this.parents("tr").children(":first").html();
-            $previewId.val(id);
-            getPreviewContent(ajaxData, id);
-        });
-        /**
-         * "预览"模态框"刷新"按钮功能实现
-         */
-        $previewRefresh.on('click', function() {
-            getPreviewContent(ajaxData, $previewId.val());
         });
 
         /**
@@ -116,7 +104,7 @@ $(function() {
         $linkModify.on('click', function() {
             var $this = $(this);
             var id = $this.parents("tr").children(":first").html();
-            location.href = "EditAdvertise.html?id=" + id;
+            location.href = "EditSchedule.html?id=" + id;
         });
 
         /**
@@ -127,7 +115,7 @@ $(function() {
             var $this = $(this);
             var id = $this.parents("tr").children(":first").html();
             if(confirm("确定要删除该广告？")) {
-                deleteAdvertisebyId(id);
+                deleteSchedulebyId(id);
             }
         });
     }
@@ -154,11 +142,11 @@ $(function() {
      * @return {success}
      * @return {error} 提示删除失败信息
      */
-    function deleteAdvertisebyId(id) {
+    function deleteSchedulebyId(id) {
         $.ajax({
             async: true,
             type: "DELETE",
-            url: "/_admin/s/task/advertises/" + id,
+            url: "" + id,
             success: function(data) {
                 if(data.code == 200) {
                     alert("删除成功!");

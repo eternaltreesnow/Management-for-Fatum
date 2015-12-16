@@ -143,7 +143,12 @@
                         <div class="form-group">
                             <label for="inputFile" class="col-lg-3 control-label">文章题图</label>
                             <div class="col-lg-7">
-                                <input type="file" class="form-control" id="inputFile" name="thumbnails">
+                                <div class="input-group">
+                                    <input type="file" class="form-control" id="inputFile" name="thumbnails">
+                                    <div class="input-group-btn">
+                                        <a href="javascript:void(0);" class="btn btn-default" id="previewBtn">预览</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -169,6 +174,57 @@
                         </div>
                     </fieldset>
                 </form>
+            </div>
+        </div>
+
+        <div id="successModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">修改成功提示</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>文章修改成功! </p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="ArticleManage.html" class="btn btn-default">返回列表</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="errorModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">提交错误提示</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p id="errorMsg"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="previewModal" class="modal fade">
+            <input type="hidden" id="previewId" value>
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">文章题图预览</h4>
+                    </div>
+                    <div class="modal-body" id="previewContent">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">返回</button>
+                    </div>
+                </div>
             </div>
         </div>
 

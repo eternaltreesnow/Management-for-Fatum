@@ -1,141 +1,42 @@
 $(function() {
+    var datatable;
     var $vipCreditTable;
     var $linkCheck, $linkPass, $linkModify;
     var $datetimepicker;
+    var $filterDate, $inputKeyword;
     var $checkId, $passId;
     var $checkModal, $passModal;
     var $checkModalBtn, $uncheckModalBtn, $passModalBtn, $unpassModalBtn;
-    var $filterDate, $filterSearchBtn, $filterClearBtn;
 
-    var tempcolumn = [
+    $filterDate = $("#filterDate");
+    $inputKeyword = $("#inputKeyword");
+    $checkId = $("#checkId");
+    $checkModal = $("#checkModal");
+    $passId = $("#passId");
+    $passModal = $("#passModal");
+
+    var column = [
         {"data": "id"},
-        {"data": "phone"},
-        {"data": "credit"},
-        {"data": "date"},
+        {"data": "user.id"},
+        {"data": "user.phone"},
+        {"data": "points"},
+        {"data": "time"},
         {"data": "reason"},
-        {"data": "task"},
-        {"data": "article"},
-        {"data": "signin"},
-        {"data": "edit"}
+        {"data": "status"},
+        {"data": ""}
     ];
     var tempdata = [
         {
             "id" : "1",
-            "phone" : "13300000000",
-            "credit" : "文章1",
-            "date" : "上线",
+            "user" : {
+                "id" : "1111",
+                "phone" : "13300000000"
+            },
+            "points" : "11",
+            "time" : "2015/12/15 15:30",
             "reason" : "因为完成xx任务获得积分",
-            "task" : "XXX任务",
-            "article" : "文章名称XXX",
-            "signin" : "已签到",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="check">审核</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="pass">通过</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="modify">修改</a>',
-        },
-        {
-            "id" : "2",
-            "phone" : "13300000000",
-            "credit" : "文章1",
-            "date" : "上线",
-            "reason" : "因为完成xx任务获得积分",
-            "task" : "XXX任务",
-            "article" : "文章名称XXX",
-            "signin" : "已签到",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="check">审核</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="pass">通过</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="modify">修改</a>',
-        },
-        {
-            "id" : "3",
-            "phone" : "13300000000",
-            "credit" : "文章1",
-            "date" : "上线",
-            "reason" : "因为完成xx任务获得积分",
-            "task" : "XXX任务",
-            "article" : "文章名称XXX",
-            "signin" : "已签到",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="check">审核</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="pass">通过</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="modify">修改</a>',
-        },
-        {
-            "id" : "4",
-            "phone" : "13300000000",
-            "credit" : "文章1",
-            "date" : "上线",
-            "reason" : "因为完成xx任务获得积分",
-            "task" : "XXX任务",
-            "article" : "文章名称XXX",
-            "signin" : "已签到",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="check">审核</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="pass">通过</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="modify">修改</a>',
-        },
-        {
-            "id" : "5",
-            "phone" : "13300000000",
-            "credit" : "文章1",
-            "date" : "上线",
-            "reason" : "因为完成xx任务获得积分",
-            "task" : "XXX任务",
-            "article" : "文章名称XXX",
-            "signin" : "已签到",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="check">审核</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="pass">通过</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="modify">修改</a>',
-        },
-        {
-            "id" : "6",
-            "phone" : "13300000000",
-            "credit" : "文章1",
-            "date" : "上线",
-            "reason" : "因为完成xx任务获得积分",
-            "task" : "XXX任务",
-            "article" : "文章名称XXX",
-            "signin" : "已签到",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="check">审核</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="pass">通过</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="modify">修改</a>',
-        },
-        {
-            "id" : "7",
-            "phone" : "13300000000",
-            "credit" : "文章1",
-            "date" : "上线",
-            "reason" : "因为完成xx任务获得积分",
-            "task" : "XXX任务",
-            "article" : "文章名称XXX",
-            "signin" : "已签到",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="check">审核</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="pass">通过</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="modify">修改</a>',
-        },
-        {
-            "id" : "8",
-            "phone" : "13300000000",
-            "credit" : "文章1",
-            "date" : "上线",
-            "reason" : "因为完成xx任务获得积分",
-            "task" : "XXX任务",
-            "article" : "文章名称XXX",
-            "signin" : "已签到",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="check">审核</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="pass">通过</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="modify">修改</a>',
-        },
-        {
-            "id" : "9",
-            "phone" : "13300000000",
-            "credit" : "文章1",
-            "date" : "上线",
-            "reason" : "因为完成xx任务获得积分",
-            "task" : "XXX任务",
-            "article" : "文章名称XXX",
-            "signin" : "已签到",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="check">审核</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="pass">通过</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="modify">修改</a>',
-        },
+            "status" : "1"
+        }
     ];
 
     /**
@@ -143,7 +44,7 @@ $(function() {
      * $vipCreditTable 积分表格
      */
     $vipCreditTable = $("#vipCreditTable");
-    $vipCreditTable.DataTable({
+    datatable = $vipCreditTable.DataTable({
         processing: true,
         language: {
             "search" : "内容搜索: ",
@@ -159,12 +60,42 @@ $(function() {
             },
             "lengthMenu": '每页显示 _MENU_ 条记录'
         },
-        data: tempdata,
-        columns: tempcolumn,
+        columns: column,
         pagingType: "full_numbers",
-        dom: 'frtlp'
+        dom: 'rtlp',
+        serverSide: true,
+        ajax: {
+            url: '/_admin/s/user_profit_details',
+            type: 'GET',
+            data: function(d) {
+                delete d.columns;
+                delete d.order;
+                d.limit = d.length;
+                delete d.length;
+                d.search.time = $filterDate.val();
+                d.search.keyword = $inputKeyword.val();
+                d.keyword = $inputKeyword.val();
+            }
+        },
+        sortClasses: false,
+        columnDefs: [{
+            "targets" : -1,
+            "data" : null,
+            "defaultContent" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="check">审核</a>' +
+                               '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="pass">通过</a>' +
+                               '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="modify">修改</a>'
+        }],
+        initComplete: function(settings, json) {
+            bindBtnEvent();
+        }
     });
-    $("div#articleTable_filter").append('<b class="table-title pull-left">积分信息列表</b>');
+
+    $searchBtn = $("#searchBtn");
+    $searchBtn.on('click', function() {
+        datatable.ajax.reload(function ( json ) {
+            bindBtnEvent();
+        });
+    });
 
     $datetimepicker = $("#datetimepicker");
     $datetimepicker.datetimepicker({
@@ -172,55 +103,29 @@ $(function() {
         format: 'YYYY/MM/DD'
     });
 
-    $filterDate = $("#filterDate");
-    $filterSearchBtn = $("#filterSearchBtn");
-    $filterSearchBtn.on('click', function() {
-        var requestData = {
-            date: $filterDate.val()
-        };
-        $.ajax({
-            async: true,
-            type: "GET",
-            url: "searchCreditByDate", //补充搜索api
-            data: requestData,
-            dataType: "json",
-            success: function(data) {
-                // 获取搜索结果
-            },
-            error: function(data) {
-            }
+    function bindBtnEvent() {
+        $linkCheck = $('[data-link="check"]');
+        $linkPass = $('[data-link="pass"]');
+        $linkModify = $('[data-link="modify"]');
+
+        $linkCheck.on('click', function() {
+            var $this = $(this);
+            $checkId.val($this.parents("tr").children(":first").html());
+            $checkModal.modal('show');
         });
-    });
-    $filterClearBtn = $("#filterClearBtn");
-    $filterClearBtn.on('click', function() {
-        $("#filterDate").val(null);
-    });
 
-    $linkCheck = $('[data-link="check"]');
-    $linkPass = $('[data-link="pass"]');
-    $linkModify = $('[data-link="modify"]');
+        $linkPass.on('click', function() {
+            var $this = $(this);
+            $passId.val($this.parents("tr").children(":first").html());
+            $passModal.modal('show');
+        });
 
-    $checkId = $("#checkId");
-    $checkModal = $("#checkModal");
-    $linkCheck.on('click', function() {
-        var $this = $(this);
-        $checkId.val($this.parents("tr").children(":first").html());
-        $checkModal.modal('show');
-    });
-
-    $passId = $("#passId");
-    $passModal = $("#passModal");
-    $linkPass.on('click', function() {
-        var $this = $(this);
-        $passId.val($this.parents("tr").children(":first").html());
-        $passModal.modal('show');
-    });
-
-    $linkModify.on('click', function() {
-        var $this = $(this);
-        var id = $this.parents("tr").children(":first").html();
-        location.href = "EditVipCredit.html?id=" + id;
-    });
+        $linkModify.on('click', function() {
+            var $this = $(this);
+            var id = $this.parents("tr").children(":first").html();
+            location.href = "EditVipCredit.html?id=" + id;
+        });
+    }
 
     $checkModalBtn = $("#checkModalBtn");
     $checkModalBtn.on('click', function() {
@@ -229,9 +134,8 @@ $(function() {
             "check" : true
         };
         $.ajax({
-            async: true,
-            type: "GET",
-            url: "checkCredit", //补充审核积分信息api
+            type: "POST",
+            url: "",
             data: requestData,
             dataType: "json",
             success: function(data) {
@@ -247,9 +151,8 @@ $(function() {
             "check" : false
         };
         $.ajax({
-            async: true,
-            type: "GET",
-            url: "checkCredit", //补充审核积分信息api
+            type: "POST",
+            url: "",
             data: requestData,
             dataType: "json",
             success: function(data) {
@@ -265,9 +168,8 @@ $(function() {
             "check" : true
         };
         $.ajax({
-            async: true,
-            type: "GET",
-            url: "passCredit", //补充通过积分信息api
+            type: "POST",
+            url: "",
             data: requestData,
             dataType: "json",
             success: function(data) {
@@ -283,9 +185,8 @@ $(function() {
             "check" : false
         };
         $.ajax({
-            async: true,
-            type: "GET",
-            url: "passCredit", //补充通过积分信息api
+            type: "POST",
+            url: "",
             data: requestData,
             dataType: "json",
             success: function(data) {

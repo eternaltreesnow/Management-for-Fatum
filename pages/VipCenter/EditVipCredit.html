@@ -118,15 +118,15 @@
                     <fieldset>
                         <legend>修改积分信息</legend>
                         <div class="form-group">
-                            <label for="inputPhone" class="col-lg-3 control-label">手机号</label>
+                            <label for="inputPhone" class="col-lg-3 control-label">用户ID</label>
                             <div class="col-lg-7">
-                                <input type="text" class="form-control" id="inputPhone" placeholder="请输入手机号...">
+                                <input type="text" class="form-control" id="userId" disabled="disabled">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="inputCredit" class="col-lg-3 control-label">积分</label>
+                            <label for="inputPoints" class="col-lg-3 control-label">积分</label>
                             <div class="col-lg-7">
-                                <input type="text" class="form-control" id="inputCredit" placeholder="请输入积分...">
+                                <input type="text" class="form-control" id="inputPoints" placeholder="请输入积分...">
                             </div>
                         </div>
                         <div class="form-group">
@@ -147,21 +147,12 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="inputTask" class="col-lg-3 control-label">任务名</label>
+                            <label for="selectStatus" class="col-lg-3 control-label">状态</label>
                             <div class="col-lg-7">
-                                <input type="text" class="form-control" id="inputTask" placeholder="请输入任务名...">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputArticle" class="col-lg-3 control-label">文章名</label>
-                            <div class="col-lg-7">
-                                <input type="text" class="form-control" id="inputArticle" placeholder="请输入文章名...">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputSignin" class="col-lg-3 control-label">签到</label>
-                            <div class="col-lg-7">
-                                <input type="text" class="form-control" id="inputSignin" placeholder="请输入签到信息...">
+                                <select id="selectStatus" name="status" class="form-control">
+                                    <option value="1">状态1</option>
+                                    <option value="2">状态2</option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">

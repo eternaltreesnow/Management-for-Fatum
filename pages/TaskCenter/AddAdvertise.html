@@ -153,12 +153,6 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="inputAdder" class="col-lg-3 control-label">添加人员</label>
-                            <div class="col-lg-7">
-                                <input type="text" class="form-control" id="inputAdder" disabled="disabled" value="{username}">
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <div class="col-lg-9 col-lg-offset-3">
                                 <a href="javascript:void(0);" class="btn btn-primary" id="submitBtn">提交</a>
                                 <a href="javascript:void(0);" class="btn btn-default" id="cancerBtn">取消</a>
@@ -166,6 +160,41 @@
                         </div>
                     </fieldset>
                 </form>
+            </div>
+        </div>
+
+        <div id="successModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">添加成功提示</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>广告成功添加! 请选择继续添加或返回广告列表。</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="AddAdvertise.html" class="btn btn-primary">继续添加</a>
+                        <a href="AdvertiseManage.html" class="btn btn-default">返回列表</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="errorModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">提交错误提示</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p id="errorMsg"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
             </div>
         </div>
 

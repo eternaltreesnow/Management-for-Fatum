@@ -109,15 +109,28 @@
                     <li class="active">提现管理</li>
                 </ol>
             </div>
+            <div class="search-container">
+                <div class="col-md-6 col-md-offset-3 input-group">
+                    <input type="text" id="searchInput" class="form-control" placeholder="请输入搜索内容...">
+                    <div class="input-group-btn">
+                        <a href="javascript:void(0);" class="btn btn-default" id="searchBtn">搜索</a>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid table-title-container">
+                <b class="table-title pull-left">提现列表</b>
+            </div>
             <div class="container-fluid table-container">
                 <table class="table table-striped table-hover table-bordered" cellspacing="0" width="100%" id="cashTable">
                     <thead>
                         <tr>
+                            <th>ID</th>
                             <th>用户ID</th>
                             <th>手机号</th>
                             <th>支付宝账号</th>
                             <th>提现金额(元)</th>
                             <th>提现时间</th>
+                            <th>积分原因</th>
                             <th>操作</th>
                         </tr>
                     </thead>

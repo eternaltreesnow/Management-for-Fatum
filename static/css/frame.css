@@ -152,3 +152,8 @@ ul.dropdown-menu li a.menu-link {
     min-height: 300px;
     outline: none;
 }
+
+/* Search Container */
+.search-container {
+    margin-bottom: 15px;
+}

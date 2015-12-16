@@ -1,151 +1,38 @@
 $(function() {
+    var datatable, ajaxData;
     var $vipInfoTable;
+    var $searchBtn;
 
-    var tempcolumn = [
+    var column = [
         {"data": "id"},
+        {"data": "avatarUrl"},
+        {"data": "nickname"},
         {"data": "phone"},
+        {"data": "email"},
         {"data": "wechat"},
         {"data": "qq"},
-        {"data": "nickname"},
         {"data": "gender"},
-        {"data": "area"},
         {"data": "alipay"},
-        {"data": "invitation"},
-        {"data": "mail"}
+        {"data": "province" + "city"},
+        {"data": "inviteCode"},
+        {"data": "status"}
     ];
     var tempdata = [
         {
             "id" : "1",
+            "nickname" : "nickname",
             "phone" : "13300000000",
+            "email" : "xxxxx@xx.com",
+            "avatarUrl" : "avatarUrl",
             "wechat" : "13300000000",
             "qq" : "555555555",
-            "nickname" : "nickname",
-            "area" : "华南地区",
-            "gender" : "男",
+            "gender" : "1",
             "alipay" : "13300000000",
-            "invitation" : "sdlk123vxcjh8lasdfj12",
-            "mail" : "xxxxx@xx.com"
-        },
-        {
-            "id" : "2",
-            "phone" : "13300000000",
-            "wechat" : "13300000000",
-            "qq" : "555555555",
-            "nickname" : "nickname",
-            "area" : "华南地区",
-            "gender" : "男",
-            "alipay" : "13300000000",
-            "invitation" : "sdlk123vxcjh8lasdfj12",
-            "mail" : "xxxxx@xx.com"
-        },
-        {
-            "id" : "3",
-            "phone" : "13300000000",
-            "wechat" : "13300000000",
-            "qq" : "555555555",
-            "nickname" : "nickname",
-            "area" : "华南地区",
-            "gender" : "男",
-            "alipay" : "13300000000",
-            "invitation" : "sdlk123vxcjh8lasdfj12",
-            "mail" : "xxxxx@xx.com"
-        },
-        {
-            "id" : "4",
-            "phone" : "13300000000",
-            "wechat" : "13300000000",
-            "qq" : "555555555",
-            "nickname" : "nickname",
-            "area" : "华南地区",
-            "gender" : "男",
-            "alipay" : "13300000000",
-            "invitation" : "sdlk123vxcjh8lasdfj12",
-            "mail" : "xxxxx@xx.com"
-        },
-        {
-            "id" : "5",
-            "phone" : "13300000000",
-            "wechat" : "13300000000",
-            "qq" : "555555555",
-            "nickname" : "nickname",
-            "area" : "华南地区",
-            "gender" : "男",
-            "alipay" : "13300000000",
-            "invitation" : "sdlk123vxcjh8lasdfj12",
-            "mail" : "xxxxx@xx.com"
-        },
-        {
-            "id" : "6",
-            "phone" : "13300000000",
-            "wechat" : "13300000000",
-            "qq" : "555555555",
-            "nickname" : "nickname",
-            "area" : "华南地区",
-            "gender" : "男",
-            "alipay" : "13300000000",
-            "invitation" : "sdlk123vxcjh8lasdfj12",
-            "mail" : "xxxxx@xx.com"
-        },
-        {
-            "id" : "7",
-            "phone" : "13300000000",
-            "wechat" : "13300000000",
-            "qq" : "555555555",
-            "nickname" : "nickname",
-            "area" : "华南地区",
-            "gender" : "男",
-            "alipay" : "13300000000",
-            "invitation" : "sdlk123vxcjh8lasdfj12",
-            "mail" : "xxxxx@xx.com"
-        },
-        {
-            "id" : "8",
-            "phone" : "13300000000",
-            "wechat" : "13300000000",
-            "qq" : "555555555",
-            "nickname" : "nickname",
-            "area" : "华南地区",
-            "gender" : "男",
-            "alipay" : "13300000000",
-            "invitation" : "sdlk123vxcjh8lasdfj12",
-            "mail" : "xxxxx@xx.com"
-        },
-        {
-            "id" : "9",
-            "phone" : "13300000000",
-            "wechat" : "13300000000",
-            "qq" : "555555555",
-            "nickname" : "nickname",
-            "area" : "华南地区",
-            "gender" : "男",
-            "alipay" : "13300000000",
-            "invitation" : "sdlk123vxcjh8lasdfj12",
-            "mail" : "xxxxx@xx.com"
-        },
-        {
-            "id" : "10",
-            "phone" : "13300000000",
-            "wechat" : "13300000000",
-            "qq" : "555555555",
-            "nickname" : "nickname",
-            "area" : "华南地区",
-            "gender" : "男",
-            "alipay" : "13300000000",
-            "invitation" : "sdlk123vxcjh8lasdfj12",
-            "mail" : "xxxxx@xx.com"
-        },
-        {
-            "id" : "11",
-            "phone" : "13300000000",
-            "wechat" : "13300000000",
-            "qq" : "555555555",
-            "nickname" : "nickname",
-            "area" : "华南地区",
-            "gender" : "男",
-            "alipay" : "13300000000",
-            "invitation" : "sdlk123vxcjh8lasdfj12",
-            "mail" : "xxxxx@xx.com"
-        },
+            "province" : "1",
+            "city" : "1",
+            "inviteCode" : "sdlk123vxcjh8lasdfj12",
+            "status" : "1"
+        }
     ];
 
     /**
@@ -153,7 +40,7 @@ $(function() {
      * $vipInfoTable 基本信息表格
      */
     $vipInfoTable = $("#vipInfoTable");
-    $vipInfoTable.DataTable({
+    datatable = $vipInfoTable.DataTable({
         processing: true,
         language: {
             "search" : "内容搜索: ",
@@ -169,11 +56,27 @@ $(function() {
             },
             "lengthMenu": '每页显示 _MENU_ 条记录'
         },
-        data: tempdata,
-        columns: tempcolumn,
         pagingType: "full_numbers",
-        dom: 'frtlp'
+        dom: 'rtlp',
+        serverSide: true,
+        ajax: {
+            url: '/_admin/s/users',
+            type: 'GET',
+            data: function(d) {
+                delete d.columns;   // delete request parameters columns
+                delete d.order;     // delete request parameters order
+                d.limit = d.length; // reset length as limit
+                delete d.length;
+                d.keyword = $("#searchInput").val();
+                d.search.value = $("#searchInput").val();
+            }
+        },
+        sortClasses: false,
+        columns: column
     });
-    $("div#articleTable_filter").append('<b class="table-title pull-left">基本信息列表</b>');
 
+    $searchBtn = $("#searchBtn");
+    $searchBtn.on('click', function() {
+        datatable.ajax.reload();
+    });
 });

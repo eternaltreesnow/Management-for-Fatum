@@ -1,15 +1,20 @@
 $(function() {
-    var $advertiseId, $selectType, $inputOwner, $inputTitle, $inputNick, $uploadedFile, $inputAdder;
+    var $advertiseId, $selectType, $inputOwner, $inputTitle, $inputNick;
     var $submitBtn;
+    var $previewBtn, $previewModal, $previewContent;
     var $inputOwnerHint, $inputTitleHint;
+    var $successModal;
+    var $errorModal, $errorMsg;
+    var advertise;
 
     $advertiseId = $("#advertiseId");
     $selectType = $("#selectType");
     $inputOwner = $("#inputOwner");
     $inputTitle = $("#inputTitle");
     $inputNick = $("#inputNick");
-    $uploadedFile = $("#uploadedFile");
-    $inputAdder = $("#inputAdder");
+    $successModal = $("#successModal");
+    $errorModal = $("#errorModal");
+    $errorMsg = $("#errorMsg");
 
     /**
      * init 初始化
@@ -18,17 +23,14 @@ $(function() {
     if(url.indexOf("?") != -1) {
         var id = url.substr(1).split("&")[0].split("=")[1];
         $.ajax({
-            url: "/_admin/s/task/advertises",
+            url: "/_admin/s/task/advertises/" + id,
             type: "GET",
-            data: function(data) {
-                data.id = id;
-            },
-            dataType: "json",
             success: function(data) {
-                if(data.error == "") {
-                    initialForm(data.advertise);
+                if(data.code == 200) {
+                    advertise = data.data.advertise;
+                    initialForm(advertise);
                 } else {
-                    alert(data.error);
+                    console.log(data.error);
                 }
             },
             error: function(data) {
@@ -44,10 +46,15 @@ $(function() {
         $inputOwner.val(data["advertiser"]);
         $inputTitle.val(data["name"]);
         $inputNick.val(data["alias"]);
-        $uploadedFile.html(data["image"]);
-        $inputAdder.val(data["adder"]);
     }
 
+    $previewModal = $("#previewModal");
+    $previewContent = $("#previewContent");
+    $previewBtn = $("#previewBtn");
+    $previewBtn.on('click', function() {
+        $previewContent.html('<div style="text-align: center;"><img src="' + advertise.image + '"></img></div>');
+        $previewModal.modal('show');
+    });
 
     $inputOwnerHint = $("#inputOwnerHint");
     $inputTitleHint = $("#inputTitleHint");
@@ -63,21 +70,27 @@ $(function() {
             $inputTitle.focus();
             return;
         }
-        var formdata = new FormData($("#editAdvertiseForm"));
+        var formdata = new FormData($("#editAdvertiseForm")[0]);
         $.ajax({
             type: 'POST',
             url: '/_admin/s/task/advertises/' + $advertiseId.val(),
-            // data: $("#editAdvertiseForm").serialize(),
+            cache: false,
             data: formdata,
             processData: false,         // tell jQuery not to process the data
             contentType: false,         // tell jQuery not to set the request header
             success: function(data) {
-                if(data) {
-                    alert('form submitted');
+                if(data.code == 200) {
+                    $successModal.modal({
+                        dropback: 'static',
+                        show: true
+                    });
+                } else {
+                    $errorMsg.html(data.error);
+                    $errorModal.modal('show');
                 }
             },
             error: function(data) {
-                alert(data.data.msg);
+                console.log(data);
             }
         });
     });

@@ -1,6 +1,10 @@
 $(function() {
+    var article;
     var $articleId, $selectType, $inputSrc, $inputTitle, $inputAdder, $inputFile, $selectStatus;
     var $submitBtn;
+    var $previewBtn, $previewModal, $previewContent;
+    var $successModal;
+    var $errorModal, $errorMsg;
 
     $articleId = $("#articleId");
     $selectType = $("#selectType");
@@ -16,21 +20,18 @@ $(function() {
     if(url.indexOf("?") != -1) {
         var id = url.substr(1).split("&")[0].split("=")[1];
         $.ajax({
-            url: "/_admin/s/task/articles/",
+            url: "/_admin/s/task/articles/" + id,
             type: "GET",
-            data: function(data) {
-                data.id = id;
-            },
-            dataType: 'json',
             success: function(data) {
-                if(data.error == "") {
-                    initialForm(data.article);
+                if(data.code == 200) {
+                    article = data.data.article;
+                    initialForm(article);
                 } else {
-                    alert(data.error);
+                    console.log(data.error);
                 }
             },
             error: function(data) {
-                alert(data.error);
+                console.log(data);
             }
         });
     }
@@ -40,32 +41,41 @@ $(function() {
         $selectType.find('option[value="' + data.type + '"]').attr('selected', true);
         $inputTitle.val(data.title);
         $inputSrc.val(data.source);
-        $inputFile.val(data.thumbnails);
         $selectStatus.find('option[value="' + data.status + '"]').attr('selected', true);
         // 未初始化富文本编辑器内容
     }
 
-    // ue.ready(function() {
-    //     ue.setContent($tempdata['content']);
-    // });
+    $previewModal = $("#previewModal");
+    $previewContent = $("#previewContent");
+    $previewBtn = $("#previewBtn");
+    $previewBtn.on('click', function() {
+        $previewContent.html('<div style="text-align: center;"><img src="' + article.thumbnails + '"></img></div>');
+        $previewModal.modal('show');
+    });
 
     $submitBtn = $("#submitBtn");
     $submitBtn.on('click', function() {
-        var formdata = new FormData($("#editArticleForm"));
+        var formdata = new FormData($("#editArticleForm")[0]);
         $.ajax({
             type: "POST",
             url: "/_admin/s/task/articles/" + $articleId.val(),
-            // data: $("#editArticleForm"),
+            cache: false,
             data: formdata,
             processData: false,
             contentTypt: false,
             success: function(data) {
-                if(data) {
-                    alert('form submitted');
+                if(data.code == 200) {
+                    $successModal.modal({
+                        dropback: 'static',
+                        show: true
+                    });
+                } else {
+                    $errorMsg.html(data.error);
+                    $errorModal.modal('show');
                 }
             },
             error: function(data) {
-                alert(data.data.msg);
+                console.log(data);
             }
         });
     });

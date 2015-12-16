@@ -1,73 +1,90 @@
 $(function() {
+    var profitDetails;
     var $inputTimePicker;
-    var $creditId, $inputPhone, $inputCredit, $inputTime, $inputReason, $inputTask, $inputArticle, $inputSignin;
+    var $creditId, $userId, $inputCredit, $inputTime, $inputReason, $selectStatus;
     var $submitBtn;
 
-    var $tempdata = {
-        id: 1,
-        phone: "13300000000",
-        credit: 30,
-        time: '2015/12/05 11:11',
-        reason: '因xxx而获得积分30',
-        task: '任务名1',
-        article: '文章名1',
-        signin: '已签到'
-    };
+    var tempdata = [
+        {
+            "id" : "1",
+            "user" : {
+                "id" : "1111",
+                "phone" : "13300000000"
+            },
+            "points" : "11",
+            "time" : "2015/12/15 15:30",
+            "reason" : "因为完成xx任务获得积分",
+            "status" : "1"
+        }
+    ];
 
     $creditId = $("#creditId");
-    $inputPhone = $("#inputPhone");
-    $inputCredit = $("#inputCredit");
+    $userId = $("#userId");
+    $inputPoints = $("#inputPoints");
     $inputTime = $("#inputTime");
     $inputReason = $("#inputReason");
-    $inputTask = $("#inputTask");
-    $inputArticle = $("#inputArticle");
-    $inputSignin = $("#inputSignin");
+    $selectStatus = $("#selectStatus");
     /**
      * init 初始化
      */
-    $creditId.val($tempdata['id']);
-    $inputPhone.val($tempdata['phone']);
-    $inputCredit.val($tempdata['credit']);
-    $inputReason.val($tempdata['reason']);
-    $inputTask.val($tempdata['task']);
-    $inputArticle.val($tempdata['article']);
-    $inputSignin.val($tempdata['signin']);
+    var url = location.search;
+    if(url.indexOf("?") != -1) {
+        var id = url.substr(1).split("&")[0].split("=")[1];
+        $.ajax({
+            url: "/_admin/s/user_profit_details/" + id,
+            type: "GET",
+            success: function(data) {
+                if(data.error == "") {
+                    profitDetails = data.profitDetails;
+                    initialForm(profitDetails);
+                } else {
+                    alert(data.error);
+                }
+            },
+            error: function(data) {
+            }
+        });
+    } else {
+
+    }
+
+    function initialForm(data) {
+        $creditId.val(data.id);
+        $userId.val(data.user.id);
+        $inputPoints.val(data.points);
+        $inputTime.val(data.time);
+        $inputReason.val(data.reason);
+        $selectStatus.find('option[value="' + data["status"] + '"]').attr("selected", true);
+    }
 
     $datetimepicker = $("#datetimepicker");
     $datetimepicker.datetimepicker({
         sideBySide: true,
         format: 'YYYY/MM/DD HH:mm',
-        defaultDate: $tempdata['time']
+        defaultDate: profitDetails['time']
     });
 
     $submitBtn = $("#submitBtn");
     $submitBtn.on('click', function() {
         var requestData = {
             id: $creditId.val(),
-            phone: $inputPhone.val(),
-            credit: $inputCredit.val(),
+            points: $inputPoints.val(),
             time: $inputTime.val(),
             reason: $inputReason.val(),
-            task: $inputTask.val(),
-            article: $inputArticle.val(),
-            signin: $inputSignin.val()
+            status: $selectStatus.val()
         };
         $.ajax({
-            async: true,
-            type: "GET",
-            url: "editVipCredit", //补充修改积分api
+            type: "POST",
+            url: "/_admin/s/user_profit_details",
             data: requestData,
             dataType: "json",
             success: function(data) {
-                if(data.type == 1) {
-                    alert("修改成功!");
-                    location.href = "VipCredit.html";
-                } else {
-                    alert("修改失败，请重试...");
+                if(data) {
+                    alert('form submitted!');
                 }
             },
             error: function(data) {
-                alert("修改失败，请重试...");
+                alert(data.data.msg);
             }
         });
     });

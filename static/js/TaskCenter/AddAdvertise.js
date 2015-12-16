@@ -2,7 +2,8 @@ $(function() {
     var $submitBtn, $cancerBtn;
     var $selectType, $inputOwner, $inputTitle, $inputNick, $inputFile;
     var $selectTypeHint, $inputOwnerHint, $inputTitleHint, $inputNickHint;
-    var $cancerModal;
+    var $successModal, $cancerModal;
+    var $errorModal, $errorMsg;
 
     $selectType = $("#selectType");
     $inputOwner = $("#inputOwner");
@@ -14,7 +15,10 @@ $(function() {
     $inputOwnerHint = $("#inputOwnerHint");
     $inputTitleHint = $("#inputTitleHint");
     $inputNickHint = $("#inputNickHint");
+    $successModal = $("#successModal");
 
+    $errorModal = $("#errorModal");
+    $errorMsg = $("#errorMsg");
 
     $submitBtn = $("#submitBtn");
     $submitBtn.on('click', function() {
@@ -30,21 +34,27 @@ $(function() {
             $inputTitle.focus();
             return;
         }
-        var formdata = new FormData($("#addAdvertiseForm"));
+        var formdata = new FormData($("#addAdvertiseForm")[0]);
         $.ajax({
             type: 'POST',
             url: '/_admin/s/task/advertises',
-            // data: $("#addAdvertiseForm").serialize(),
+            cache: false,
             data: formdata,
             processData: false,         // tell jQuery not to process the data
             contentType: false,         // tell jQuery not to set the request header
             success: function(data) {
-                if(data) {
-                    alert('form submitted');
+                if(data.code == 200) {
+                    $successModal.modal({
+                        dropback: 'static',
+                        show: true
+                    });
+                } else {
+                    $errorMsg.html(data.error);
+                    $errorModal.modal('show');
                 }
             },
             error: function(data) {
-                alert(data.data.msg);
+                console.log(data);
             }
         });
     });

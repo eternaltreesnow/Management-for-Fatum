@@ -1,7 +1,11 @@
 $(function() {
     var $submitBtn;
     var $selectType, $inputSrc, $inputTitle, $inputAdder;
-    // var ue = UE.getEditor('editorArticle');
+    var $successModal, $errorMsg, $errorModal;
+
+    $successModal = $("#successModal");
+    $errorMsg = $("#errorMsg");
+    $errorModal = $("#errorModal");
 
     $selectType = $("#selectType");
     $inputSrc = $("#inputSrc");
@@ -9,22 +13,28 @@ $(function() {
 
     $submitBtn = $("#submitBtn");
     $submitBtn.on('click', function(event) {
-        $("#time").val(event.timeStamp);
-        var formdata = new FormData($("#addArticleForm"));
+        var formdata = new FormData($("#addArticleForm")[0]);
+        formdata.append('time', event.timeStamp);
         $.ajax({
             type: "POST",
             url: "/_admin/s/task/articles",
-            // data: $("#addArticleForm").serialize(),
+            cache: false,
             data: formdata,
             processData: false,
             contentType: false,
             success: function(data) {
-                if(data) {
-                    alert('form submitted');
+                if(data.code == 200) {
+                    $successModal.modal({
+                        dropback: 'static',
+                        show: true
+                    });
+                } else {
+                    $errorMsg.html(data.error);
+                    $errorModal.modal('show');
                 }
             },
             error: function(data) {
-                alert(data.data.msg);
+                console.log(data);
             }
         });
     });

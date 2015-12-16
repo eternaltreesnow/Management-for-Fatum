@@ -171,6 +171,41 @@
             </div>
         </div>
 
+        <div id="successModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">添加成功提示</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>文章成功添加! 请选择继续添加或返回文章列表。</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="AddArticle.html" class="btn btn-primary">继续添加</a>
+                        <a href="ArticleManage.html" class="btn btn-default">返回列表</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="errorModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">提交错误提示</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p id="errorMsg"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- jQuery-2.0.3 -->
         <script src="../../lib/jquery-2.0.3.min.js"></script>
         <!-- Bootstrap -->

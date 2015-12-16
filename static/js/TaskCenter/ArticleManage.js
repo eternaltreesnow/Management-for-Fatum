@@ -51,7 +51,6 @@ $(function() {
             },
             "lengthMenu": '每页显示 _MENU_ 条记录'
         },
-        columns: column,
         pagingType: "full_numbers",
         dom: 'rtlp',
         serverSide: true,
@@ -65,10 +64,11 @@ $(function() {
                 delete d.length;
                 d.search.type = $selectType.val();
                 d.search.status = $selectStatus.val();
-                d.search.keyword = $inputKeyword.val();
+                d.search.value = $inputKeyword.val();
                 d.keyword = $inputKeyword.val();
             }
         },
+        columns: column,
         sortClasses: false,
         columnDefs: [{
             "targets" : -1,
@@ -150,7 +150,7 @@ $(function() {
     function getPreviewContent(requestData) {
         for(var i = 0; i < ajaxData.data.length; i++) {
             if(ajaxData.data[i].id == id) {
-                $previewContent.html(ajaxData.data[i].content);
+                $previewContent.html('').html(ajaxData.data[i].content);
                 return;
             }
         }
@@ -164,20 +164,22 @@ $(function() {
      * @return {error} 提示删除失败信息
      */
     function deleteArticlebyId(id) {
-        var requestData = {
-            "id" : id
-        };
         $.ajax({
-            async: true,
             type: "DELETE",
-            url: "/_admin/s/task/articles",
-            data: requestData,
-            dataType: "json",
+            url: "/_admin/s/task/articles/" + id,
             success: function(data) {
-
+                if(data.code == 200) {
+                    alert("删除成功!");
+                    datatable.ajax.reload(function ( json ) {
+                        bindBtnEvent();
+                        ajaxData = json;
+                    });
+                } else {
+                    console.log(data.error);
+                }
             },
             error: function(data) {
-                alert("删除失败，请重试...");
+                console.log(data);
             }
         });
     }
