@@ -1,8 +1,9 @@
 $(function() {
     var profitDetails;
     var $inputTimePicker;
-    var $creditId, $userId, $inputCredit, $inputTime, $inputReason, $selectStatus;
+    var $creditId, $userId, $inputCredit, $inputTime, $inputReason, $selectStatus, $time;
     var $submitBtn;
+    var $successModal, $errorModal, $errorMsg;
 
     var tempdata = [
         {
@@ -24,6 +25,8 @@ $(function() {
     $inputTime = $("#inputTime");
     $inputReason = $("#inputReason");
     $selectStatus = $("#selectStatus");
+    $time = $("#time");
+
     /**
      * init 初始化
      */
@@ -34,11 +37,11 @@ $(function() {
             url: "/_admin/s/user_profit_details/" + id,
             type: "GET",
             success: function(data) {
-                if(data.error == "") {
-                    profitDetails = data.profitDetails;
+                if(data.code == 200) {
+                    profitDetails = data.data.profitDetails;
                     initialForm(profitDetails);
                 } else {
-                    alert(data.error);
+                    console.log(data.error);
                 }
             },
             error: function(data) {
@@ -52,16 +55,15 @@ $(function() {
         $creditId.val(data.id);
         $userId.val(data.user.id);
         $inputPoints.val(data.points);
-        $inputTime.val(data.time);
         $inputReason.val(data.reason);
         $selectStatus.find('option[value="' + data["status"] + '"]').attr("selected", true);
+        $datetimepicker.data('DateTimePicker').defaultDate(moment(data.time).format('YYYY-MM-DD HH:mm'));
     }
 
     $datetimepicker = $("#datetimepicker");
     $datetimepicker.datetimepicker({
         sideBySide: true,
-        format: 'YYYY/MM/DD HH:mm',
-        defaultDate: profitDetails['time']
+        format: 'YYYY/MM/DD HH:mm'
     });
 
     $submitBtn = $("#submitBtn");
@@ -73,18 +75,26 @@ $(function() {
             reason: $inputReason.val(),
             status: $selectStatus.val()
         };
+        $time.val(moment($inputTime.val()).format('x'));
+        var formdata = new FormData($("#creditForm")[0]);
         $.ajax({
             type: "POST",
-            url: "/_admin/s/user_profit_details",
-            data: requestData,
-            dataType: "json",
+            url: "/_admin/s/user_profit_details/" + $creditId.val(),
+            data: formdata,
+            cache: false,
             success: function(data) {
-                if(data) {
-                    alert('form submitted!');
+                if(data.code == 200) {
+                    $successModal.modal({
+                        backdrop: 'static',
+                        show: true
+                    });
+                } else {
+                    $errorMsg.html(data.error);
+                    $errorModal.modal('show');
                 }
             },
             error: function(data) {
-                alert(data.data.msg);
+                console.log(data);
             }
         });
     });

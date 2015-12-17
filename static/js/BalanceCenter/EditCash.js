@@ -1,8 +1,9 @@
 $(function() {
     var withdraws;
     var $inputTimePicker;
-    var $cashId, $userId, $inputAlipay, $inputCash, $inputTime, $inputReason;
+    var $cashId, $userId, $inputAlipay, $inputCash, $time, $inputTime, $inputReason;
     var $submitBtn;
+    var $successModal, $errorModal, $errorMsg;
 
     var $tempdata = {
         id: 1,
@@ -22,6 +23,12 @@ $(function() {
     $inputCash = $("#inputCash");
     $inputTime = $("#inputTime");
     $inputReason = $("#inputReason");
+    $time = $("#time");
+
+    $successModal = $("#successModal");
+    $errorModal = $("#errorModal");
+    $errorMsg = $("#errorMsg");
+
     /**
      * init 初始化
      */
@@ -32,8 +39,8 @@ $(function() {
             url: "/_admin/s/user_withdraw/" + id,
             type: "GET",
             success: function(data) {
-                if(data.error == "") {
-                    withdraws = data.withdraws;
+                if(data.code == 200) {
+                    withdraws = data.data.withdraws;
                     initialForm(withdraws);
                 } else {
                     alert(data.error);
@@ -52,35 +59,37 @@ $(function() {
         $inputAlipay.val(data.alipay);
         $inputCash.val(data.cash);
         $inputReason.val(data.profitReason);
+        $datetimepicker.data('DateTimePicker').defaultDate(moment(data.time).format('YYYY-MM-DD HH:mm'));
     }
 
     $datetimepicker = $("#datetimepicker");
     $datetimepicker.datetimepicker({
         sideBySide: true,
-        format: 'YYYY/MM/DD HH:mm',
-        defaultDate: withdraws['time']
+        format: 'YYYY-MM-DD HH:mm'
     });
 
     $submitBtn = $("#submitBtn");
     $submitBtn.on('click', function() {
-        var requestData = {
-            id: $cashId.val(),
-            cash: $inputCash.val(),
-            time: $inputTime.val(),
-            profitReason : $inputReason.val()
-        };
+        $time.val(moment($inputTime.val()).format('x'));
+        var formdate = new FormDate($("#cashForm")[0]);
         $.ajax({
             type: "POST",
-            url: "/_admin/s/user_withdraw",
-            data: requestData,
-            dataType: "json",
+            url: "/_admin/s/user_withdraw/" + $cashId.val(),
+            data: formdate,
+            cache: false,
             success: function(data) {
-                if(data) {
-                    alert('form submitted!');
+                if(data.code == 200) {
+                    $successModal.modal({
+                        backdrop: 'static',
+                        show: true
+                    });
+                } else {
+                    $errorMsg.html(data.error);
+                    $errorModal.modal('show');
                 }
             },
             error: function(data) {
-                alert(data.data.msg);
+                console.log(data);
             }
         });
     });
