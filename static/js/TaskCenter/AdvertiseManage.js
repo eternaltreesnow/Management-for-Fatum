@@ -59,6 +59,11 @@ $(function() {
                 delete d.length;
                 d.keyword = $("#searchInput").val();
                 d.search.value = $("#searchInput").val();
+            },
+            dataSrc: function(json) {
+                ajaxData = json;
+                resetData(json);
+                return json.data;
             }
         },
         sortClasses: false,
@@ -72,7 +77,6 @@ $(function() {
         }],
         initComplete: function(settings, json) {
             bindBtnEvent();
-            ajaxData = json;
         }
     });
 
@@ -80,7 +84,6 @@ $(function() {
     $searchBtn.on('click', function() {
         datatable.ajax.reload( function ( json ) {
             bindBtnEvent();
-            ajaxData = json;
         });
     });
 
@@ -130,6 +133,16 @@ $(function() {
                 deleteAdvertisebyId(id);
             }
         });
+    }
+
+    function resetData(json) {
+        for(var i=0; i<json.data.length; i++) {
+            if(json.data[i]['status'] == 1) {
+                json.data[i]['status'] = '上线';
+            } else {
+                json.data[i]['status'] = '下线';
+            }
+        }
     }
 
     /**

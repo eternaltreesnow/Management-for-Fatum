@@ -72,9 +72,15 @@ $(function() {
                 delete d.order;
                 d.limit = d.length;
                 delete d.length;
-                d.search.time = $filterDate.val();
-                d.search.keyword = $inputKeyword.val();
-                d.keyword = $inputKeyword.val();
+                d.search.time = moment($filterDate.val()).format('x');
+                d.search.keyword = $("#inputKeyword").val();
+                d.keyword = $("#inputKeyword").val();
+            },
+            dataSrc: function(json) {
+                for(var i=0; i<json.data.length; i++) {
+                    json.data[i]['time'] = moment(json.data[i]['time']).format('YYYY-MM-DD HH:mm:ss');
+                }
+                return json.data;
             }
         },
         sortClasses: false,
@@ -100,7 +106,7 @@ $(function() {
     $datetimepicker = $("#datetimepicker");
     $datetimepicker.datetimepicker({
         sideBySide: true,
-        format: 'YYYY/MM/DD'
+        format: 'YYYY-MM-DD'
     });
 
     function bindBtnEvent() {

@@ -39,7 +39,7 @@
                         <li class="dropdown" role="presentation">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                 <span class="glyphicon glyphicon-user"></span>
-                                <span id="userName">{username}</span>
+                                <span id="userName"></span>
                                 <span class="caret"></span>
                                 <ul class="dropdown-menu">
                                     <li>
@@ -151,6 +151,7 @@
                             <th>编号</th>
                             <th>分类</th>
                             <th>标题</th>
+                            <th>题图</th>
                             <th>来源</th>
                             <th>状态</th>
                             <th>域名</th>
@@ -176,6 +177,22 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">离开</button>
                         <a href="javascript:void(0);" class="btn btn-primary" id="previewRefresh">刷新</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="thumbnailsModal" class="modal fade">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">文章题图预览</h4>
+                    </div>
+                    <div class="modal-body" id="thumbnailsContent">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">离开</button>
                     </div>
                 </div>
             </div>

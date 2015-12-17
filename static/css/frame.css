@@ -157,3 +157,7 @@ ul.dropdown-menu li a.menu-link {
 .search-container {
     margin-bottom: 15px;
 }
+
+[data-link=thumbnails]>img {
+    height: 50px;
+}

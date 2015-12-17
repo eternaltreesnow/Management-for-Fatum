@@ -45,7 +45,7 @@ $(function() {
             success: function(data) {
                 if(data.code == 200) {
                     $successModal.modal({
-                        dropback: 'static',
+                        backdrop: 'static',
                         show: true
                     });
                 } else {

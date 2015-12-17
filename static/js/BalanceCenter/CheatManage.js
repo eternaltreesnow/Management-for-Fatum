@@ -60,6 +60,12 @@ $(function() {
                 delete d.length;
                 d.keyword = $("#searchInput").val();
                 d.search.value = $("#searchInput").val();
+            },
+            dataSrc: function(json) {
+                for(var i=0; i<json.data.length; i++) {
+                    json.data[i]['time'] = moment(json.data[i]['time']).format('YYYY-MM-DD HH:mm:ss');
+                }
+                return json.data;
             }
         },
         sortClasses: false

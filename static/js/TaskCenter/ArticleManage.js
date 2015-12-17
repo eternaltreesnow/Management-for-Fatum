@@ -14,6 +14,7 @@ $(function() {
         {"data": "id"},
         {"data": "articleClassId"},
         {"data": "title"},
+        {"data": "thumbnails"},
         {"data": "source"},
         {"data": "status"},
         {"data": "domain"},
@@ -66,6 +67,11 @@ $(function() {
                 d.search.status = $selectStatus.val();
                 d.search.value = $inputKeyword.val();
                 d.keyword = $inputKeyword.val();
+            },
+            dataSrc: function(json) {
+                ajaxData = json;
+                resetData(json);
+                return json.data;
             }
         },
         columns: column,
@@ -79,7 +85,6 @@ $(function() {
         }],
         initComplete: function(settings, json) {
             bindBtnEvent();
-            ajaxData = json;
         }
     });
 
@@ -87,7 +92,6 @@ $(function() {
     $searchBtn.on('click', function() {
         datatable.ajax.reload(function ( json ) {
             bindBtnEvent();
-            ajaxData = json;
         });
     });
 
@@ -97,6 +101,18 @@ $(function() {
         $selectStatus.find('option[value=0]').attr('selected', true);
         $inputKeyword.val('');
     });
+
+    function resetData(json) {
+        for(var i = 0; i<json.data.length; i++) {
+            json.data[i]['thumbnails'] = '<a href="javascript:void(0);" data-link="thumbnails"><img src="' + json.data[i]['thumbnails'] + '"></img></a>';
+            json.data[i]['domain'] = '<a href="' + json.data[i]['domain'] + '">' + json.data[i]['domain'] + '</a>';
+            if(json.data[i]['status'] == 1) {
+                json.data[i]['status'] = '上线';
+            } else {
+                json.data[i]['status'] = '下线';
+            }
+        }
+    }
 
     function bindBtnEvent() {
         // Preview Btn
@@ -133,12 +149,21 @@ $(function() {
             location.href = "EditArticle.html?id=" + id;
         });
 
+        $linkDelete = $('[data-link="delete"]');
         $linkDelete.on('click', function() {
             var $this = $(this);
             var id = $this.parents("tr").children(":first").html();
             if(confirm("确定要删除该文章？")) {
                 deleteArticlebyId(id);
             }
+        });
+
+        $linkThumbnails = $('[data-link="thumbnails"]');
+        $thumbnailsModal = $("#thumbnailsModal");
+        $thumbnailsContent = $("#thumbnailsContent");
+        $linkThumbnails.on('click', function() {
+            $thumbnailsContent.html('<div style="text-align:center;"><img src="' + $(this).children().attr('src') + '"></img></div>');
+            $thumbnailsModal.modal('show');
         });
     }
 
@@ -147,7 +172,7 @@ $(function() {
      * @param  {Object} ajaxData ajax获取的表格数据
      * @param {number} id 文章id
      */
-    function getPreviewContent(requestData) {
+    function getPreviewContent(ajaxData, id) {
         for(var i = 0; i < ajaxData.data.length; i++) {
             if(ajaxData.data[i].id == id) {
                 $previewContent.html('').html(ajaxData.data[i].content);
@@ -172,7 +197,6 @@ $(function() {
                     alert("删除成功!");
                     datatable.ajax.reload(function ( json ) {
                         bindBtnEvent();
-                        ajaxData = json;
                     });
                 } else {
                     console.log(data.error);
