@@ -1,4 +1,23 @@
 $(function() {
+    $("#userName").text(localStorage['user']);
+    $("#logoutBtn").on('click', function() {
+        $.ajax({
+            url: "/_admin/s/logout",
+            type: 'GET',
+            success: function(data) {
+                if(data.code == 200) {
+                    localStorage.removeItem('user');
+                    location.href = '../index.html';
+                } else {
+                    console.log(data.error);
+                }
+            },
+            error: function(data) {
+                console.log(data.error);
+            }
+        });
+    });
+
     var withdraws;
     var $inputTimePicker;
     var $cashId, $userId, $inputAlipay, $inputCash, $time, $inputTime, $inputReason;

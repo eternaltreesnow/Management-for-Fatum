@@ -43,11 +43,12 @@ $(function() {
             };
             $.ajax({
                 url: "/_admin/s/login",
-                method: "POST",
+                type: "POST",
                 data: requestData,
                 dataType: 'json',
                 success: function(data) {
                     if(data.code == 200) {
+                        localStorage['user'] = data.data.manager.username;
                         location.href = 'index.html';
                     } else {
                         validateError(data.error);

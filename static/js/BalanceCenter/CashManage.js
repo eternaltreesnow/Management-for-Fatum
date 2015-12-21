@@ -1,4 +1,23 @@
 $(function() {
+    $("#userName").text(localStorage['user']);
+    $("#logoutBtn").on('click', function() {
+        $.ajax({
+            url: "/_admin/s/logout",
+            type: 'GET',
+            success: function(data) {
+                if(data.code == 200) {
+                    localStorage.removeItem('user');
+                    location.href = '../index.html';
+                } else {
+                    console.log(data.error);
+                }
+            },
+            error: function(data) {
+                console.log(data.error);
+            }
+        });
+    });
+
     var datatable;
     var $cashTable;
     var $linkCheck, $linkPass, $linkModify;
@@ -18,8 +37,9 @@ $(function() {
         {"data": "user.alipay"},
         {"data": "cash"},
         {"data": "time"},
-        {"data": "profitReason"},
-        {"data": ""}
+        {"data": "permitted"},
+        {"data": "withdraw"},
+        {"data": "edit"}
     ];
     var tempdata = [
         {
@@ -31,7 +51,8 @@ $(function() {
             },
             "cash" : "500.00",
             "time" : '2015/11/30 15:30',
-            "profitReason" : "ReasonReason"
+            "isPermitted" : "0",
+            "isWithdraw" : "0"
         }
     ];
 
@@ -74,18 +95,31 @@ $(function() {
             dataSrc: function(json) {
                 for(var i=0; i<json.data.length; i++) {
                     json.data[i]['time'] = moment(json.data[i]['time']).format('YYYY-MM-DD HH:mm:ss');
+                    if(json.data[i]['isPermitted'] == 1) {
+                        json.data[i]['permitted'] = "通过审核";
+                        if(json.data[i]['isWithdraw'] == 1) {
+                            json.data[i]['withdraw'] = "已提现";
+                            json.data[i]['edit'] = '';
+                        } else {
+                            json.data[i]['withdraw'] = "未提现";
+                            json.data[i]['edit'] = '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="pass">提现</a>';
+                        }
+                    } else {
+                        json.data[i]['permitted'] = "未审核";
+                        json.data[i]['withdraw'] = "未提现";
+                        json.data[i]['edit'] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="check">审核</a>'
+                    }
                 }
                 return json.data;
             }
         },
         sortClasses: false,
-        columnDefs: [{
-            "targets" : -1,
-            "data" : null,
-            "defaultContent" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="check">审核</a>' +
-                               '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="pass">通过</a>' +
-                               '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="modify">修改</a>'
-        }],
+        // columnDefs: [{
+        //     "targets" : -1,
+        //     "data" : null,
+        //     "defaultContent" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="check">审核</a>' +
+        //                        '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="pass">提现</a>'
+        // }],
         initComplete: function(settings, json) {
             bindBtnEvent();
         }

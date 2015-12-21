@@ -3,6 +3,25 @@ $(function() {
     var $vipInfoTable;
     var $searchBtn;
 
+    $("#userName").text(localStorage['user']);
+    $("#logoutBtn").on('click', function() {
+        $.ajax({
+            url: "/_admin/s/logout",
+            type: 'GET',
+            success: function(data) {
+                if(data.code == 200) {
+                    localStorage.removeItem('user');
+                    location.href = '../index.html';
+                } else {
+                    console.log(data.error);
+                }
+            },
+            error: function(data) {
+                console.log(data.error);
+            }
+        });
+    });
+
     var column = [
         {"data": "id"},
         {"data": "img"},
@@ -99,6 +118,11 @@ $(function() {
         for(var i=0; i<json.data.length; i++) {
             json.data[i]['img'] = '<img src="' + json.data[i]['avatarUrl'] + '" height="50"></img>';
             json.data[i]['area'] = setArea(areaData, json.data[i]['city']);
+            if(json.data[i]['status'] == 1) {
+                json.data[i]['status'] = '正常';
+            } else {
+                json.data[i]['status'] = '封号';
+            }
         }
         return json;
     }

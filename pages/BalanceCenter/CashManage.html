@@ -43,7 +43,7 @@
                                 <span class="caret"></span>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a href="../login.html" class="menu-link"><span class="glyphicon glyphicon-off"></span>&nbsp;退出登录</a>
+                                        <a href="javascript:void(0);" class="menu-link" id="logoutBtn"><span class="glyphicon glyphicon-off"></span>&nbsp;退出登录</a>
                                     </li>
                                 </ul>
                             </a>
@@ -130,7 +130,8 @@
                             <th>支付宝账号</th>
                             <th>提现金额(元)</th>
                             <th>提现时间</th>
-                            <th>积分原因</th>
+                            <th>审核状态</th>
+                            <th>提现状态</th>
                             <th>操作</th>
                         </tr>
                     </thead>
@@ -152,8 +153,8 @@
                         是否审核该提现信息？
                     </div>
                     <div class="modal-footer">
-                        <a href="javascript:void(0);" class="btn btn-default" id="uncheckModalBtn">不审核</a>
-                        <a href="javascript:void(0);" class="btn btn-primary" id="checkModalBtn">审核</a>
+                        <a href="javascript:void(0);" class="btn btn-default" id="uncheckModalBtn">审核不通过</a>
+                        <a href="javascript:void(0);" class="btn btn-primary" id="checkModalBtn">审核通过</a>
                     </div>
                 </div>
             </div>
@@ -168,11 +169,11 @@
                         <h4 class="modal-title">提现通过</h4>
                     </div>
                     <div class="modal-body">
-                        是否通过该提现信息？
+                        是否确认该提现信息？
                     </div>
                     <div class="modal-footer">
                         <a href="javascript:void(0);" class="btn btn-default" id="unpassModalBtn">不通过</a>
-                        <a href="javascript:void(0);" class="btn btn-success" id="passModalBtn">通过</a>
+                        <a href="javascript:void(0);" class="btn btn-success" id="passModalBtn">完成提现</a>
                     </div>
                 </div>
             </div>
