@@ -164,7 +164,8 @@
                             <div class="form-group">
                                 <label for="editorArticle" class="col-lg-1 control-label">编辑文章</label>
                                 <div class="col-lg-11">
-                                    <script id="editorArticle" class="wysiwyg-editor"></script>
+                                    <script id="editorArticle" class="wysiwyg-editor" name="content"></script>
+                                    <input type="hidden" name="content" id="content">
                                 </div>
                             </div>
                         </div>
@@ -175,10 +176,10 @@
                         </div>
                         <div class="panel-body">
                             <div class="form-group">
-                                <label for="firstAdId" class="col-lg-3 control-label">广告1 ID</label>
+                                <label for="firstAdId" class="col-lg-3 control-label">广告ID</label>
                                 <div class="col-lg-7">
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="firstAdId" name="ad1" placeholder="请输入第一个广告ID...">
+                                        <input type="text" class="form-control" id="AdId" name="ad" placeholder="请输入广告ID...">
                                         <div class="input-group-btn">
                                             <a href="javascript:void(0);" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></a>
                                         </div>
@@ -188,32 +189,11 @@
                             <div class="form-group">
                                 <label for="firstPrice" class="col-lg-3 control-label">单价</label>
                                 <div class="col-lg-2">
-                                    <input type="text" class="form-control" id="firstPrice" name="price1" placeholder="请输入广告单价...">
+                                    <input type="text" class="form-control" id="Price" name="price" placeholder="请输入广告单价...">
                                 </div>
                                 <label for="firstCount" class="col-lg-3 control-label">浏览次数上限</label>
                                 <div class="col-lg-2">
-                                    <input type="text" class="form-control" id="firstCount" name="count1">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="secondAdId" class="col-lg-3 control-label">广告2 ID</label>
-                                <div class="col-lg-7">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" id="secondAdId" name="ad2" placeholder="请输入第二个广告ID...">
-                                        <div class="input-group-btn">
-                                            <a href="javascript:void(0);" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="secondPrice" class="col-lg-3 control-label">单价</label>
-                                <div class="col-lg-2">
-                                    <input type="text" class="form-control" id="secondPrice" name="price2" placeholder="广告单价...">
-                                </div>
-                                <label for="secondCount" class="col-lg-3 control-label">浏览次数上限</label>
-                                <div class="col-lg-2">
-                                    <input type="text" class="form-control" id="secondCount" name="count2">
+                                    <input type="text" class="form-control" id="Count" name="count">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -234,6 +214,22 @@
                                         <input type="text" class="form-control" id="endTime" placeholder="请选择结束时间...">
                                         <div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="profitLimit" class="col-lg-3 control-label">收益上限</label>
+                                <div class="col-lg-7">
+                                    <input type="text" class="form-control" id="profitLimit" name="profitLimit" placeholder="请输入收益上限...">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="selectPlatform" class="col-lg-3 control-label">限制平台</label>
+                                <div class="col-lg-7">
+                                    <select name="platform" id="selectPlatform" class="form-control">
+                                        <option value="0">不限制</option>
+                                        <option value="1">微信</option>
+                                        <option value="2">QQ</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -296,9 +292,9 @@
         <script src="../../lib/bootstrap-datetimepicker/moment/moment.js"></script>
         <script src="../../lib/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
         <!-- UEditor -->
-        <script src="../../lib/ueditor1_4_3_1/ueditor.config.js"></script>
-        <script src="../../lib/ueditor1_4_3_1/ueditor.all.min.js"></script>
-        <script src="../../lib/ueditor1_4_3_1/lang/zh-cn/zh-cn.js"></script>
+        <script src="../../lib/ueditor/ueditor.config.js"></script>
+        <script src="../../lib/ueditor/ueditor.all.min.js"></script>
+        <script src="../../lib/ueditor/lang/zh-cn/zh-cn.js"></script>
 
         <script src="../../static/js/TaskCenter/AddArticle.js"></script>
     </body>

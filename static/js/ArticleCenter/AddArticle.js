@@ -10,6 +10,7 @@ $(function() {
     $submitBtn = $("#submitBtn");
     ue.ready(function() {
         $submitBtn.on('click', function() {
+            $("#content").val(ue.getContent());
             var requestData = {
                 "type" : $selectType.val(),
                 "src" : $inputSrc.val(),

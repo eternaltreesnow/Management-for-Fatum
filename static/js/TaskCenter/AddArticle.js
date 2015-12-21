@@ -12,6 +12,44 @@ $(function() {
     $inputSrc = $("#inputSrc");
     $inputTitle = $("#inputTitle");
 
+    // initial UEditor
+    var ue = UE.getEditor('editorArticle');
+    ue.ready(function() {
+        $time = $("#time");
+        $begintime = $("#begintime");
+        $endtime = $("#endtime");
+        $submitBtn = $("#submitBtn");
+        $submitBtn.on('click', function(event) {
+            $("#content").val(ue.getContent());
+            $time.val(event.timeStamp);
+            $begintime.val(moment($("#beginTime").val()).format('x'));
+            $endtime.val(moment($("#endTime").val()).format('x'));
+            var formdata = new FormData($("#addArticleForm")[0]);
+            $.ajax({
+                type: "POST",
+                url: "/_admin/s/task/articles",
+                cache: false,
+                data: formdata,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    if(data.code == 200) {
+                        $successModal.modal({
+                            backdrop: 'static',
+                            show: true
+                        });
+                    } else {
+                        $errorMsg.html(data.error);
+                        $errorModal.modal('show');
+                    }
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
+        });
+    });
+
     /**
      * [$beginDatetimepicker 排期起始时间选择器]
      * [$endDatetimepicker 排期结束时间选择器]
@@ -35,37 +73,6 @@ $(function() {
         $beginDatetimepicker.data("DateTimePicker").maxDate(e.date);
     });
 
-    $time = $("#time");
-    $begintime = $("#begintime");
-    $endtime = $("#endtime");
-    $submitBtn = $("#submitBtn");
-    $submitBtn.on('click', function(event) {
-        $time.val(event.timeStamp);
-        $begintime.val(moment($("#beginTime").val()).format('x'));
-        $endtime.val(moment($("#endTime").val()).format('x'));
-        var formdata = new FormData($("#addArticleForm")[0]);
-        $.ajax({
-            type: "POST",
-            url: "/_admin/s/task/articles",
-            cache: false,
-            data: formdata,
-            processData: false,
-            contentType: false,
-            success: function(data) {
-                if(data.code == 200) {
-                    $successModal.modal({
-                        backdrop: 'static',
-                        show: true
-                    });
-                } else {
-                    $errorMsg.html(data.error);
-                    $errorModal.modal('show');
-                }
-            },
-            error: function(data) {
-                console.log(data);
-            }
-        });
-    });
+
 
 });

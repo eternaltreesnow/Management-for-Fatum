@@ -1,7 +1,7 @@
 $(function() {
     var article;
     var $articleId, $selectType, $inputSrc, $inputTitle, $inputAdder, $inputFile, $selectStatus;
-    var $firstAdId, $firstPrice, $firstCount, $secondAdId, $secondPrice, $secondCount, $beginTime, $endTime, $begintime, $endtime, $time;
+    var $AdId, $Price, $Count, $beginTime, $endTime, $begintime, $endtime, $time, $profitLimit, $selectPlatform;
     var $submitBtn;
     var $previewBtn, $previewModal, $previewContent;
     var $successModal;
@@ -13,17 +13,16 @@ $(function() {
     $inputTitle = $("#inputTitle");
     $inputFile = $("#inputFile");
     $selectStatus = $("#selectStatus");
-    $firstAdId = $("#firstAdId");
-    $firstPrice = $("#firstPrice");
-    $firstCount = $("#firstCount");
-    $secondAdId = $("#secondAdId");
-    $secondPrice = $("#secondPrice");
-    $secondCount = $("#secondCount");
+    $AdId = $("#AdId");
+    $Price = $("#Price");
+    $Count = $("#Count");
     $beginTime = $("#beginTime");
     $endTime = $("#endTime");
     $begintime = $("#begintime");
     $endtime = $("#endtime");
     $time = $("#time");
+    $profitLimit = $("#profitLimit");
+    $selectPlatform = $("#selectPlatform");
 
     /**
      * [$beginDatetimepicker 排期起始时间选择器]
@@ -77,19 +76,24 @@ $(function() {
         $inputTitle.val(data.title);
         $inputSrc.val(data.source);
         $selectStatus.find('option[value="' + data.status + '"]').attr('selected', true);
-        // 未初始化富文本编辑器内容
-        $firstAdId.val(data.ad1);
-        $firstPrice.val(data.price1);
-        $firstCount.val(data.count1);
-        $secondAdId.val(data.ad2);
-        $secondPrice.val(data.price2);
-        $secondCount.val(data.count2);
+        // initial UEditor and content
+        var ue = UE.getEditor('editorArticle');
+        ue.ready(function() {
+            ue.setContent(data.content);
+            bindBtnEvent();
+        });
+
+        $AdId.val(data.ad);
+        $Price.val(data.price);
+        $Count.val(data.count);
         if(data.begintime != null) {
             $beginDatetimepicker.data("DateTimePicker").defaultDate(moment(data.begintime).format('YYYY-MM-DD HH:mm:ss'));
         }
         if(data.endtime != null) {
             $endDatetimepicker.data("DateTimePicker").defaultDate(moment(data.endtime).format('YYYY-MM-DD HH:mm:ss'));
         }
+        $profitLimit.val(data.profitLimit);
+        $selectPlatform.find('option[value="' + data.platform + '"]').attr('selected', true);
     }
 
     $previewModal = $("#previewModal");
@@ -100,33 +104,36 @@ $(function() {
         $previewModal.modal('show');
     });
 
-    $submitBtn = $("#submitBtn");
-    $submitBtn.on('click', function(event) {
-        $time.val(event.timeStamp);
-        $begintime.val(moment($("#beginTime").val()).format('x'));
-        $endtime.val(moment($("#endTime").val()).format('x'));
-        var formdata = new FormData($("#editArticleForm")[0]);
-        $.ajax({
-            type: "POST",
-            url: "/_admin/s/task/articles/" + $articleId.val(),
-            cache: false,
-            data: formdata,
-            processData: false,
-            contentTypt: false,
-            success: function(data) {
-                if(data.code == 200) {
-                    $successModal.modal({
-                        backdrop: 'static',
-                        show: true
-                    });
-                } else {
-                    $errorMsg.html(data.error);
-                    $errorModal.modal('show');
+    function bindBtnEvent() {
+        $submitBtn = $("#submitBtn");
+        $submitBtn.on('click', function(event) {
+            $("#content").val(ue.getContent());
+            $time.val(event.timeStamp);
+            $begintime.val(moment($("#beginTime").val()).format('x'));
+            $endtime.val(moment($("#endTime").val()).format('x'));
+            var formdata = new FormData($("#editArticleForm")[0]);
+            $.ajax({
+                type: "POST",
+                url: "/_admin/s/task/articles/" + $articleId.val(),
+                cache: false,
+                data: formdata,
+                processData: false,
+                contentTypt: false,
+                success: function(data) {
+                    if(data.code == 200) {
+                        $successModal.modal({
+                            backdrop: 'static',
+                            show: true
+                        });
+                    } else {
+                        $errorMsg.html(data.error);
+                        $errorModal.modal('show');
+                    }
+                },
+                error: function(data) {
+                    console.log(data);
                 }
-            },
-            error: function(data) {
-                console.log(data);
-            }
+            });
         });
-    });
+    }
 });
