@@ -24,6 +24,7 @@ $(function() {
     var $previewModal, $previewId, $previewContent, $previewRefresh;
     var $searchBtn, $clearBtn;
     var $selectType, $selectStatus, $inputKeyword;
+    var $previewSize;
 
     $selectType = $("#selectType");
     $selectStatus = $("#selectStatus");
@@ -119,6 +120,21 @@ $(function() {
         $selectType.find('option[value=0]').attr('selected', true);
         $selectStatus.find('option[value=0]').attr('selected', true);
         $inputKeyword.val('');
+    });
+
+    $previewSize = $("#previewSize");
+    $previewSize.on('change', function() {
+        if($previewSize.val() == 1) {
+            $("#previewContent").css({
+                width: '391px',
+                height: '683px'
+            });
+        } else if($previewSize.val() == 2) {
+            $("#previewContent").css({
+                width: '430px',
+                height: '752px'
+            });
+        }
     });
 
     function resetData(json) {

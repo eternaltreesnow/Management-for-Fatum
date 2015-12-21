@@ -161,3 +161,14 @@ ul.dropdown-menu li a.menu-link {
 [data-link=thumbnails]>img {
     height: 50px;
 }
+
+/* Preview Content Iframe */
+#previewContainer {
+    text-align: center;
+}
+.iframe-preview {
+    margin-top: 20px;
+    width: 391px;
+    height: 683px;
+    overflow: scroll;
+}

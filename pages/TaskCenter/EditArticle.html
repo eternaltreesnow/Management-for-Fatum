@@ -122,6 +122,15 @@
                         </div>
                         <div class="panel-body">
                             <div class="form-group">
+                                <label for="selectClassify" class="col-lg-3 control-label">类型</label>
+                                <div class="col-lg-7">
+                                    <select name="classify" id="selectClassify" class="form-control">
+                                        <option value="1">文章</option>
+                                        <option value="2">直接跳转</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label for="selectType" class="col-lg-3 control-label">选择分类</label>
                                 <div class="col-lg-7">
                                     <select id="selectType" name="articleClassId" class="form-control">
@@ -147,6 +156,12 @@
                                 <span id="inputOwnerHint" class="col-lg-2 form-hint form-hint-nec">(*必填)</span>
                             </div>
                             <div class="form-group">
+                                <label for="inputFile" class="col-lg-3 control-label">文章简介</label>
+                                <div class="col-lg-7">
+                                    <input type="text" class="form-control" id="inputIntro" name="intro">
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label for="inputFile" class="col-lg-3 control-label">文章题图</label>
                                 <div class="col-lg-7">
                                     <div class="input-group">
@@ -158,19 +173,26 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label for="selectStatus" class="col-lg-3 control-label">域名</label>
+                                <div class="col-lg-7">
+                                    <select id="selectDomain" name="domain" class="form-control">
+                                        <option value="1">域名1</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group" id="inputUrlContainer" style="display:none;">
+                                <label for="inputUrl" class="col-lg-3 control-label">跳转链接</label>
+                                <div class="col-lg-7">
+                                    <input type="text" class="form-control" id="inputUrl" name="url" placeholder="请输入跳转链接...">
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label for="selectStatus" class="col-lg-3 control-label">状态</label>
                                 <div class="col-lg-7">
                                     <select id="selectStatus" name="status" class="form-control">
                                         <option value="1">上线</option>
                                         <option value="2">下线</option>
                                     </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="" class="col-lg-1 control-label">编辑文章</label>
-                                <div class="col-lg-11">
-                                    <script id="editorArticle" class="wysiwyg-editor"></script>
-                                    <input type="hidden" id="content" name="content">
                                 </div>
                             </div>
                         </div>
@@ -180,7 +202,7 @@
                             <div class="panel-title">排期信息</div>
                         </div>
                         <div class="panel-body">
-                            <div class="form-group">
+                            <div class="form-group" id="adIdContainer">
                                 <label for="AdId" class="col-lg-3 control-label">广告ID</label>
                                 <div class="col-lg-7">
                                     <div class="input-group">
@@ -239,12 +261,21 @@
                             </div>
                         </div>
                     </div>
-                        <div class="form-group">
-                            <div class="col-lg-9 col-lg-offset-3">
-                                <a href="javascript:void(0);" class="btn btn-primary" id="submitBtn">提交</a>
-                                <a href="ArticleManage.html" class="btn btn-default" id="cancerBtn">取消</a>
-                            </div>
+                    <div class="panel panel-default" id="editorContainer">
+                        <div class="panel-heading">
+                            <div class="panel-title">编辑文章</div>
                         </div>
+                        <div class="panel-body">
+                            <script id="editorArticle" class="wysiwyg-editor" name="content"></script>
+                            <input type="hidden" name="content" id="content">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-9 col-lg-offset-3">
+                            <a href="javascript:void(0);" class="btn btn-primary" id="submitBtn">提交</a>
+                            <a href="ArticleManage.html" class="btn btn-default" id="cancerBtn">取消</a>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>

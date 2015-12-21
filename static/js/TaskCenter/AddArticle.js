@@ -19,7 +19,7 @@ $(function() {
     });
 
     var $submitBtn;
-    var $time, $selectType, $inputSrc, $inputTitle, $inputAdder;
+    var $selectClassify, $time, $selectType, $inputSrc, $inputTitle, $inputAdder;
     var $successModal, $errorMsg, $errorModal;
     var $beginDatetimepicker, $endDatetimepicker;
 
@@ -27,12 +27,19 @@ $(function() {
     $errorMsg = $("#errorMsg");
     $errorModal = $("#errorModal");
 
+    $selectClassify = $("#selectClassify");
     $selectType = $("#selectType");
     $inputSrc = $("#inputSrc");
     $inputTitle = $("#inputTitle");
 
     // initial UEditor
-    var ue = UE.getEditor('editorArticle');
+    var ue = UE.getEditor('editorArticle', {
+        toolbars: [
+            ['fullscreen', 'source', 'undo', 'redo'],
+            ['customstyle', 'paragraph', 'fontfamily', 'fontsize', '|', 'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|', 'rowspacingtop', 'rowspacingbottom', 'lineheight'],
+            ['directionalityltr', 'directionalityrtl', 'indent', '|', 'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'simpleupload', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|', 'pagebreak', 'horizontal', 'date', 'time', '|', 'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', '|', 'drafts']
+        ]
+    });
     ue.ready(function() {
         $time = $("#time");
         $begintime = $("#begintime");
@@ -92,6 +99,15 @@ $(function() {
         $beginDatetimepicker.data("DateTimePicker").maxDate(e.date);
     });
 
-
-
+    $selectClassify.on('change', function() {
+        if($selectClassify.val() == 1) {
+            $("#inputUrlContainer").hide();
+            $("#adIdContainer").show();
+            $("#editorContainer").show();
+        } else {
+            $("#inputUrlContainer").show();
+            $("#adIdContainer").hide();
+            $("#editorContainer").hide();
+        }
+    });
 });
