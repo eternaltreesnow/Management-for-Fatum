@@ -24,11 +24,14 @@ $(function() {
     var $checkId, $passId;
     var $checkModal, $passModal;
     var $checkModalBtn, $uncheckModalBtn, $passModalBtn, $unpassModalBtn;
+    var $checkContent, $passContent;
 
     $checkId = $("#checkId");
     $checkModal = $("#checkModal");
     $passId = $("#passId");
     $passModal = $("#passModal");
+    $checkContent = $("#checkContent");
+    $passContent = $("#passContent");
 
     var column = [
         {"data": "id"},
@@ -114,12 +117,6 @@ $(function() {
             }
         },
         sortClasses: false,
-        // columnDefs: [{
-        //     "targets" : -1,
-        //     "data" : null,
-        //     "defaultContent" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="check">审核</a>' +
-        //                        '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="pass">提现</a>'
-        // }],
         initComplete: function(settings, json) {
             bindBtnEvent();
         }
@@ -140,12 +137,16 @@ $(function() {
         $linkCheck.on('click', function() {
             var $this = $(this);
             $checkId.val($this.parents("tr").children(":first").html());
+            $checkContent.text("是否审核该提现信息？");
+            $checkModalBtn.show();
             $checkModal.modal('show');
         });
 
         $linkPass.on('click', function() {
             var $this = $(this);
             $passId.val($this.parents("tr").children(":first").html());
+            $passContent.text("是否确认该提现信息？");
+            $passModalBtn.show();
             $passModal.modal('show');
         });
 
@@ -159,68 +160,50 @@ $(function() {
     $checkModalBtn = $("#checkModalBtn");
     $checkModalBtn.on('click', function() {
         var requestData = {
-            "id" : $checkId.val(),
-            "check" : true
+            "isPermitted" : 1
         };
         $.ajax({
             type: "POST",
-            url: "",
+            url: "/_admin/s/user_withdraw/" + $checkId.val(),
             data: requestData,
-            dataType: "json",
             success: function(data) {
+                if(data.code == 200) {
+                    $checkContent.text("审核成功！");
+                    datatable.ajax.reload(function ( json ) {
+                        bindBtnEvent();
+                    });
+                } else {
+                    $checkContent.text(data.error);
+                }
+                $checkModalBtn.hide();
             },
             error: function(data) {
-            }
-        });
-    });
-    $uncheckModalBtn = $("#uncheckModalBtn");
-    $uncheckModalBtn.on('click', function() {
-        var requestData = {
-            "id" : $checkId.val(),
-            "check" : false
-        };
-        $.ajax({
-            type: "POST",
-            url: "",
-            data: requestData,
-            dataType: "json",
-            success: function(data) {
-            },
-            error: function(data) {
+                console.log(data);
             }
         });
     });
     $passModalBtn = $("#passModalBtn");
     $passModalBtn.on('click', function() {
         var requestData = {
-            "id" : $passId.val(),
-            "check" : true
+            "isWithdraw": 1
         };
         $.ajax({
             type: "POST",
-            url: "",
+            url: "/_admin/s/user_withdraw/" + $passId.val(),
             data: requestData,
-            dataType: "json",
             success: function(data) {
+                if(data.code == 200) {
+                    $passContent.text("提现修改成功！");
+                    datatable.ajax.reload(function ( json ) {
+                        bindBtnEvent();
+                    });
+                } else {
+                    $passContent.text(data.error);
+                }
+                $passModalBtn.hide();
             },
             error: function(data) {
-            }
-        });
-    });
-    $unpassModalBtn = $("#unpassModalBtn");
-    $unpassModalBtn.on('click', function() {
-        var requestData = {
-            "id" : $passId.val(),
-            "check" : false
-        };
-        $.ajax({
-            type: "POST",
-            url: "",
-            data: requestData,
-            dataType: "json",
-            success: function(data) {
-            },
-            error: function(data) {
+                console.log(data);
             }
         });
     });
