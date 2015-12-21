@@ -171,4 +171,5 @@ ul.dropdown-menu li a.menu-link {
     width: 391px;
     height: 683px;
     overflow: scroll;
+    border: 1px solid #E1E1E1;
 }
