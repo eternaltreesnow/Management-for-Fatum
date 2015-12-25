@@ -19,7 +19,7 @@ $(function() {
     });
 
     var article;
-    var $articleId, $selectType, $inputSrc, $inputTitle, $inputAdder, $inputFile, $selectStatus;
+    var $articleId, $selectType, $inputSrc, $inputTitle, $inputAdder, $inputFile, $selectStatus, $selectDomain, $inputUrl, $inputIntro;
     var $AdId, $Price, $Count, $beginTime, $endTime, $begintime, $endtime, $time, $profitLimit, $selectPlatform;
     var $submitBtn;
     var $previewBtn, $previewModal, $previewContent;
@@ -30,8 +30,11 @@ $(function() {
     $selectType = $("#selectType");
     $inputSrc = $("#inputSrc");
     $inputTitle = $("#inputTitle");
+    $selectDomain = $("#selectDomain");
     $inputFile = $("#inputFile");
     $selectStatus = $("#selectStatus");
+    $inputUrl = $("#inputUrl");
+    $inputIntro = $("#inputIntro");
     $AdId = $("#AdId");
     $Price = $("#Price");
     $Count = $("#Count");
@@ -91,10 +94,45 @@ $(function() {
 
     function initialForm(data) {
         $articleId.val(data.id);
-        $selectType.find('option[value="' + data.type + '"]').attr('selected', true);
+        // initial select type of article
+        Papa.parse('../../lib/article_type.csv', {
+            download: true,
+            header: true,
+            complete: function(result) {
+                var options = '';
+                result.data.map(function(item) {
+                    options += '<option value="' + item['id'] + '">' + item['article_class_name'] + '</option>';
+                });
+                $selectType.append(options);
+                $selectType.find('option[value="' + data.articleClassId + '"]').attr('selected', true);
+            }
+        });
+        // initial domain
+        $.ajax({
+            url: '/_admin/s/article_domains',
+            type: 'GET',
+            async: true,
+            success: function(result) {
+                if(result.code == 200) {
+                    var options = '';
+                    result.data.map(function(value) {
+                        options += '<option value="' + value + '">' + value + '</option>';
+                    });
+                    $selectDomain.append(options);
+                    $selectType.find('option[value="' + data.domain + '"]').attr('selected', true);
+                } else {
+                    console.log(result.error);
+                }
+            },
+            error: function(result) {
+                console.log(result);
+            }
+        });
         $inputTitle.val(data.title);
         $inputSrc.val(data.source);
         $selectStatus.find('option[value="' + data.status + '"]').attr('selected', true);
+        $inputUrl.val(data.url);
+        $inputIntro.val(data.intro);
         // initial UEditor and content
         var ue = UE.getEditor('editorArticle');
         ue.ready(function() {
@@ -102,17 +140,17 @@ $(function() {
             bindBtnEvent();
         });
 
-        $AdId.val(data.ad);
-        $Price.val(data.price);
-        $Count.val(data.count);
+        $AdId.val(data.advertiseId1);
+        $Price.val(data.price1);
+        $Count.val(data.limitRetweetCount1);
         if(data.begintime != null) {
-            $beginDatetimepicker.data("DateTimePicker").defaultDate(moment(data.begintime).format('YYYY-MM-DD HH:mm:ss'));
+            $beginDatetimepicker.data("DateTimePicker").defaultDate(moment(data.beginTime).format('YYYY-MM-DD HH:mm:ss'));
         }
         if(data.endtime != null) {
-            $endDatetimepicker.data("DateTimePicker").defaultDate(moment(data.endtime).format('YYYY-MM-DD HH:mm:ss'));
+            $endDatetimepicker.data("DateTimePicker").defaultDate(moment(data.endTime).format('YYYY-MM-DD HH:mm:ss'));
         }
-        $profitLimit.val(data.profitLimit);
-        $selectPlatform.find('option[value="' + data.platform + '"]').attr('selected', true);
+        $profitLimit.val(data.limitProfit);
+        $selectPlatform.find('option[value="' + data.limitDestination + '"]').attr('selected', true);
     }
 
     $previewModal = $("#previewModal");

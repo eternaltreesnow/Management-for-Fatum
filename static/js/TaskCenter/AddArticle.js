@@ -19,6 +19,7 @@ $(function() {
     });
 
     var $submitBtn;
+    var $selectDomain, $selectType;
     var $selectClassify, $time, $selectType, $inputSrc, $inputTitle, $inputAdder;
     var $successModal, $errorMsg, $errorModal;
     var $beginDatetimepicker, $endDatetimepicker;
@@ -31,6 +32,44 @@ $(function() {
     $selectType = $("#selectType");
     $inputSrc = $("#inputSrc");
     $inputTitle = $("#inputTitle");
+
+    /**
+     * 初始化分类
+     * $selectType 文章分类
+     */
+    $selectType = $("#selectType");
+    Papa.parse('../../lib/article_type.csv', {
+        download: true,
+        header: true,
+        complete: function(result) {
+            var options = '';
+            result.data.map(function(item) {
+                options += '<option value="' + item['id'] + '">' + item['article_class_name'] + '</option>';
+            });
+            $selectType.append(options);
+        }
+    });
+
+    $selectDomain = $("#selectDomain");
+    $.ajax({
+        url: '/_admin/s/article_domains',
+        type: 'GET',
+        async: true,
+        success: function(data) {
+            if(data.code == 200) {
+                var options = '';
+                data.data.map(function(value) {
+                    options += '<option value="' + value + '">' + value + '</option>';
+                });
+                $selectDomain.append(options);
+            } else {
+                console.log(data.error);
+            }
+        },
+        error: function(data) {
+            console.log(data);
+        }
+    })
 
     // initial UEditor
     var ue = UE.getEditor('editorArticle', {
