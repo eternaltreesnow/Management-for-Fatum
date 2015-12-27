@@ -18,9 +18,9 @@ $(function() {
         });
     });
 
-    var article;
+    var article, info;
     var $articleId, $selectType, $inputSrc, $inputTitle, $inputAdder, $inputFile, $selectStatus, $selectDomain, $inputUrl, $inputIntro;
-    var $AdId, $Price, $Count, $beginTime, $endTime, $begintime, $endtime, $time, $profitLimit, $selectPlatform;
+    var $scheduleId, $AdId, $Price, $Count, $beginTime, $endTime, $begintime, $endtime, $time, $profitLimit, $selectPlatform;
     var $submitBtn;
     var $previewBtn, $previewModal, $previewContent;
     var $successModal;
@@ -35,6 +35,7 @@ $(function() {
     $selectStatus = $("#selectStatus");
     $inputUrl = $("#inputUrl");
     $inputIntro = $("#inputIntro");
+    $scheduleId = $("#scheduleId");
     $AdId = $("#AdId");
     $Price = $("#Price");
     $Count = $("#Count");
@@ -81,7 +82,8 @@ $(function() {
             success: function(data) {
                 if(data.code == 200) {
                     article = data.data.article;
-                    initialForm(article);
+                    info = data.data.info;
+                    initialForm(article, info);
                 } else {
                     console.log(data.error);
                 }
@@ -92,7 +94,7 @@ $(function() {
         });
     }
 
-    function initialForm(data) {
+    function initialForm(data, info) {
         $articleId.val(data.id);
         // initial select type of article
         Papa.parse('../../lib/article_type.csv', {
@@ -140,31 +142,38 @@ $(function() {
             bindBtnEvent();
         });
 
-        $AdId.val(data.advertiseId1);
-        $Price.val(data.price1);
-        $Count.val(data.limitRetweetCount1);
-        if(data.begintime != null) {
-            $beginDatetimepicker.data("DateTimePicker").defaultDate(moment(data.beginTime).format('YYYY-MM-DD HH:mm:ss'));
+        // initial Schedule info
+        $scheduleId.val(info.id);
+        $AdId.val(info.advertiserId1);
+        $Price.val(info.price1);
+        $Count.val(info.limitRetweetCount1);
+        if(info.beginTime != null) {
+            $beginDatetimepicker.data("DateTimePicker").defaultDate(moment(info.beginTime).format('YYYY-MM-DD HH:mm:ss'));
         }
-        if(data.endtime != null) {
-            $endDatetimepicker.data("DateTimePicker").defaultDate(moment(data.endTime).format('YYYY-MM-DD HH:mm:ss'));
+        if(info.endTime != null) {
+            $endDatetimepicker.data("DateTimePicker").defaultDate(moment(info.endTime).format('YYYY-MM-DD HH:mm:ss'));
         }
-        $profitLimit.val(data.limitProfit);
-        $selectPlatform.find('option[value="' + data.limitDestination + '"]').attr('selected', true);
+        $profitLimit.val(info.limitProfit);
+        $selectPlatform.find('option[value="' + info.limitDestination + '"]').attr('selected', true);
     }
 
     $previewModal = $("#previewModal");
     $previewContent = $("#previewContent");
     $previewBtn = $("#previewBtn");
     $previewBtn.on('click', function() {
-        $previewContent.html('<div style="text-align: center;"><img src="' + article.thumbnails + '"></img></div>');
+        $previewContent.html('<div style="text-align: center;"><img class="previewImage" src="' + article.thumbnails + '"></img></div>');
+        $(".previewImage").css("max-width", '558px');
         $previewModal.modal('show');
+    });
+    $previewModal.on('shown.bs.modal', function() {
+        if($previewContent.width() > 558) {
+            $(".previewImage").css("max-width", $previewContent.width() + 'px');
+        }
     });
 
     function bindBtnEvent() {
         $submitBtn = $("#submitBtn");
         $submitBtn.on('click', function(event) {
-            $("#content").val(ue.getContent());
             $time.val(event.timeStamp);
             $begintime.val(moment($("#beginTime").val()).format('x'));
             $endtime.val(moment($("#endTime").val()).format('x'));

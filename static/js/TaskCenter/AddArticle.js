@@ -19,8 +19,8 @@ $(function() {
     });
 
     var $submitBtn;
-    var $selectDomain, $selectType;
-    var $selectClassify, $time, $selectType, $inputSrc, $inputTitle, $inputAdder;
+    var $selectDomain;
+    var $selectClassify, $time, $selectType, $inputSrc, $inputTitle;
     var $successModal, $errorMsg, $errorModal;
     var $beginDatetimepicker, $endDatetimepicker;
 
@@ -69,7 +69,7 @@ $(function() {
         error: function(data) {
             console.log(data);
         }
-    })
+    });
 
     // initial UEditor
     var ue = UE.getEditor('editorArticle', {

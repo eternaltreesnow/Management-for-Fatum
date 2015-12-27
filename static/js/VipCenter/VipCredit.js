@@ -110,7 +110,7 @@ $(function() {
                                '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="pass">通过</a>' +
                                '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="modify">修改</a>'
         }],
-        initComplete: function(settings, json) {
+        drawCallback: function(settings, json) {
             bindBtnEvent();
         }
     });

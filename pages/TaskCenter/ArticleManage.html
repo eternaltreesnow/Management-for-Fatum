@@ -113,16 +113,14 @@
                 <div class="form-inline col-md-8 col-md-offset-2">
                     <div class="form-group">
                         <select id="selectType" class="form-control">
-                            <option value="0">所有分类</option>
-                            <option value="1">生活</option>
-                            <option value="2">体育</option>
+                            <option value=" ">所有分类</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <select id="selectStatus" class="form-control">
-                            <option value="0">所有状态</option>
+                            <option value=" ">所有状态</option>
                             <option value="1">上线</option>
-                            <option value="2">下线</option>
+                            <option value="0">下线</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -173,15 +171,17 @@
                         <h4 class="modal-title">文章预览</h4>
                     </div>
                     <div class="modal-body" id="previewContainer">
+<!--
                         <select id="previewSize" class="form-control">
                             <option value="1">iphone 6</option>
                             <option value="2">iphone 6 plus</option>
                         </select>
+                         -->
                         <iframe src="" frameborder="0" id="previewContent" class="iframe-preview"></iframe>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">离开</button>
-                        <a href="javascript:void(0);" class="btn btn-primary" id="previewRefresh">刷新</a>
+                        <!-- <a href="javascript:void(0);" class="btn btn-primary" id="previewRefresh">刷新</a> -->
                     </div>
                 </div>
             </div>
@@ -212,6 +212,8 @@
         <!-- DataTables -->
         <script src="../../lib/DataTables-1.10.8/js/jquery.dataTables.min.js"></script>
         <script src="../../lib/DataTables-1.10.8/js/dataTables.bootstrap.min.js"></script>
+        <!-- PapaParse -->
+        <script src="../../lib/PapaParse/papaparse.min.js"></script>
 
         <script src="../../static/js/TaskCenter/ArticleManage.js"></script>
     </body>
