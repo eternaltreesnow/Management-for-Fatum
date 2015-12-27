@@ -85,7 +85,6 @@ $(function() {
         $endtime = $("#endtime");
         $submitBtn = $("#submitBtn");
         $submitBtn.on('click', function(event) {
-            $("#content").val(ue.getContent());
             $time.val(event.timeStamp);
             $begintime.val(moment($("#beginTime").val()).format('x'));
             $endtime.val(moment($("#endTime").val()).format('x'));
