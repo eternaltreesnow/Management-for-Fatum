@@ -47,7 +47,6 @@ $(function() {
     $begintime = $("#begintime");
     $endtime = $("#endtime");
     $time = $("#time");
-    $profitLimit = $("#profitLimit");
     $selectPlatform = $("#selectPlatform");
 
     /**
@@ -158,7 +157,6 @@ $(function() {
         if(info.endTime != null) {
             $endDatetimepicker.data("DateTimePicker").defaultDate(moment(info.endTime).format('YYYY-MM-DD HH:mm:ss'));
         }
-        $profitLimit.val(info.limitProfit);
         $selectPlatform.find('option[value="' + info.limitDestination + '"]').attr('selected', true);
     }
 
