@@ -21,7 +21,7 @@ $(function() {
     var datatable, ajaxData;
     var $advertisementTable;
     var $linkPreview, $linkModify, $linkDelete;
-    var $previewModal, $previewId, $previewContent, $previewRefresh;
+    var $previewModal, $previewId, $previewContent;
     var $searchBtn;
 
     var column = [
@@ -94,7 +94,7 @@ $(function() {
                                '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
                                '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
         }],
-        initComplete: function(settings, json) {
+        drawCallback: function(settings, json) {
             bindBtnEvent();
         }
     });
@@ -123,12 +123,6 @@ $(function() {
             var id = $this.parents("tr").children(":first").html();
             $previewId.val(id);
             getPreviewContent(ajaxData, id);
-        });
-        /**
-         * "预览"模态框"刷新"按钮功能实现
-         */
-        $previewRefresh.on('click', function() {
-            getPreviewContent(ajaxData, $previewId.val());
         });
 
         /**
@@ -195,10 +189,9 @@ $(function() {
                     alert("删除成功!");
                     datatable.ajax.reload( function ( json ) {
                         bindBtnEvent();
-                        ajaxData = json;
                     });
                 } else {
-                    alert(data.error);
+                    console.log(data.error);
                 }
             },
             error: function(data) {

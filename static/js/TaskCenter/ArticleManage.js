@@ -21,10 +21,10 @@ $(function() {
     var datatable, ajaxData;
     var $articleTable;
     var $linkPreview, $linkModify, $linkDelete;
-    var $previewModal, $previewId, $previewContent, $previewRefresh;
+    var $previewModal, $previewId, $previewContent;
     var $searchBtn, $clearBtn;
     var $selectType, $selectStatus, $inputKeyword;
-    var $previewSize;
+    var $linkThumbnails, $thumbnailsModal, $thumbnailsContent;
 
     $selectType = $("#selectType");
     $selectStatus = $("#selectStatus");
@@ -32,7 +32,7 @@ $(function() {
 
     var column = [
         {"data": "id"},
-        {"data": "articleClassId"},
+        {"data": "type"},
         {"data": "title"},
         {"data": "thumbnails"},
         {"data": "source"},
@@ -51,62 +51,77 @@ $(function() {
         }
     ];
 
+    Papa.parse('../../lib/article_type.csv', {
+        download: true,
+        header: true,
+        complete: function(result) {
+            initDataTable(result);
+            var options = '';
+            result.data.map(function(item) {
+                options += '<option value="' + item['id'] + '">' + item['article_class_name'] + '</option>';
+            });
+            $selectType.append(options);
+        }
+    });
+
     /**
      * 初始化表格
      * $articleTable 文章表格
      */
-    $articleTable = $("#articleTable");
-    datatable = $articleTable.DataTable({
-        processing: true,
-        language: {
-            "search" : "内容搜索: ",
-            "searchPlaceholder" : "输入搜索条件",
-            "processing": "数据加载中, 请稍后...",
-            "zeroRecords": "记录数为0...",
-            "emptyTable":  "记录数为0...",
-            "paginate": {
-                "first": "首页",
-                "previous": "上一页",
-                "next": "下一页",
-                "last": "尾页"
+    function initDataTable(article_type) {
+        $articleTable = $("#articleTable");
+        datatable = $articleTable.DataTable({
+            processing: true,
+            language: {
+                "search" : "内容搜索: ",
+                "searchPlaceholder" : "输入搜索条件",
+                "processing": "数据加载中, 请稍后...",
+                "zeroRecords": "记录数为0...",
+                "emptyTable":  "记录数为0...",
+                "paginate": {
+                    "first": "首页",
+                    "previous": "上一页",
+                    "next": "下一页",
+                    "last": "尾页"
+                },
+                "lengthMenu": '每页显示 _MENU_ 条记录'
             },
-            "lengthMenu": '每页显示 _MENU_ 条记录'
-        },
-        pagingType: "full_numbers",
-        dom: 'rtlp',
-        serverSide: true,
-        ajax: {
-            url: '/_admin/s/task/articles',
-            type: 'GET',
-            data: function(d) {
-                delete d.columns;
-                delete d.order;
-                d.limit = d.length;
-                delete d.length;
-                d.search.type = $selectType.val();
-                d.search.status = $selectStatus.val();
-                d.search.value = $inputKeyword.val();
-                d.keyword = $inputKeyword.val();
+            pagingType: "full_numbers",
+            dom: 'rtlp',
+            serverSide: true,
+            ajax: {
+                url: '/_admin/s/task/articles',
+                type: 'GET',
+                data: function(d) {
+                    delete d.columns;
+                    delete d.order;
+                    d.limit = d.length;
+                    delete d.length;
+                    d.search.type = $selectType.val();
+                    d.search.status = $selectStatus.val();
+                    d.search.value = $inputKeyword.val();
+                    d.keyword = $inputKeyword.val();
+                },
+                dataSrc: function(json) {
+                    ajaxData = json;
+                    resetData(json, article_type);
+                    return json.data;
+                }
             },
-            dataSrc: function(json) {
-                ajaxData = json;
-                resetData(json);
-                return json.data;
+            columns: column,
+            sortClasses: false,
+            columnDefs: [{
+                "targets" : -1,
+                "data" : null,
+                "defaultContent" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
+                                   '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
+                                   '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
+            }],
+            drawCallback: function(settings, json) {
+                bindBtnEvent();
             }
-        },
-        columns: column,
-        sortClasses: false,
-        columnDefs: [{
-            "targets" : -1,
-            "data" : null,
-            "defaultContent" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                               '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                               '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
-        }],
-        initComplete: function(settings, json) {
-            bindBtnEvent();
-        }
-    });
+        });
+    }
 
     $searchBtn = $("#searchBtn");
     $searchBtn.on('click', function() {
@@ -117,30 +132,30 @@ $(function() {
 
     $clearBtn = $("#clearBtn");
     $clearBtn.on('click', function() {
-        $selectType.find('option[value=0]').attr('selected', true);
-        $selectStatus.find('option[value=0]').attr('selected', true);
+        $selectType.find('option[value=" "]').attr('selected', true);
+        $selectStatus.find('option[value=" "]').attr('selected', true);
         $inputKeyword.val('');
     });
 
-    $previewSize = $("#previewSize");
-    $previewSize.on('change', function() {
-        if($previewSize.val() == 1) {
-            $("#previewContent").css({
-                width: '391px',
-                height: '683px'
-            });
-        } else if($previewSize.val() == 2) {
-            $("#previewContent").css({
-                width: '430px',
-                height: '752px'
-            });
-        }
-    });
+    // $previewSize = $("#previewSize");
+    // $previewSize.on('change', function() {
+    //     if($previewSize.val() == 1) {
+    //         $("#previewContent").css({
+    //             width: '391px',
+    //             height: '683px'
+    //         });
+    //     } else if($previewSize.val() == 2) {
+    //         $("#previewContent").css({
+    //             width: '430px',
+    //             height: '752px'
+    //         });
+    //     }
+    // });
 
-    function resetData(json) {
+    function resetData(json, article_type) {
         for(var i = 0; i<json.data.length; i++) {
+            json.data[i]['type'] = article_type.data[json.data[i]['articleClassId']]['article_class_name'];
             json.data[i]['thumbnails'] = '<a href="javascript:void(0);" data-link="thumbnails"><img src="' + json.data[i]['thumbnails'] + '"></img></a>';
-            json.data[i]['domain'] = '<a href="' + json.data[i]['domain'] + '">' + json.data[i]['domain'] + '</a>';
             if(json.data[i]['status'] == 1) {
                 json.data[i]['status'] = '上线';
             } else {
@@ -155,23 +170,30 @@ $(function() {
         $previewModal = $("#previewModal");
         $previewContent = $("#previewContent");
         $previewId = $("#previewId");
-        $previewRefresh = $("#previewRefresh");
         /**
          * 行内"预览"按钮功能实现
          */
         $linkPreview.on('click', function() {
             var $this = $(this);
-            $previewContent.html("数据加载中...");
-            $previewModal.modal('show');
-            var id = $this.parents("tr").children(":first").html();
-            $previewId.val(id);
-            getPreviewContent(ajaxData, id);
-        });
-        /**
-         * "预览"模态框"刷新"按钮功能实现
-         */
-        $previewRefresh.on('click', function() {
-            getPreviewContent(ajaxData, $previewId.val());
+            var articleId = $this.parents("tr").children(":first").html();
+            var scheduleId;
+            $.ajax({
+                url: '/_admin/s/task/articles/' + articleId,
+                type: 'GET',
+                success: function(data) {
+                    if(data.code == 200) {
+                        scheduleId = data.data.info.id;
+                        $previewId.val(scheduleId);
+                        $previewContent.attr('src', '/public/share/task.html?id=' + scheduleId);
+                        $previewModal.modal('show');
+                    } else {
+                        console.log(data.error);
+                    }
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
         });
 
         /**
@@ -197,24 +219,15 @@ $(function() {
         $thumbnailsModal = $("#thumbnailsModal");
         $thumbnailsContent = $("#thumbnailsContent");
         $linkThumbnails.on('click', function() {
-            $thumbnailsContent.html('<div style="text-align:center;"><img src="' + $(this).children().attr('src') + '"></img></div>');
+            $thumbnailsContent.html('<div style="text-align:center;"><img class="thumbnailsImage" src="' + $(this).children().attr('src') + '"></img></div>');
+            $(".thumbnailsImage").css("max-width", '558px');
             $thumbnailsModal.modal('show');
         });
-    }
-
-    /**
-     * [getPreviewContent 请求获取文章html内容]
-     * @param  {Object} ajaxData ajax获取的表格数据
-     * @param {number} id 文章id
-     */
-    function getPreviewContent(ajaxData, id) {
-        for(var i = 0; i < ajaxData.data.length; i++) {
-            if(ajaxData.data[i].id == id) {
-                $previewContent.html('').html(ajaxData.data[i].content);
-                return;
+        $thumbnailsModal.on('shown.bs.modal', function() {
+            if($thumbnailsContent.width() > 558) {
+                $(".thumbnailsImage").css("max-width", $thumbnailsContent.width() + 'px');
             }
-        }
-        $previewContent.html("无预览数据...");
+        });
     }
 
     /**

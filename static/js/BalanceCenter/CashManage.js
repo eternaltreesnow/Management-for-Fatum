@@ -117,7 +117,7 @@ $(function() {
             }
         },
         sortClasses: false,
-        initComplete: function(settings, json) {
+        drawCallback: function(settings, json) {
             bindBtnEvent();
         }
     });
