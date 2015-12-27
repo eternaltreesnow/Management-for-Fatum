@@ -1,36 +1,80 @@
 $(function() {
-    var $advertiseId, $selectType, $inputOwner, $inputTitle, $inputNick, $uploadedFile, $inputAdder;
+    $("#userName").text(localStorage['user']);
+    $("#logoutBtn").on('click', function() {
+        $.ajax({
+            url: "/_admin/s/logout",
+            type: 'GET',
+            success: function(data) {
+                if(data.code == 200) {
+                    localStorage.removeItem('user');
+                    location.href = '../index.html';
+                } else {
+                    console.log(data.error);
+                }
+            },
+            error: function(data) {
+                console.log(data.error);
+            }
+        });
+    });
+
+    var $advertiseId, $selectType, $inputOwner, $inputTitle, $inputNick;
     var $submitBtn;
     var $inputOwnerHint, $inputTitleHint;
+    var $previewBtn, $previewModal, $previewContent;
+    var $successModal;
+    var $errorModal, $errorMsg;
+    var advertise;
 
     $advertiseId = $("#advertiseId");
     $selectType = $("#selectType");
     $inputOwner = $("#inputOwner");
     $inputTitle = $("#inputTitle");
     $inputNick = $("#inputNick");
-    $uploadedFile = $("#uploadedFile");
-    $inputAdder = $("#inputAdder");
-
-    var $tempdata = {
-        id: "1",
-        type: "2",
-        owner: "广告主",
-        title: "标题1:",
-        nick: "别名1",
-        file: "filename1.xxxx",
-        adder: "username"
-    };
+    $successModal = $("#successModal");
+    $errorModal = $("#errorModal");
+    $errorMsg = $("#errorMsg");
 
     /**
      * init 初始化
      */
-    $advertiseId.val($tempdata['id']);
-    $selectType.find('option[value="' + $tempdata["type"] + '"]').attr("selected", true);
-    $inputOwner.val($tempdata["owner"]);
-    $inputTitle.val($tempdata["title"]);
-    $inputNick.val($tempdata["nick"]);
-    $uploadedFile.html($tempdata["file"]);
-    $inputAdder.val($tempdata["adder"]);
+    var url = location.search;
+    if(url.indexOf("?") != -1) {
+        var id = url.substr(1).split("&")[0].split("=")[1];
+        $.ajax({
+            url: "/_admin/s/article/advertises/" + id,
+            type: "GET",
+            success: function(data) {
+                if(data.code == 200) {
+                    advertise = data.data.advertise;
+                    initialForm(advertise);
+                } else {
+                    console.log(data.error);
+                }
+            },
+            error: function(data) {
+                console.log(data);
+            }
+        });
+    } else {
+
+    }
+
+    function initialForm(data) {
+        $advertiseId.val(data['id']);
+        $selectType.find('option[value="' + data["type"] + '"]').attr("selected", true);
+        $inputOwner.val(data["advertiser"]);
+        $inputTitle.val(data["name"]);
+        $inputNick.val(data["alias"]);
+    }
+
+    $previewModal = $("#previewModal");
+    $previewContent = $("#previewContent");
+    $previewBtn = $("#previewBtn");
+    $previewBtn.on('click', function() {
+        $previewContent.html('<div style="text-align: center;"><img src="' + advertise.image + '"></img></div>');
+        $previewModal.modal('show');
+    });
 
     $inputOwnerHint = $("#inputOwnerHint");
     $inputTitleHint = $("#inputTitleHint");
@@ -46,6 +90,28 @@ $(function() {
             $inputTitle.focus();
             return;
         }
-        $("#editAdvertiseForm").submit();
+        var formdata = new FormData($("#editAdvertiseForm")[0]);
+        $.ajax({
+            type: 'POST',
+            url: '/_admin/s/article/advertises/' + $advertiseId.val(),
+            cache: false,
+            data: formdata,
+            processData: false,         // tell jQuery not to process the data
+            contentType: false,         // tell jQuery not to set the request header
+            success: function(data) {
+                if(data.code == 200) {
+                    $successModal.modal({
+                        backdrop: 'static',
+                        show: true
+                    });
+                } else {
+                    $errorMsg.html(data.error);
+                    $errorModal.modal('show');
+                }
+            },
+            error: function(data) {
+                console.log(data);
+            }
+        });
     });
 });

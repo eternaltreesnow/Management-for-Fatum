@@ -1,8 +1,28 @@
 $(function() {
+    $("#userName").text(localStorage['user']);
+    $("#logoutBtn").on('click', function() {
+        $.ajax({
+            url: "/_admin/s/logout",
+            type: 'GET',
+            success: function(data) {
+                if(data.code == 200) {
+                    localStorage.removeItem('user');
+                    location.href = '../index.html';
+                } else {
+                    console.log(data.error);
+                }
+            },
+            error: function(data) {
+                console.log(data.error);
+            }
+        });
+    });
+
     var $submitBtn, $cancerBtn;
     var $selectType, $inputOwner, $inputTitle, $inputNick, $inputFile;
     var $selectTypeHint, $inputOwnerHint, $inputTitleHint, $inputNickHint;
-    var $cancerModal;
+    var $successModal, $cancerModal;
+    var $errorModal, $errorMsg;
 
     $selectType = $("#selectType");
     $inputOwner = $("#inputOwner");
@@ -15,6 +35,9 @@ $(function() {
     $inputTitleHint = $("#inputTitleHint");
     $inputNickHint = $("#inputNickHint");
 
+    $successModal = $("#successModal");
+    $errorModal = $("#errorModal");
+    $errorMsg = $("#errorMsg");
 
     $submitBtn = $("#submitBtn");
     $submitBtn.on('click', function() {
@@ -30,7 +53,29 @@ $(function() {
             $inputTitle.focus();
             return;
         }
-        $("#addAdvertiseForm").submit();
+        var formdata = new FormData($("#addAdvertiseForm")[0]);
+        $.ajax({
+            type: 'POST',
+            url: '/_admin/s/article/advertises',
+            cache: false,
+            data: formdata,
+            processData: false,         // tell jQuery not to process the data
+            contentType: false,         // tell jQuery not to set the request header
+            success: function(data) {
+                if(data.code == 200) {
+                    $successModal.modal({
+                        backdrop: 'static',
+                        show: true
+                    });
+                } else {
+                    $errorMsg.html(data.error);
+                    $errorModal.modal('show');
+                }
+            },
+            error: function(data) {
+                console.log(data);
+            }
+        });
     });
 
     $inputOwner.on('input', function() {

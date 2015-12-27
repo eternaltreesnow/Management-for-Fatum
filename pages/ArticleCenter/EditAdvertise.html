@@ -111,14 +111,14 @@
                 </ol>
             </div>
             <div class="well container advertisement-form">
-                <form class="form-horizontal" id="editAdvertiseForm" action="editAdvertise" enctype="multipart/form-data">
+                <form class="form-horizontal" id="editAdvertiseForm" enctype="multipart/form-data">
                     <input type="hidden" id="advertiseId" name="id">
                     <fieldset>
                         <legend>编辑广告</legend>
                         <div class="form-group">
                             <label for="selectType" class="col-lg-3 control-label">选择分类</label>
                             <div class="col-lg-7">
-                                <select id="selectType" name="selectType" class="form-control">
+                                <select id="selectType" name="type" class="form-control">
                                     <option value="1">分类1</option>
                                     <option value="2">分类2</option>
                                     <option value="3">分类3</option>
@@ -129,38 +129,35 @@
                         <div class="form-group">
                             <label for="inputOwner" class="col-lg-3 control-label">广告主</label>
                             <div class="col-lg-7">
-                                <input type="text" class="form-control" id="inputOwner" name="inputOwner" placeholder="请输入广告主...">
+                                <input type="text" class="form-control" id="inputOwner" name="advertiser" placeholder="请输入广告主...">
                             </div>
                             <span id="inputOwnerHint" class="col-lg-2 form-hint form-hint-nec"></span>
                         </div>
                         <div class="form-group">
                             <label for="inputTitle" class="col-lg-3 control-label">广告名称</label>
                             <div class="col-lg-7">
-                                <input type="text" class="form-control" id="inputTitle" name="inputTitle" placeholder="请输入广告名称...">
+                                <input type="text" class="form-control" id="inputTitle" name="name" placeholder="请输入广告名称...">
                             </div>
                             <span id="inputTitleHint" class="col-lg-2 form-hint form-hint-nec"></span>
                         </div>
                         <div class="form-group">
                             <label for="inputNick" class="col-lg-3 control-label">广告别名</label>
                             <div class="col-lg-7">
-                                <input type="text" class="form-control" id="inputNick" name="inputNick" placeholder="请输入广告别名...">
+                                <input type="text" class="form-control" id="inputNick" name="alias" placeholder="请输入广告别名...">
                             </div>
                             <span id="inputNickHint" class="col-lg-2 form-hint form-hint-opt"></span>
                         </div>
                         <div class="form-group">
                             <label for="inputFile" class="col-lg-3 control-label">广告素材</label>
                             <div class="col-lg-7">
-                                <div class="form-control" id="uploadedFile" disabled="disabled" style="margin-bottom:10px;"></div>
-                                <input type="file" class="form-control" id="inputFile" name="inputFile">
+                                 <div class="input-group">
+                                    <input type="file" class="form-control" id="inputFile" name="image">
+                                    <div class="input-group-btn">
+                                        <a href="javascript:void(0);" class="btn btn-default" id="previewBtn">预览</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="inputAdder" class="col-lg-3 control-label">添加人员</label>
-                            <div class="col-lg-7">
-                                <input type="text" class="form-control" id="inputAdder" disabled="disabled">
-                            </div>
-                        </div>
-                        <input type="hidden" id="inputModifier" name="inputModifier">
                         <div class="form-group">
                             <div class="col-lg-9 col-lg-offset-3">
                                 <a href="javascript:void(0);" class="btn btn-primary" id="submitBtn">确认修改</a>
@@ -169,6 +166,57 @@
                         </div>
                     </fieldset>
                 </form>
+            </div>
+        </div>
+
+        <div id="successModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">修改成功提示</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>广告修改成功! </p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="AdvertiseManage.html" class="btn btn-default">返回列表</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="errorModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">提交错误提示</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p id="errorMsg"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="previewModal" class="modal fade">
+            <input type="hidden" id="previewId" value>
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">广告素材预览</h4>
+                    </div>
+                    <div class="modal-body" id="previewContent">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">返回</button>
+                    </div>
+                </div>
             </div>
         </div>
 

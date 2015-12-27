@@ -1,237 +1,210 @@
 $(function() {
+    $("#userName").text(localStorage['user']);
+    $("#logoutBtn").on('click', function() {
+        $.ajax({
+            url: "/_admin/s/logout",
+            type: 'GET',
+            success: function(data) {
+                if(data.code == 200) {
+                    localStorage.removeItem('user');
+                    location.href = '../index.html';
+                } else {
+                    console.log(data.error);
+                }
+            },
+            error: function(data) {
+                console.log(data.error);
+            }
+        });
+    });
+
+    var datatable, ajaxData;
     var $articleTable;
     var $linkPreview, $linkModify, $linkDelete;
-    var $previewModal, $previewId, $previewContent, $previewRefresh;
-    var $filterSearchBtn, $filterClearBtn;
-    var $selectType, $selectStatus;
+    var $previewModal, $previewId, $previewContent;
+    var $searchBtn, $clearBtn;
+    var $selectType, $selectStatus, $inputKeyword;
+    var $linkThumbnails, $thumbnailsModal, $thumbnailsContent;
 
-    var tempcolumn = [
-        {"data": "No"},
+    $selectType = $("#selectType");
+    $selectStatus = $("#selectStatus");
+    $inputKeyword = $("#inputKeyword");
+
+    var column = [
+        {"data": "id"},
         {"data": "type"},
-        {"data": "name"},
+        {"data": "title"},
+        {"data": "thumbnails"},
+        {"data": "source"},
         {"data": "status"},
-        {"data": "edit"},
-        {"data": "domain"}
+        {"data": "domain"},
+        {"data": ""}
     ];
-    var tempdata = [
-        {
-            "No" : "1",
-            "type" : "生活",
-            "name" : "文章1",
-            "status" : "上线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>',
-             "domain" : '<a href="/article1.html">article1.html</a>'
-        },
-        {
-            "No" : "2",
-            "type" : "生活",
-            "name" : "文章2",
-            "status" : "上线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>',
-             "domain" : '<a href="/article2.html">article2.html</a>'
-        },
-        {
-            "No" : "3",
-            "type" : "生活",
-            "name" : "文章3",
-            "status" : "上线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>',
-             "domain" : '<a href="/article3.html">article3.html</a>'
-        },
-        {
-            "No" : "4",
-            "type" : "生活",
-            "name" : "文章4",
-            "status" : "上线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>',
-             "domain" : '<a href="/article4.html">article4.html</a>'
-        },
-        {
-            "No" : "5",
-            "type" : "生活",
-            "name" : "文章5",
-            "status" : "上线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>',
-             "domain" : '<a href="/article5.html">article5.html</a>'
-        },
-        {
-            "No" : "6",
-            "type" : "生活",
-            "name" : "文章6",
-            "status" : "上线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>',
-             "domain" : '<a href="/article6.html">article6.html</a>'
-        },
-        {
-            "No" : "7",
-            "type" : "生活",
-            "name" : "文章7",
-            "status" : "上线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>',
-             "domain" : '<a href="/article7.html">article7.html</a>'
-        },
-        {
-            "No" : "8",
-            "type" : "生活",
-            "name" : "文章8",
-            "status" : "上线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>',
-             "domain" : '<a href="/article8.html">article8.html</a>'
-        },
-        {
-            "No" : "9",
-            "type" : "生活",
-            "name" : "文章9",
-            "status" : "上线",
-            "edit" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                     '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>',
-             "domain" : '<a href="/article9.html">article9.html</a>'
+
+    Papa.parse('../../lib/article_type.csv', {
+        download: true,
+        header: true,
+        complete: function(result) {
+            initDataTable(result);
+            var options = '';
+            result.data.map(function(item) {
+                options += '<option value="' + item['id'] + '">' + item['article_class_name'] + '</option>';
+            });
+            $selectType.append(options);
         }
-    ];
+    });
 
     /**
      * 初始化表格
      * $articleTable 文章表格
      */
-    $articleTable = $("#articleTable");
-    $articleTable.DataTable({
-        processing: true,
-        language: {
-            "search" : "内容搜索: ",
-            "searchPlaceholder" : "输入搜索条件",
-            "processing": "数据加载中, 请稍后...",
-            "zeroRecords": "记录数为0...",
-            "emptyTable":  "记录数为0...",
-            "paginate": {
-                "first": "首页",
-                "previous": "上一页",
-                "next": "下一页",
-                "last": "尾页"
+    function initDataTable(article_type) {
+        $articleTable = $("#articleTable");
+        datatable = $articleTable.DataTable({
+            processing: true,
+            language: {
+                "search" : "内容搜索: ",
+                "searchPlaceholder" : "输入搜索条件",
+                "processing": "数据加载中, 请稍后...",
+                "zeroRecords": "记录数为0...",
+                "emptyTable":  "记录数为0...",
+                "paginate": {
+                    "first": "首页",
+                    "previous": "上一页",
+                    "next": "下一页",
+                    "last": "尾页"
+                },
+                "lengthMenu": '每页显示 _MENU_ 条记录'
             },
-            "lengthMenu": '每页显示 _MENU_ 条记录'
-        },
-        data: tempdata,
-        columns: tempcolumn,
-        pagingType: "full_numbers",
-        dom: 'frtlp'
-        // dom: 'rtl<"ecg-table-paginate"p>'
-    });
-    $("div#articleTable_filter").append('<b class="table-title pull-left">文章列表</b>');
-    $("div#articleTable_filter").append('<a href="AddArticle.html"  class="btn btn-default btn-sm">' +
-                                                  '<span class="glyphicon glyphicon-plus"></span>' +
-                                                  '&nbsp;添加文章' +
-                                              '</a>');
-
-    $selectType = $("#selectType");
-    $selectStatus = $("#selectStatus");
-
-    $filterSearchBtn = $("#filterSearchBtn");
-    $filterSearchBtn.on('click', function() {
-        var requestData = {
-            type: $selectType.find('option:selected').val(),
-            status: $selectStatus.find('option:selected').val()
-        };
-        $.ajax({
-            async: true,
-            type: "GET",
-            url: "searchArticleByTypeStatus", //补充搜索api
-            data: requestData,
-            dataType: "json",
-            success: function(data) {
-                // 获取搜索结果
+            columns: column,
+            pagingType: "full_numbers",
+            dom: 'rtlp',
+            serverSide: true,
+            ajax: {
+                url: '/_admin/s/article/articles',
+                type: 'GET',
+                data: function(d) {
+                    delete d.columns;
+                    delete d.order;
+                    d.limit = d.length;
+                    delete d.length;
+                    d.search.type = $selectType.val();
+                    d.search.status = $selectStatus.val();
+                    d.search.value = $inputKeyword.val();
+                    d.keyword = $inputKeyword.val();
+                },
+                dataSrc: function(json) {
+                    ajaxData = json;
+                    resetData(json, article_type);
+                    return json.data;
+                }
             },
-            error: function(data) {
-
-            }
-        });
-    });
-
-    $filterClearBtn = $("#filterClearBtn");
-    $filterClearBtn.on('click', function() {
-        $selectType.find('option[value=1]').attr('selected', true);
-        $selectStatus.find('option[value=1]').attr('selected', true);
-    });
-
-    $linkPreview = $('[data-link="preview"]');
-    $linkModify = $('[data-link="modify"]');
-    $linkDelete = $('[data-link="delete"]');
-
-    $previewModal = $("#previewModal");
-    $previewContent = $("#previewContent");
-    $previewId = $("#previewId");
-    $previewRefresh = $("#previewRefresh");
-
-    $linkPreview.on('click', function() {
-        var $this = $(this);
-        $previewContent.html("数据加载中...");
-        $previewModal.modal('show');
-        var id = $this.parents("tr").children(":first").html();
-        $previewId.val(id);
-        var requestData = {
-            "id" : id
-        };
-        getPreviewContent(requestData);
-    });
-
-    $previewRefresh.on('click', function() {
-        var requestData = {
-            "id" : $previewId.val()
-        };
-        getPreviewContent(requestData);
-    });
-
-    /**
-     * [getPreviewContent 请求获取文章html内容]
-     * @param  {[json]} requestData [文章id]
-     * @return {success} 加载内容到modal中的previewContent
-     * @return {error} 加载请求失败提示到previewContent
-     */
-    function getPreviewContent(requestData) {
-        $.ajax({
-            async: true,
-            type: "GET",
-            url: "", //补充返回html内容api
-            data: requestData,
-            dataType: "json",
-            success: function(data) {
-                $previewContent.html(data.content);
-            },
-            error: function(data) {
-                $previewContent.html("数据加载失败, 请刷新重试...");
+            sortClasses: false,
+            columnDefs: [{
+                "targets" : -1,
+                "data" : null,
+                "defaultContent" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
+                                   '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
+                                   '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
+            }],
+            drawCallback: function(settings, json) {
+                bindBtnEvent();
             }
         });
     }
 
-    $linkModify.on('click', function() {
-        var $this = $(this);
-        var id = $this.parents("tr").children(":first").html();
-        location.href = "EditArticle.html?id=" + id;
+    $searchBtn = $("#searchBtn");
+    $searchBtn.on('click', function() {
+        datatable.ajax.reload(function ( json ) {
+            bindBtnEvent();
+        });
     });
 
-    $linkDelete.on('click', function() {
-        var $this = $(this);
-        var id = $this.parents("tr").children(":first").html();
-        if(confirm("确定要删除该文章？")) {
-            deleteArticlebyId(id);
-        }
+    $clearBtn = $("#clearBtn");
+    $clearBtn.on('click', function() {
+        $selectType.find('option[value=" "]').attr('selected', true);
+        $selectStatus.find('option[value=" "]').attr('selected', true);
+        $inputKeyword.val('');
     });
+
+    function resetData(json, article_type) {
+        for(var i = 0; i<json.data.length; i++) {
+            json.data[i]['type'] = article_type.data[json.data[i]['articleClassId']]['article_class_name'];
+            json.data[i]['thumbnails'] = '<a href="javascript:void(0);" data-link="thumbnails"><img src="' + json.data[i]['thumbnails'] + '"></img></a>';
+            if(json.data[i]['status'] == 1) {
+                json.data[i]['status'] = '上线';
+            } else {
+                json.data[i]['status'] = '下线';
+            }
+        }
+    }
+
+    function bindBtnEvent() {
+        // Preview Btn
+        $linkPreview = $('[data-link="preview"]');
+        $previewModal = $("#previewModal");
+        $previewContent = $("#previewContent");
+        $previewId = $("#previewId");
+        /**
+         * 行内"预览"按钮功能实现
+         */
+        $linkPreview.on('click', function() {
+            var $this = $(this);
+            var articleId = $this.parents("tr").children(":first").html();
+            var scheduleId;
+            $.ajax({
+                url: '/_admin/s/article/articles/' + articleId,
+                type: 'GET',
+                success: function(data) {
+                    if(data.code == 200) {
+                        scheduleId = data.data.info.id;
+                        $previewId.val(scheduleId);
+                        $previewContent.attr('src', '/public/share/article.html?id=' + articleId + '&info_id=' + scheduleId);
+                        $previewModal.modal('show');
+                    } else {
+                        console.log(data.error);
+                    }
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
+        });
+
+        /**
+         * 行内"修改"按钮功能实现
+         */
+        $linkModify = $('[data-link="modify"]');
+        $linkModify.on('click', function() {
+            var $this = $(this);
+            var id = $this.parents("tr").children(":first").html();
+            location.href = "EditArticle.html?id=" + id;
+        });
+
+        $linkDelete = $('[data-link="delete"]');
+        $linkDelete.on('click', function() {
+            var $this = $(this);
+            var id = $this.parents("tr").children(":first").html();
+            if(confirm("确定要删除该文章？")) {
+                deleteArticlebyId(id);
+            }
+        });
+
+        $linkThumbnails = $('[data-link="thumbnails"]');
+        $thumbnailsModal = $("#thumbnailsModal");
+        $thumbnailsContent = $("#thumbnailsContent");
+        $linkThumbnails.on('click', function() {
+            $thumbnailsContent.html('<div style="text-align:center;"><img class="thumbnailsImage" src="' + $(this).children().attr('src') + '"></img></div>');
+            $(".thumbnailsImage").css("max-width", '558px');
+            $thumbnailsModal.modal('show');
+        });
+        $thumbnailsModal.on('shown.bs.modal', function() {
+            if($thumbnailsContent.width() > 558) {
+                $(".thumbnailsImage").css("max-width", $thumbnailsContent.width() + 'px');
+            }
+        });
+    }
+
     /**
      * [deleteArticlebyId 通过id删除文章]
      * @param  {String} id [文章id]
@@ -239,20 +212,21 @@ $(function() {
      * @return {error} 提示删除失败信息
      */
     function deleteArticlebyId(id) {
-        var requestData = {
-            "id" : id
-        };
         $.ajax({
-            async: true,
-            type: "POST",
-            url: "", //补充删除文章api
-            data: requestData,
-            dataType: "json",
+            type: "DELETE",
+            url: "/_admin/s/article/articles/" + id,
             success: function(data) {
-                location.href = "ArticleManage.html";
+                if(data.code == 200) {
+                    alert("删除成功!");
+                    datatable.ajax.reload(function ( json ) {
+                        bindBtnEvent();
+                    });
+                } else {
+                    console.log(data.error);
+                }
             },
             error: function(data) {
-                alert("删除失败，请重试...");
+                console.log(data);
             }
         });
     }

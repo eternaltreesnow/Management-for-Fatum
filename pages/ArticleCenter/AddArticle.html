@@ -12,10 +12,13 @@
         <link rel="stylesheet" href="../../lib/jquery-ui-1.11.4/jquery-ui.min.css">
         <!-- DataTables -->
         <link rel="stylesheet" href="../../lib/DataTables-1.10.8/css/dataTables.bootstrap.min.css">
+                <!-- Bootstrap-Datetimepicker -->
+        <link rel="stylesheet" href="../../lib/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
         <!-- Normalize.css -->
         <link rel="stylesheet" href="../../lib/normalize.css">
 
         <link rel="stylesheet" href="../../static/css/frame.css">
+        <link rel="stylesheet" href="../../static/css/AddArticle.css">
 
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!-- Warning: Respond.js doesn't work if you view the page via file:// -->
@@ -109,50 +112,190 @@
                     <li class="active">添加文章</li>
                 </ol>
             </div>
-            <div class="well container advertisement-form">
-                <form class="form-horizontal" enctype="multipart/form-data">
-                    <fieldset>
-                        <legend>添加文章</legend>
-                        <div class="form-group">
-                            <label for="selectType" class="col-lg-3 control-label">选择分类</label>
-                            <div class="col-lg-7">
-                                <select id="selectType" class="form-control">
-                                    <option value="1">分类1</option>
-                                    <option value="2">分类2</option>
-                                    <option value="3">分类3</option>
-                                    <option value="4">分类4</option>
-                                </select>
+            <div class="container advertisement-form">
+                <form class="form-horizontal" enctype="multipart/form-data" id="addArticleForm">
+                    <input type="hidden" id="time" name="time">
+                    <legend><b>添加文章</b></legend>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="panel-title">文章信息</div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label for="selectType" class="col-lg-3 control-label">选择分类</label>
+                                <div class="col-lg-7">
+                                    <select id="selectType" name="articleClassId" class="form-control">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputOwner" class="col-lg-3 control-label">文章来源</label>
+                                <div class="col-lg-7">
+                                    <input type="text" class="form-control" id="inputSrc" name="source" placeholder="请输入文章来源...">
+                                </div>
+                                <span id="inputOwnerHint" class="col-lg-2 form-hint form-hint-nec">(*必填)</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputTitle" class="col-lg-3 control-label">文章标题</label>
+                                <div class="col-lg-7">
+                                    <input type="text" class="form-control" id="inputTitle" name="title" placeholder="请输入文章标题...">
+                                </div>
+                                <span id="inputTitleHint" class="col-lg-2 form-hint form-hint-nec">(*必填)</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputFile" class="col-lg-3 control-label">文章简介</label>
+                                <div class="col-lg-7">
+                                    <input type="text" class="form-control" id="inputIntro" name="intro" placeholder="请输入文章简介...">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputFile" class="col-lg-3 control-label">文章题图</label>
+                                <div class="col-lg-7">
+                                    <input type="file" class="form-control" id="inputFile" name="thumbnails">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="selectDomain" class="col-lg-3 control-label">可用域名</label>
+                                <div class="col-lg-7">
+                                    <select id="selectDomain" name="domain" class="form-control"></select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="selectStatus" class="col-lg-3 control-label">状态</label>
+                                <div class="col-lg-7">
+                                    <select id="selectStatus" name="status" class="form-control">
+                                        <option value="1">上线</option>
+                                        <option value="0">下线</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="inputOwner" class="col-lg-3 control-label">文章来源</label>
-                            <div class="col-lg-7">
-                                <input type="text" class="form-control" id="inputSrc" placeholder="请输入文章来源...">
-                            </div>
-                            <span id="inputOwnerHint" class="col-lg-2 form-hint form-hint-nec">(*必填)</span>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="panel-title">排期信息</div>
                         </div>
-                        <div class="form-group">
-                            <label for="inputTitle" class="col-lg-3 control-label">文章标题</label>
-                            <div class="col-lg-7">
-                                <input type="text" class="form-control" id="inputTitle" placeholder="请输入文章标题...">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label for="firstAdId" class="col-lg-3 control-label">广告1 ID</label>
+                                <div class="col-lg-7">
+                                    <input type="text" class="form-control" id="AdId1" name="advertiseId1" placeholder="请输入广告2 ID...">
+                                </div>
                             </div>
-                            <span id="inputTitleHint" class="col-lg-2 form-hint form-hint-nec">(*必填)</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="editorArticle" class="col-lg-1 control-label">编辑文章</label>
-                            <div class="col-lg-11">
-                                <script id="editorArticle" class="wysiwyg-editor"></script>
+                            <div class="form-group">
+                                <label for="firstPrice" class="col-lg-3 control-label">单价</label>
+                                <div class="col-lg-2">
+                                    <input type="text" class="form-control" id="Price1" name="price1" placeholder="请输入广告1单价...">
+                                </div>
+                                <label for="firstCount" class="col-lg-3 control-label">浏览次数上限</label>
+                                <div class="col-lg-2">
+                                    <input type="text" class="form-control" id="Count1" name="limitViewCount1">
+                                </div>
                             </div>
-                            <input type="hidden" id="content" name="content">
-                        </div>
-                        <div class="form-group">
-                            <div class="col-lg-9 col-lg-offset-3">
-                                <a href="javascript:void(0);" class="btn btn-primary" id="submitBtn">提交</a>
-                                <a href="javascript:void(0);" class="btn btn-default" id="cancerBtn">取消</a>
+                            <div class="form-group">
+                                <label for="firstAdId" class="col-lg-3 control-label">广告2 ID</label>
+                                <div class="col-lg-7">
+                                    <input type="text" class="form-control" id="AdId2" name="advertiseId2" placeholder="请输入广告2 ID...">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="firstPrice" class="col-lg-3 control-label">单价</label>
+                                <div class="col-lg-2">
+                                    <input type="text" class="form-control" id="Price2" name="price2" placeholder="请输入广告1单价...">
+                                </div>
+                                <label for="firstCount" class="col-lg-3 control-label">浏览次数上限</label>
+                                <div class="col-lg-2">
+                                    <input type="text" class="form-control" id="Count2" name="limitViewCount2">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="beginTime" class="col-lg-3 control-label">起止时间</label>
+                                <input type="hidden" id="begintime" name="beginTime">
+                                <input type="hidden" id="endtime" name="endTime">
+                                <div class="col-lg-3">
+                                    <div class="input-group date" id="beginDatetimepicker">
+                                        <input type="text" class="form-control" id="beginTime" placeholder="请选择开始时间...">
+                                        <div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-1" style="text-align:center; line-height:43px;">
+                                    <span class="glyphicon glyphicon-minus"></span>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="input-group date" id="endDatetimepicker">
+                                        <input type="text" class="form-control" id="endTime" placeholder="请选择结束时间...">
+                                        <div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="profitLimit" class="col-lg-3 control-label">收益上限</label>
+                                <div class="col-lg-7">
+                                    <input type="text" class="form-control" id="profitLimit" name="limitProfit" placeholder="请输入收益上限...">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="selectPlatform" class="col-lg-3 control-label">限制平台</label>
+                                <div class="col-lg-7">
+                                    <select name="limitDestination" id="selectPlatform" class="form-control">
+                                        <option value="0">不限制</option>
+                                        <option value="1">微信</option>
+                                        <option value="2">QQ</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </fieldset>
+                    </div>
+                    <div class="panel panel-default" id="editorContainer">
+                        <div class="panel-heading">
+                            <div class="panel-title">编辑文章</div>
+                        </div>
+                        <div class="panel-body">
+                            <script id="editorArticle" class="wysiwyg-editor" name="content"></script>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-9 col-lg-offset-3">
+                            <a href="javascript:void(0);" class="btn btn-primary" id="submitBtn">提交</a>
+                            <a href="javascript:void(0);" class="btn btn-default" id="cancerBtn">取消</a>
+                        </div>
+                    </div>
                 </form>
+            </div>
+        </div>
+
+        <div id="successModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">添加成功提示</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>文章成功添加! 请选择继续添加或返回文章列表。</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="AddArticle.html" class="btn btn-primary">继续添加</a>
+                        <a href="ArticleManage.html" class="btn btn-default">返回列表</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="errorModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">提交错误提示</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p id="errorMsg"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -165,10 +308,15 @@
         <!-- DataTables -->
         <script src="../../lib/DataTables-1.10.8/js/jquery.dataTables.min.js"></script>
         <script src="../../lib/DataTables-1.10.8/js/dataTables.bootstrap.min.js"></script>
+        <!-- Bootstrap-Datetimepick -->
+        <script src="../../lib/bootstrap-datetimepicker/moment/moment.js"></script>
+        <script src="../../lib/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
         <!-- UEditor -->
         <script src="../../lib/ueditor/ueditor.config.js"></script>
         <script src="../../lib/ueditor/ueditor.all.min.js"></script>
         <script src="../../lib/ueditor/lang/zh-cn/zh-cn.js"></script>
+        <!-- PapaParse -->
+        <script src="../../lib/PapaParse/papaparse.min.js"></script>
 
         <script src="../../static/js/ArticleCenter/AddArticle.js"></script>
     </body>

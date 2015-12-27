@@ -1,20 +1,39 @@
 $(function() {
+    $("#userName").text(localStorage['user']);
+    $("#logoutBtn").on('click', function() {
+        $.ajax({
+            url: "/_admin/s/logout",
+            type: 'GET',
+            success: function(data) {
+                if(data.code == 200) {
+                    localStorage.removeItem('user');
+                    location.href = '../index.html';
+                } else {
+                    console.log(data.error);
+                }
+            },
+            error: function(data) {
+                console.log(data.error);
+            }
+        });
+    });
+
     // 变量声明
     var datatable, ajaxData;
     var $advertisementTable;
     var $linkPreview, $linkModify, $linkDelete;
-    var $previewModal, $previewId, $previewContent, $previewRefresh;
+    var $previewModal, $previewId, $previewContent;
     var $searchBtn;
 
     /**
      * [tempcolumn 列数据格式]
      * @type {Array}
      */
-    var tempcolumn = [
-        {"data": "No"},
+    var column = [
+        {"data": "id"},
         {"data": "type"},
         {"data": "name"},
-        {"data": "altername"},
+        {"data": "alias"},
         {"data": "status"},
         {"data": ""}
     ];
@@ -24,74 +43,13 @@ $(function() {
      */
     var tempdata = [
         {
-            "No" : "1",
-            "type" : "生活",
+            "id" : "1",
+            "type" : "1",
             "name" : "广告1",
-            "altername" : "ad1",
-            "status" : "上线"
-        },
-        {
-            "No" : "2",
-            "type" : "体育",
-            "name" : "广告2",
-            "altername" : "ad2",
-            "status" : "下线"
-        },
-        {
-            "No" : "3",
-            "type" : "体育",
-            "name" : "广告2",
-            "altername" : "ad2",
-            "status" : "下线"
-        },
-        {
-            "No" : "4",
-            "type" : "体育",
-            "name" : "广告2",
-            "altername" : "ad2",
-            "status" : "下线"
-        },
-        {
-            "No" : "5",
-            "type" : "体育",
-            "name" : "广告2",
-            "altername" : "ad2",
-            "status" : "下线"
-        },
-        {
-            "No" : "6",
-            "type" : "体育",
-            "name" : "广告2",
-            "altername" : "ad2",
-            "status" : "下线"
-        },
-        {
-            "No" : "7",
-            "type" : "体育",
-            "name" : "广告2",
-            "altername" : "ad2",
-            "status" : "下线"
-        },
-        {
-            "No" : "8",
-            "type" : "体育",
-            "name" : "广告2",
-            "altername" : "ad2",
-            "status" : "下线"
-        },
-        {
-            "No" : "9",
-            "type" : "体育",
-            "name" : "广告2",
-            "altername" : "ad2",
-            "status" : "下线"
-        },
-        {
-            "No" : "10",
-            "type" : "体育",
-            "name" : "广告2",
-            "altername" : "ad2",
-            "status" : "下线"
+            "alias" : "ad1",
+            "advertiser" : "d",
+            "status" : "1",
+            "image" : "imagesrc"
         }
     ];
 
@@ -116,10 +74,28 @@ $(function() {
             },
             "lengthMenu": '每页显示 _MENU_ 条记录'
         },
-        data: tempdata,
-        columns: tempcolumn,
+        columns: column,
         pagingType: "full_numbers",
         dom: 'rtlp',
+        serverSide: true,
+        ajax: {
+            url: '/_admin/s/article/advertises',
+            type: 'GET',
+            data: function(d) {
+                delete d.columns;   // delete request parameters columns
+                delete d.order;     // delete request parameters order
+                d.limit = d.length; // reset length as limit
+                delete d.length;
+                d.keyword = $("#searchInput").val();
+                d.search.value = $("#searchInput").val();
+            },
+            dataSrc: function(json) {
+                ajaxData = json;
+                resetData(json);
+                return json.data;
+            }
+        },
+        sortClasses: false,
         columnDefs: [ {
           "targets" : -1,
           "data" : null,
@@ -127,17 +103,15 @@ $(function() {
                              '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
                              '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
         } ],
-        initComplete: function(settings, json) {
+        drawCallback: function(settings, json) {
             bindBtnEvent();
-            ajaxData = json;
         }
     });
 
     $searchBtn = $("#searchBtn");
     $searchBtn.on('click', function() {
-        datatables.ajax.reload( function ( json ) {
+        datatable.ajax.reload( function ( json ) {
             bindBtnEvent();
-            ajaxData = json;
         });
     });
 
@@ -147,7 +121,6 @@ $(function() {
         $previewModal = $("#previewModal");
         $previewContent = $("#previewContent");
         $previewId = $("#previewId");
-        $previewRefresh = $("#previewRefresh");
         /**
          * 行内"预览"按钮功能实现
          */
@@ -158,12 +131,6 @@ $(function() {
             var id = $this.parents("tr").children(":first").html();
             $previewId.val(id);
             getPreviewContent(ajaxData, id);
-        });
-        /**
-         * "预览"模态框"刷新"按钮功能实现
-         */
-        $previewRefresh.on('click', function() {
-            getPreviewContent(ajaxData, $previewId.val());
         });
 
         /**
@@ -189,6 +156,16 @@ $(function() {
         });
     }
 
+    function resetData(json) {
+        for(var i=0; i<json.data.length; i++) {
+            if(json.data[i]['status'] == 1) {
+                json.data[i]['status'] = '上线';
+            } else {
+                json.data[i]['status'] = '下线';
+            }
+        }
+    }
+
     /**
      * [getPreviewContent 请求获取广告html内容]
      * @param  {Object} ajaxData ajax获取的表格数据
@@ -197,7 +174,8 @@ $(function() {
     function getPreviewContent(ajaxData, id) {
         for(var i = 0; i < ajaxData.data.length; i++) {
             if(ajaxData.data[i].id == id) {
-                $previewContent.html(ajaxData.data[i].image);
+                var img = '<div style="text-align:center;"><img src="' + ajaxData.data[i].image + '"></img></div>';
+                $previewContent.html('').html(img);
                 return;
             }
         }
@@ -211,17 +189,18 @@ $(function() {
      * @return {error} 提示删除失败信息
      */
     function deleteAdvertisebyId(id) {
-        var requestData = {
-            "id" : id
-        };
         $.ajax({
-            async: true,
-            type: "POST",
-            url: "", //补充删除广告api
-            data: requestData,
-            dataType: "json",
+            type: "DELETE",
+            url: "/_admin/s/article/advertises/" + id,
             success: function(data) {
-                location.href = "AdvertiseManage.html";
+                if(data.code == 200) {
+                    alert("删除成功!");
+                    datatable.ajax.reload( function ( json ) {
+                        bindBtnEvent();
+                    });
+                } else {
+                    console.log(data.error);
+                }
             },
             error: function(data) {
                 alert("删除失败，请重试...");
