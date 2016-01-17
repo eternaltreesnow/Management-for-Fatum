@@ -149,7 +149,7 @@
                                 <div class="col-lg-7">
                                     <input type="text" class="form-control" id="inputSrc" name="source" placeholder="请输入文章来源...">
                                 </div>
-                                <span id="inputOwnerHint" class="col-lg-2 form-hint form-hint-nec">(*必填)</span>
+                                <span id="inputSrcHint" class="col-lg-2 form-hint form-hint-nec">(*必填)</span>
                             </div>
                             <div class="form-group">
                                 <label for="inputFile" class="col-lg-3 control-label">文章简介</label>
@@ -197,6 +197,12 @@
                         </div>
                         <div class="panel-body">
                             <input type="hidden" id="scheduleId">
+                            <div class="form-group">
+                                <label for="" class="col-lg-3"></label>
+                                <div class="col-lg-7">
+                                    <a href="javascript:void(0);" class="btn btn-default" id="deleteScheduleBtn">重置排期</a>
+                                </div>
+                            </div>
                             <div class="form-group" id="adIdContainer">
                                 <label for="AdId" class="col-lg-3 control-label">广告ID</label>
                                 <div class="col-lg-7">
@@ -320,6 +326,41 @@
             </div>
         </div>
 
+        <div id="confirmModal" class="modal fade">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">重置排期确认</h4>
+                    </div>
+                    <div class="modal-body" id="confirmContent">
+                    </div>
+                    <div class="modal-footer">
+                        <a href="javascript:void(0);" class="btn btn-primary" id="deleteConfirmBtn">确认重置</a>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="videoModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">视频链接转换</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" class="form-control" id="videoUrl" placeholder="请输入视频链接(仅限腾讯视频、优酷视频)...">
+                    </div>
+                    <div class="modal-footer">
+                        <a href="javascript:void(0);" class="btn btn-primary" id="videoLinkBtn">转换并添加</a>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- jQuery-2.0.3 -->
         <script src="../../lib/jquery-2.0.3.min.js"></script>
         <!-- Bootstrap -->
@@ -336,8 +377,10 @@
         <script src="../../lib/ueditor/ueditor.config.js"></script>
         <script src="../../lib/ueditor/ueditor.all.min.js"></script>
         <script src="../../lib/ueditor/lang/zh-cn/zh-cn.js"></script>
+        <script src="../../static/js/plugin/ueditor/addVideoLinkBtn.js"></script>
         <!-- PapaParse -->
         <script src="../../lib/PapaParse/papaparse.min.js"></script>
+        <script src="../../static/js/plugin/video_template.js"></script>
 
         <script src="../../static/js/TaskCenter/EditArticle.js"></script>
     </body>

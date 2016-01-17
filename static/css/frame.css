@@ -173,3 +173,19 @@ ul.dropdown-menu li a.menu-link {
     overflow: scroll;
     border: 1px solid #E1E1E1;
 }
+
+/* Form Hint */
+.form-hint {
+    display: inline-block;
+    height: 43px;
+    line-height: 43px;
+}
+.form-hint-nec {
+    color: red;
+}
+.form-hint-opt {
+    color: #8A6D3B;
+}
+.form-hint-suc {
+    color: #3C763D;
+}

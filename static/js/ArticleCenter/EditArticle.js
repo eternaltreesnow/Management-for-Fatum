@@ -22,10 +22,18 @@ $(function() {
     var $articleId, $selectType, $inputSrc, $inputTitle, $inputAdder, $inputFile, $selectStatus, $selectDomain, $inputIntro;
     var $scheduleId, $AdId1, $Price1, $Count1, $AdId2, $Price2, $Count2, $beginTime, $endTime, $begintime, $endtime, $time, $selectPlatform;
     var $submitBtn;
+    var $deleteScheduleBtn, $deleteConfirmBtn, $confirmModal, $confirmContent;
     var $fetchUrl, $fetchBtn;
     var $previewBtn, $previewModal, $previewContent;
     var $successModal;
     var $errorModal, $errorMsg;
+    var $videoUrl, $videoLinkBtn;
+
+    var $inputTitleHint, $inputSrcHint;
+    var ue;
+
+    $inputTitleHint = $("#inputTitleHint");
+    $inputSrcHint = $("#inputSrcHint");
 
     $articleId = $("#articleId");
     $selectType = $("#selectType");
@@ -63,12 +71,14 @@ $(function() {
     $endDatetimepicker = $("#endDatetimepicker");
     $beginDatetimepicker.datetimepicker({
         sideBySide: true,
-        format: 'YYYY/MM/DD HH:mm'
+        format: 'YYYY/MM/DD HH:mm',
+        defaultDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
     });
     $endDatetimepicker.datetimepicker({
         sideBySide: true,
         format: 'YYYY/MM/DD HH:mm',
-        useCurrent: false
+        useCurrent: false,
+        minDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
     });
     $beginDatetimepicker.on("dp.change", function(e) {
         $endDatetimepicker.data("DateTimePicker").minDate(e.date);
@@ -142,7 +152,7 @@ $(function() {
         $selectStatus.find('option[value="' + data.status + '"]').attr('selected', true);
         $inputIntro.val(data.intro);
         // initial UEditor and content
-        var ue = UE.getEditor('editorArticle', {
+        ue = UE.getEditor('editorArticle', {
             toolbars: [
                 ['fullscreen', 'source', 'undo', 'redo'],
                 ['customstyle', 'paragraph', 'fontfamily', 'fontsize', '|', 'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|', 'rowspacingtop', 'rowspacingbottom', 'lineheight'],
@@ -151,7 +161,7 @@ $(function() {
         });
         ue.ready(function() {
             ue.setContent(data.content);
-            bindBtnEvent();
+            bindBtnEvent(ue);
 
             // initial fetch
             $fetchBtn = $("#fetchBtn");
@@ -178,21 +188,28 @@ $(function() {
             });
         });
 
-        // initial Schedule info
-        $scheduleId.val(info.id);
-        $AdId1.val(info.advertiserId1);
-        $Price1.val(info.price1);
-        $Count1.val(info.limitViewCount1);
-        $AdId2.val(info.advertiserId2);
-        $Price2.val(info.price2);
-        $Count2.val(info.limitViewCount2);
-        if(info.beginTime != null) {
-            $beginDatetimepicker.data("DateTimePicker").defaultDate(moment(info.beginTime).format('YYYY-MM-DD HH:mm:ss'));
+        if(info.advertiserId1 == null && info.advertiserId2 == null) {
+
+        } else {
+            // initial Schedule info
+            $scheduleId.val(info.id);
+            $AdId1.val(info.advertiserId1);
+            $Price1.val(info.price1);
+            $Count1.val(info.limitViewCount1);
+            $AdId2.val(info.advertiserId2);
+            $Price2.val(info.price2);
+            $Count2.val(info.limitViewCount2);
+            if(info.beginTime != null) {
+                $beginDatetimepicker.data("DateTimePicker").defaultDate(moment(info.beginTime).format('YYYY-MM-DD HH:mm:ss'));
+            }
+            if(info.endTime != null) {
+                $endDatetimepicker.data("DateTimePicker").defaultDate(moment(info.endTime).format('YYYY-MM-DD HH:mm:ss'));
+            }
+            $selectPlatform.find('option[value="' + info.limitDestination + '"]').attr('selected', true);
+
+            // set schedule form disable
+            setSchduleFormDisable(true);
         }
-        if(info.endTime != null) {
-            $endDatetimepicker.data("DateTimePicker").defaultDate(moment(info.endTime).format('YYYY-MM-DD HH:mm:ss'));
-        }
-        $selectPlatform.find('option[value="' + info.limitDestination + '"]').attr('selected', true);
     }
 
     $previewModal = $("#previewModal");
@@ -209,10 +226,116 @@ $(function() {
         }
     });
 
+    // Form validation
+    $inputSrc.on('input', function() {
+        $inputSrc.parent().removeClass('has-error');
+    });
+    $inputSrc.on('blur', function() {
+        if($inputSrc.val() !== "") {
+            $inputSrcHint.removeClass("form-hint-nec").addClass("form-hint-suc");
+            $inputSrcHint.html('<span class="glyphicon glyphicon-ok"></span>');
+        } else {
+            $inputSrcHint.removeClass("form-hint-suc").addClass("form-hint-nec");
+            $inputSrcHint.html('(*必填)');
+        }
+    });
+
+    $inputTitle.on('input', function() {
+        $inputTitle.parent().removeClass('has-error');
+    });
+    $inputTitle.on('blur', function() {
+        if($inputTitle.val() !== "") {
+            $inputTitleHint.removeClass("form-hint-nec").addClass("form-hint-suc");
+            $inputTitleHint.html('<span class="glyphicon glyphicon-ok"></span>');
+        } else {
+            $inputTitleHint.removeClass("form-hint-suc").addClass("form-hint-nec");
+            $inputTitleHint.html('(*必填)');
+        }
+    });
+
+    function setSchduleFormDisable(disableStatus) {
+        if(disableStatus == false) {
+            $scheduleId.val('');
+            $AdId1.val('');
+            $Price1.val('');
+            $Count1.val('');
+            $AdId2.val('');
+            $Price2.val('');
+            $Count2.val('');
+            $beginDatetimepicker.data("DateTimePicker").defaultDate(moment(new Date()).format('YYYY-MM-DD HH:mm:ss'));
+            $endDatetimepicker.data("DateTimePicker").clear();
+            $selectPlatform.find('option[value=0]').attr('selected', true);
+        }
+        $AdId1.attr('disabled', disableStatus);
+        $Price1.attr('disabled', disableStatus);
+        $Count1.attr('disabled', disableStatus);
+        $AdId2.attr('disabled', disableStatus);
+        $Price2.attr('disabled', disableStatus);
+        $Count2.attr('disabled', disableStatus);
+        $("#beginTime").attr('disabled', disableStatus);
+        $("#endTime").attr('disabled', disableStatus);
+        $selectPlatform.attr('disabled', disableStatus);
+    }
+
     function bindBtnEvent() {
+        $confirmModal = $("#confirmModal");
+        $confirmContent = $("#confirmContent");
+        $deleteScheduleBtn = $("#deleteScheduleBtn");
+        $deleteScheduleBtn.on('click', function() {
+            if($scheduleId.val() == "") {
+                $confirmContent.text("该文章无排期，请直接添加排期信息");
+                $deleteConfirmBtn.hide();
+            } else {
+                $confirmContent.text("重置排期将会删除原有排期的信息，请问是否确认重置？");
+                $deleteConfirmBtn.show();
+            }
+            $confirmModal.modal('show');
+        });
+
+        $deleteConfirmBtn = $("#deleteConfirmBtn");
+        $deleteConfirmBtn.on('click', function() {
+            $confirmContent.text("删除中");
+            $.ajax({
+                type: "DELETE",
+                url: "/_admin/s/article/infos/" + $scheduleId.val(),
+                success: function(data) {
+                    if(data.code == 200) {
+                        $confirmContent.text("删除成功!");
+                        $confirmModal.modal('hide');
+                        setSchduleFormDisable(false);
+                    }
+                }
+            });
+        });
+
+        $videoUrl = $("#videoUrl");
+        $videoLinkBtn = $("#videoLinkBtn");
+        $videoLinkBtn.on('click', function() {
+            var html = getVideoHtmlTemplate($videoUrl.val());
+            if(html !== '') {
+                $('#videoModal').modal('hide');
+                ue.execCommand('inserthtml', html);
+                $videoUrl.val('');
+            } else {
+                $('#videoModal').modal('hide');
+                $errorMsg.html("视频链接转换失败，请确保链接属于腾讯视频或优酷视频.");
+                $errorModal.modal('show');
+            }
+        });
+
         console.log();
         $submitBtn = $("#submitBtn");
         $submitBtn.on('click', function(event) {
+            if($inputSrc.val() === "") {
+                $inputSrc.parent().addClass('has-error');
+                $inputSrc.focus();
+                return;
+            }
+            if($inputTitle.val() === "") {
+                $inputTitle.parent().addClass('has-error');
+                $inputTitle.focus();
+                return;
+            }
             $time.val(event.timeStamp);
             $begintime.val(moment($("#beginTime").val()).format('x'));
             $endtime.val(moment($("#endTime").val()).format('x'));

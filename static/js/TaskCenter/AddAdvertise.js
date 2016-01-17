@@ -46,8 +46,6 @@ $(function() {
             $inputOwner.parent().addClass('has-error');
             $inputOwner.focus();
             return;
-        } else {
-            $inputOwnerHint.html('<span class="glyphicon glyphicon-ok"></span>');
         }
         if($inputTitle.val() === "") {
             $inputTitle.parent().addClass('has-error');

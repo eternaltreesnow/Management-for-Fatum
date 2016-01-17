@@ -164,9 +164,15 @@ $(function() {
      * @param {number} id 广告id
      */
     function getPreviewContent(ajaxData, id) {
+        var url;
         for(var i = 0; i < ajaxData.data.length; i++) {
             if(ajaxData.data[i].id == id) {
-                var img = '<div style="text-align:center;"><img src="' + ajaxData.data[i].image + '"></img></div>';
+                if(ajaxData.data[i].url != null) {
+                    url = ajaxData.data[i].url;
+                } else {
+                    url = '#';
+                }
+                var img = '<div style="text-align:center;"><a href="' + url + '"><img src="' + ajaxData.data[i].image + '"></img></a></div>';
                 $previewContent.html('').html(img);
                 return;
             }

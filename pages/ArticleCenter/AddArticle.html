@@ -129,11 +129,11 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="inputOwner" class="col-lg-3 control-label">文章来源</label>
+                                <label for="inputSrc" class="col-lg-3 control-label">文章来源</label>
                                 <div class="col-lg-7">
                                     <input type="text" class="form-control" id="inputSrc" name="source" placeholder="请输入文章来源...">
                                 </div>
-                                <span id="inputOwnerHint" class="col-lg-2 form-hint form-hint-nec">(*必填)</span>
+                                <span id="inputSrcHint" class="col-lg-2 form-hint form-hint-nec">(*必填)</span>
                             </div>
                             <div class="form-group">
                                 <label for="inputTitle" class="col-lg-3 control-label">文章标题</label>
@@ -147,26 +147,19 @@
                                 <div class="col-lg-7">
                                     <input type="text" class="form-control" id="inputIntro" name="intro" placeholder="请输入文章简介...">
                                 </div>
+                                <span id="inputNickHint" class="col-lg-2 form-hint form-hint-opt">(选填)</span>
                             </div>
                             <div class="form-group">
                                 <label for="inputFile" class="col-lg-3 control-label">文章题图</label>
                                 <div class="col-lg-7">
                                     <input type="file" class="form-control" id="inputFile" name="thumbnails">
                                 </div>
+                                <span id="inputNickHint" class="col-lg-2 form-hint form-hint-opt">(建议尺寸: 240x240)</span>
                             </div>
                             <div class="form-group">
                                 <label for="selectDomain" class="col-lg-3 control-label">可用域名</label>
                                 <div class="col-lg-7">
                                     <select id="selectDomain" name="domain" class="form-control"></select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="selectStatus" class="col-lg-3 control-label">状态</label>
-                                <div class="col-lg-7">
-                                    <select id="selectStatus" name="status" class="form-control">
-                                        <option value="1">上线</option>
-                                        <option value="0">下线</option>
-                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -176,6 +169,15 @@
                             <div class="panel-title">排期信息</div>
                         </div>
                         <div class="panel-body">
+                            <div class="form-group">
+                                <label for="selectStatus" class="col-lg-3 control-label">状态</label>
+                                <div class="col-lg-7">
+                                    <select id="selectStatus" name="status" class="form-control">
+                                        <option value="1">上线</option>
+                                        <option value="0">下线</option>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label for="firstAdId" class="col-lg-3 control-label">广告1 ID</label>
                                 <div class="col-lg-7">
@@ -304,6 +306,24 @@
             </div>
         </div>
 
+        <div id="videoModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">视频链接转换</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" class="form-control" id="videoUrl" placeholder="请输入视频链接(仅限腾讯视频、优酷视频)...">
+                    </div>
+                    <div class="modal-footer">
+                        <a href="javascript:void(0);" class="btn btn-primary" id="videoLinkBtn">转换并添加</a>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- jQuery-2.0.3 -->
         <script src="../../lib/jquery-2.0.3.min.js"></script>
         <!-- Bootstrap -->
@@ -320,8 +340,10 @@
         <script src="../../lib/ueditor/ueditor.config.js"></script>
         <script src="../../lib/ueditor/ueditor.all.min.js"></script>
         <script src="../../lib/ueditor/lang/zh-cn/zh-cn.js"></script>
+        <script src="../../static/js/plugin/ueditor/addVideoLinkBtn.js"></script>
         <!-- PapaParse -->
         <script src="../../lib/PapaParse/papaparse.min.js"></script>
+        <script src="../../static/js/plugin/video_template.js"></script>
 
         <script src="../../static/js/ArticleCenter/AddArticle.js"></script>
     </body>
