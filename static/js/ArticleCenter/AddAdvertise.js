@@ -19,7 +19,7 @@ $(function() {
     });
 
     var $submitBtn, $cancerBtn;
-    var $selectType, $inputOwner, $inputTitle, $inputNick, $inputFile;
+    var $selectType, $inputOwner, $inputTitle, $inputNick, $inputFile, $inputUrl;
     var $selectTypeHint, $inputOwnerHint, $inputTitleHint, $inputNickHint;
     var $successModal, $cancerModal;
     var $errorModal, $errorMsg;
@@ -29,6 +29,7 @@ $(function() {
     $inputTitle = $("#inputTitle");
     $inputNick = $("#inputNick");
     $inputFile = $("#inputFile");
+    $inputUrl = $("#inputUrl");
 
     $selectTypeHint = $("#selectTypeHint");
     $inputOwnerHint = $("#inputOwnerHint");

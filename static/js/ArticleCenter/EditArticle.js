@@ -20,8 +20,9 @@ $(function() {
 
     var article, info;
     var $articleId, $selectType, $inputSrc, $inputTitle, $inputAdder, $inputFile, $selectStatus, $selectDomain, $inputIntro;
-    var $scheduleId, $AdId1, $Price1, $Count1, $AdId2, $Price2, $Count2, $beginTime, $endTime, $begintime, $endtime, $time, $profitLimit, $selectPlatform;
+    var $scheduleId, $AdId1, $Price1, $Count1, $AdId2, $Price2, $Count2, $beginTime, $endTime, $begintime, $endtime, $time, $selectPlatform;
     var $submitBtn;
+    var $fetchUrl, $fetchBtn;
     var $previewBtn, $previewModal, $previewContent;
     var $successModal;
     var $errorModal, $errorMsg;
@@ -48,6 +49,10 @@ $(function() {
     $endtime = $("#endtime");
     $time = $("#time");
     $selectPlatform = $("#selectPlatform");
+
+    $successModal = $("#successModal");
+    $errorMsg = $("#errorMsg");
+    $errorModal = $("#errorModal");
 
     /**
      * [$beginDatetimepicker 排期起始时间选择器]
@@ -137,10 +142,40 @@ $(function() {
         $selectStatus.find('option[value="' + data.status + '"]').attr('selected', true);
         $inputIntro.val(data.intro);
         // initial UEditor and content
-        var ue = UE.getEditor('editorArticle');
+        var ue = UE.getEditor('editorArticle', {
+            toolbars: [
+                ['fullscreen', 'source', 'undo', 'redo'],
+                ['customstyle', 'paragraph', 'fontfamily', 'fontsize', '|', 'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|', 'rowspacingtop', 'rowspacingbottom', 'lineheight'],
+                ['directionalityltr', 'directionalityrtl', 'indent', '|', 'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'link', 'unlink', '|', 'simpleupload', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|', 'pagebreak', 'horizontal', 'date', 'time', '|', 'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', '|', 'drafts']
+            ]
+        });
         ue.ready(function() {
             ue.setContent(data.content);
             bindBtnEvent();
+
+            // initial fetch
+            $fetchBtn = $("#fetchBtn");
+            $fetchUrl = $("#fetchUrl");
+            $fetchBtn.on('click', function() {
+                $.ajax({
+                    url: "/_admin/s/crawl_article",
+                    type: "GET",
+                    data: {
+                        url: $fetchUrl.val()
+                    },
+                    success: function(data) {
+                        if(data.code == 200) {
+                            ue.setContent(data.data.html);
+                        } else {
+                            $errorMsg.html(data.data.msg);
+                            $errorModal.modal('show');
+                        }
+                    },
+                    error: function(data) {
+                        console.log(data.error);
+                    }
+                });
+            });
         });
 
         // initial Schedule info
@@ -175,6 +210,7 @@ $(function() {
     });
 
     function bindBtnEvent() {
+        console.log();
         $submitBtn = $("#submitBtn");
         $submitBtn.on('click', function(event) {
             $time.val(event.timeStamp);
@@ -187,7 +223,7 @@ $(function() {
                 cache: false,
                 data: formdata,
                 processData: false,
-                contentTypt: false,
+                contentType: false,
                 success: function(data) {
                     if(data.code == 200) {
                         $successModal.modal({

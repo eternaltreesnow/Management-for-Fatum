@@ -188,7 +188,7 @@
                                     <input type="text" class="form-control" id="AdId1" name="advertiseId1" placeholder="请输入广告1 ID...">
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group"  style="display:none;">
                                 <label for="Price1" class="col-lg-3 control-label">单价</label>
                                 <div class="col-lg-2">
                                     <input type="text" class="form-control" id="Price1" name="price1" placeholder="请输入广告1单价...">
@@ -204,7 +204,7 @@
                                     <input type="text" class="form-control" id="AdId2" name="advertiseId2" placeholder="请输入广告2 ID...">
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group"  style="display:none;">
                                 <label for="Price2" class="col-lg-3 control-label">单价</label>
                                 <div class="col-lg-2">
                                     <input type="text" class="form-control" id="Price2" name="price2" placeholder="请输入广告2单价...">
@@ -251,6 +251,17 @@
                             <div class="panel-title">编辑文章</div>
                         </div>
                         <div class="panel-body">
+                            <div class="form-group">
+                                <label for="" class="col-lg-3 control-label">抓取文章</label>
+                                <div class="col-lg-7">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="fetchUrl">
+                                        <div class="input-group-btn">
+                                            <a href="javascript:void(0);" class="btn btn-default" id="fetchBtn"><span class="glyphicon glyphicon-link"></span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <script id="editorArticle" class="wysiwyg-editor" name="content"></script>
                         </div>
                     </div>

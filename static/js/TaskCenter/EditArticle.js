@@ -19,7 +19,7 @@ $(function() {
     });
 
     var article, info;
-    var $articleId, $selectType, $inputSrc, $inputTitle, $inputAdder, $inputFile, $selectStatus, $selectDomain, $inputUrl, $inputIntro;
+    var $articleId, $selectClassify, $selectType, $inputSrc, $inputTitle, $inputAdder, $inputFile, $selectStatus, $selectDomain, $inputUrl, $inputIntro;
     var $scheduleId, $AdId, $Price, $Count, $beginTime, $endTime, $begintime, $endtime, $time, $profitLimit, $selectPlatform;
     var $submitBtn;
     var $previewBtn, $previewModal, $previewContent;
@@ -27,6 +27,7 @@ $(function() {
     var $errorModal, $errorMsg;
 
     $articleId = $("#articleId");
+    $selectClassify = $("#selectClassify");
     $selectType = $("#selectType");
     $inputSrc = $("#inputSrc");
     $inputTitle = $("#inputTitle");
@@ -46,6 +47,10 @@ $(function() {
     $time = $("#time");
     $profitLimit = $("#profitLimit");
     $selectPlatform = $("#selectPlatform");
+
+    $successModal = $("#successModal");
+    $errorMsg = $("#errorMsg");
+    $errorModal = $("#errorModal");
 
     /**
      * [$beginDatetimepicker 排期起始时间选择器]
@@ -96,6 +101,7 @@ $(function() {
 
     function initialForm(data, info) {
         $articleId.val(data.id);
+        $selectClassify.find('option[value="' + data.classify + '"]').attr('selected', true);
         // initial select type of article
         Papa.parse('../../lib/article_type.csv', {
             download: true,
@@ -133,14 +139,33 @@ $(function() {
         $inputTitle.val(data.title);
         $inputSrc.val(data.source);
         $selectStatus.find('option[value="' + data.status + '"]').attr('selected', true);
-        $inputUrl.val(data.url);
+
         $inputIntro.val(data.intro);
         // initial UEditor and content
-        var ue = UE.getEditor('editorArticle');
-        ue.ready(function() {
-            ue.setContent(data.content);
-            bindBtnEvent();
+        var ue = UE.getEditor('editorArticle', {
+            toolbars: [
+                ['fullscreen', 'source', 'undo', 'redo'],
+                ['customstyle', 'paragraph', 'fontfamily', 'fontsize', '|', 'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|', 'rowspacingtop', 'rowspacingbottom', 'lineheight'],
+                ['directionalityltr', 'directionalityrtl', 'indent', '|', 'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'link', 'unlink', '|', 'simpleupload', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|', 'pagebreak', 'horizontal', 'date', 'time', '|', 'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', '|', 'drafts']
+            ]
         });
+
+        // judge the classify
+        if(data.classify == 1) {
+            ue.ready(function() {
+                ue.setContent(data.content);
+                bindBtnEvent();
+            });
+            $("#inputUrlContainer").hide();
+            $("#adIdContainer").show();
+            $("#editorContainer").show();
+        } else {
+            bindBtnEvent();
+            $inputUrl.val(data.content);
+            $("#inputUrlContainer").show();
+            $("#adIdContainer").hide();
+            $("#editorContainer").hide();
+        }
 
         // initial Schedule info
         $scheduleId.val(info.id);
@@ -171,20 +196,33 @@ $(function() {
         }
     });
 
+    $selectClassify.on('change', function() {
+        if($selectClassify.val() == 1) {
+            $("#inputUrlContainer").hide();
+            $("#adIdContainer").show();
+            $("#editorContainer").show();
+        } else {
+            $("#inputUrlContainer").show();
+            $("#adIdContainer").hide();
+            $("#editorContainer").hide();
+        }
+    });
+
     function bindBtnEvent() {
         $submitBtn = $("#submitBtn");
         $submitBtn.on('click', function(event) {
+            console.log(1);
             $time.val(event.timeStamp);
             $begintime.val(moment($("#beginTime").val()).format('x'));
             $endtime.val(moment($("#endTime").val()).format('x'));
             var formdata = new FormData($("#editArticleForm")[0]);
             $.ajax({
-                type: "POST",
+                type: 'POST',
                 url: "/_admin/s/task/articles/" + $articleId.val(),
                 cache: false,
                 data: formdata,
                 processData: false,
-                contentTypt: false,
+                contentType: false,
                 success: function(data) {
                     if(data.code == 200) {
                         $successModal.modal({

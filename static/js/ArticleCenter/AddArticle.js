@@ -22,7 +22,7 @@ $(function() {
     var $selectDomain, $selectType, $time, $inputSrc, $inputTitle;
     var $successModal, $errorMsg, $errorModal;
     var $beginDatetimepicker, $endDatetimepicker;
-    var ue = UE.getEditor('editorArticle');
+    var $fetchUrl, $fetchBtn;
 
     $selectType = $("#selectType");
     $selectDomain = $("#selectDomain");
@@ -78,10 +78,38 @@ $(function() {
         toolbars: [
             ['fullscreen', 'source', 'undo', 'redo'],
             ['customstyle', 'paragraph', 'fontfamily', 'fontsize', '|', 'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|', 'rowspacingtop', 'rowspacingbottom', 'lineheight'],
-            ['directionalityltr', 'directionalityrtl', 'indent', '|', 'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'simpleupload', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|', 'pagebreak', 'horizontal', 'date', 'time', '|', 'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', '|', 'drafts']
+            ['directionalityltr', 'directionalityrtl', 'indent', '|', 'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'link', 'unlink', '|', 'simpleupload', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|', 'pagebreak', 'horizontal', 'date', 'time', '|', 'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', '|', 'drafts']
         ]
     });
     ue.ready(function() {
+        bindBtnEvent();
+    });
+
+    function bindBtnEvent() {
+        // initial fetch
+        $fetchBtn = $("#fetchBtn");
+        $fetchUrl = $("#fetchUrl");
+        $fetchBtn.on('click', function() {
+            $.ajax({
+                url: "/_admin/s/crawl_article",
+                type: "GET",
+                data: {
+                    url: $fetchUrl.val()
+                },
+                success: function(data) {
+                    if(data.code == 200) {
+                        ue.setContent(data.data.html);
+                    } else {
+                        $errorMsg.html(data.data.msg);
+                        $errorModal.modal('show');
+                    }
+                },
+                error: function(data) {
+                    console.log(data.error);
+                }
+            });
+        });
+
         $time = $("#time");
         $begintime = $("#begintime");
         $endtime = $("#endtime");
@@ -114,7 +142,7 @@ $(function() {
                 }
             });
         });
-    });
+    }
 
     /**
      * [$beginDatetimepicker 排期起始时间选择器]

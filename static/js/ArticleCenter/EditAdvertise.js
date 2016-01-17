@@ -18,7 +18,7 @@ $(function() {
         });
     });
 
-    var $advertiseId, $selectType, $inputOwner, $inputTitle, $inputNick;
+    var $advertiseId, $selectType, $inputOwner, $inputTitle, $inputNick, $inputUrl;
     var $submitBtn;
     var $inputOwnerHint, $inputTitleHint;
     var $previewBtn, $previewModal, $previewContent;
@@ -31,6 +31,8 @@ $(function() {
     $inputOwner = $("#inputOwner");
     $inputTitle = $("#inputTitle");
     $inputNick = $("#inputNick");
+    $inputUrl = $("#inputUrl");
+
     $successModal = $("#successModal");
     $errorModal = $("#errorModal");
     $errorMsg = $("#errorMsg");
@@ -66,6 +68,7 @@ $(function() {
         $inputOwner.val(data["advertiser"]);
         $inputTitle.val(data["name"]);
         $inputNick.val(data["alias"]);
+        $inputUrl.val(data["url"]);
     }
 
     $previewModal = $("#previewModal");
