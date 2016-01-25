@@ -22,7 +22,7 @@ $(function() {
     initialMenuTreeByIds(ids);
 
     var $submitBtn;
-    var $selectDomain, $selectType, $time, $inputSrc, $inputTitle, $inputIntro, $inputFile, $AdId1, $AdId2;
+    var $selectDomain, $selectType, $time, $inputSrc, $inputTitle, $inputIntro, $inputFile, $AdId1, $AdId2, $endTime;
     var $successModal, $errorMsg, $errorModal;
     var $beginDatetimepicker, $endDatetimepicker;
     var $fetchUrl, $fetchBtn;
@@ -36,6 +36,7 @@ $(function() {
     $inputFile = $("#inputFile");
     $AdId1 = $("#AdId1");
     $AdId2 = $("#AdId2");
+    $endTime = $("#endTime");
 
     $inputTitleHint = $("#inputTitleHint");
     $inputSrcHint = $("#inputSrcHint");
@@ -211,6 +212,10 @@ $(function() {
             if ($AdId2.val() === "") {
                 $AdId2.parent().addClass('has-error');
                 $AdId2.focus();
+                return;
+            }
+            if ($endTime.val() === "") {
+                $endTime.focus();
                 return;
             }
             $time.val(event.timeStamp);
