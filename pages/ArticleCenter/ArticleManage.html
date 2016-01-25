@@ -16,6 +16,10 @@
         <link rel="stylesheet" href="../../lib/normalize.css">
 
         <link rel="stylesheet" href="../../static/css/frame.css">
+        <!-- ReactJS -->
+        <script src="../../lib/React/react.min.js"></script>
+        <script src="../../lib/React/react-dom.js"></script>
+        <script src="../../lib/React/babel-browser.min.js"></script>
 
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!-- Warning: Respond.js doesn't work if you view the page via file:// -->
@@ -50,55 +54,8 @@
                         </li>
                     </ul>
                 </div>
-                <!-- Sidebar Menu Items -->
-                <div class="collapse navbar-collapse navbar-ex1-collapse">
-                    <ul class="nav side-nav">
-                        <li>
-                            <a href="../index.html">首页</a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);" data-toggle="collapse" data-target="#task-drop">
-                                <span>任务中心</span>
-                                <span class="caret"></span>
-                            </a>
-                            <ul id="task-drop" class="collapse">
-                                <li><a href="../TaskCenter/AdvertiseManage.html">广告管理</a></li>
-                                <li><a href="../TaskCenter/ArticleManage.html">文章管理</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);" data-toggle="collapse" data-target="#article-drop">
-                                <span>文章中心</span>
-                                <span class="caret"></span>
-                            </a>
-                            <ul id="article-drop" class="">
-                                <li><a href="../ArticleCenter/AdvertiseManage.html">广告管理</a></li>
-                                <li class="active"><a href="../ArticleCenter/ArticleManage.html">文章管理</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);" data-toggle="collapse" data-target="#vip-drop">
-                                <span>会员信息</span>
-                                <span class="caret"></span>
-                            </a>
-                            <ul id="vip-drop" class="collapse">
-                                <li><a href="../VipCenter/VipInfo.html">基本信息</a></li>
-                                <li><a href="../VipCenter/VipCredit.html">积分信息</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);" data-toggle="collapse" data-target="#account-drop">
-                                <span>结算管理</span>
-                                <span class="caret"></span>
-                            </a>
-                            <ul id="account-drop" class="collapse">
-                                <li><a href="../BalanceCenter/CashManage.html">提现管理</a></li>
-                                <li><a href="../BalanceCenter/CheatManage.html">作弊管理</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <!-- Sidebar end -->
+                <!-- MenuTree React Plugin -->
+                <div class="collapse navbar-collapse navbar-ex1-collapse" id="menu"></div>
             </div>
         </div>
         <div class="row main-page">
@@ -141,11 +98,17 @@
                 <a href="AddArticle.html" class="btn btn-default btn-sm pull-right">
                     <span class="glyphicon glyphicon-plus"></span>&nbsp;添加文章
                 </a>
+                <a href="javascript:void(0);" class="btn btn-danger btn-sm pull-right" id="deleteListBtn">
+                    <span class="glyphicon glyphicon-remove"></span>&nbsp;批量删除
+                </a>
             </div>
             <div class="container-fluid table-container">
                 <table class="table table-striped table-hover table-bordered" cellspacing="0" width="100%" id="articleTable">
                     <thead>
                         <tr>
+                            <th style="width:15px">
+                                <input type="checkbox" id="checkAll">
+                            </th>
                             <th>编号</th>
                             <th>分类</th>
                             <th>标题</th>
@@ -197,6 +160,57 @@
             </div>
         </div>
 
+        <div id="deleteModal" class="modal fade">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">批量删除确认</h4>
+                    </div>
+                    <div class="modal-body" id="deleteContent">
+                    </div>
+                    <div class="modal-footer">
+                        <a href="javascript:void(0);" class="btn btn-primary" id="deleteCommitBtn">确认删除</a>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="successModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">成功提示</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>文章删除成功! 请返回文章列表。</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">返回</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="errorModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">提交错误提示</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p id="errorMsg"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- jQuery-2.0.3 -->
         <script src="../../lib/jquery-2.0.3.min.js"></script>
         <!-- Bootstrap -->
@@ -208,6 +222,9 @@
         <script src="../../lib/DataTables-1.10.8/js/dataTables.bootstrap.min.js"></script>
         <!-- PapaParse -->
         <script src="../../lib/PapaParse/papaparse.min.js"></script>
+
+        <!-- MenuTree React Plugin -->
+        <script src="../../static/js/plugin/MenuTree.js"></script>
 
         <script src="../../static/js/ArticleCenter/ArticleManage.js"></script>
     </body>

@@ -16,6 +16,10 @@
         <link rel="stylesheet" href="../../lib/normalize.css">
 
         <link rel="stylesheet" href="../../static/css/frame.css">
+        <!-- ReactJS -->
+        <script src="../../lib/React/react.min.js"></script>
+        <script src="../../lib/React/react-dom.js"></script>
+        <script src="../../lib/React/babel-browser.min.js"></script>
 
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!-- Warning: Respond.js doesn't work if you view the page via file:// -->
@@ -50,55 +54,8 @@
                         </li>
                     </ul>
                 </div>
-                <!-- Sidebar Menu Items -->
-                <div class="collapse navbar-collapse navbar-ex1-collapse">
-                    <ul class="nav side-nav">
-                        <li>
-                            <a href="../index.html">首页</a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);" data-toggle="collapse" data-target="#task-drop">
-                                <span>任务中心</span>
-                                <span class="caret"></span>
-                            </a>
-                            <ul id="task-drop" class="collapse">
-                                <li><a href="../TaskCenter/AdvertiseManage.html">广告管理</a></li>
-                                <li><a href="../TaskCenter/ArticleManage.html">文章管理</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);" data-toggle="collapse" data-target="#article-drop">
-                                <span>文章中心</span>
-                                <span class="caret"></span>
-                            </a>
-                            <ul id="article-drop" class="collapse">
-                                <li><a href="../ArticleCenter/AdvertiseManage.html">广告管理</a></li>
-                                <li><a href="../ArticleCenter/ArticleManage.html">文章管理</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);" data-toggle="collapse" data-target="#vip-drop">
-                                <span>会员信息</span>
-                                <span class="caret"></span>
-                            </a>
-                            <ul id="vip-drop" class="collapse">
-                                <li><a href="../VipCenter/VipInfo.html">基本信息</a></li>
-                                <li><a href="../VipCenter/VipCredit.html">积分信息</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);" data-toggle="collapse" data-target="#account-drop">
-                                <span>结算管理</span>
-                                <span class="caret"></span>
-                            </a>
-                            <ul id="account-drop" class="">
-                                <li><a href="../BalanceCenter/CashManage.html">提现管理</a></li>
-                                <li class="active"><a href="../BalanceCenter/CheatManage.html">作弊管理</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <!-- Sidebar end -->
+                <!-- MenuTree React Plugin -->
+                <div class="collapse navbar-collapse navbar-ex1-collapse" id="menu"></div>
             </div>
         </div>
         <div class="row main-page">
@@ -150,6 +107,8 @@
         <script src="../../lib/DataTables-1.10.8/js/dataTables.bootstrap.min.js"></script>
         <!-- MomentJs -->
         <script src="../../lib/bootstrap-datetimepicker/moment/moment.js"></script>
+        <!-- MenuTree React Plugin -->
+        <script src="../../static/js/plugin/MenuTree.js"></script>
 
         <script src="../../static/js/BalanceCenter/CheatManage.js"></script>
     </body>

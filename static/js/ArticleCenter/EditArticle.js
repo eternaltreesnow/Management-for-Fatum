@@ -5,7 +5,7 @@ $(function() {
             url: "/_admin/s/logout",
             type: 'GET',
             success: function(data) {
-                if(data.code == 200) {
+                if (data.code == 200) {
                     localStorage.removeItem('user');
                     location.href = '../index.html';
                 } else {
@@ -17,6 +17,9 @@ $(function() {
             }
         });
     });
+
+    var ids = [3, 32];
+    initialMenuTreeByIds(ids);
 
     var article, info;
     var $articleId, $selectType, $inputSrc, $inputTitle, $inputAdder, $inputFile, $selectStatus, $selectDomain, $inputIntro;
@@ -71,8 +74,7 @@ $(function() {
     $endDatetimepicker = $("#endDatetimepicker");
     $beginDatetimepicker.datetimepicker({
         sideBySide: true,
-        format: 'YYYY/MM/DD HH:mm',
-        defaultDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+        format: 'YYYY/MM/DD HH:mm'
     });
     $endDatetimepicker.datetimepicker({
         sideBySide: true,
@@ -91,13 +93,13 @@ $(function() {
      * init 初始化
      */
     var url = location.search;
-    if(url.indexOf("?") != -1) {
+    if (url.indexOf("?") != -1) {
         var id = url.substr(1).split("&")[0].split("=")[1];
         $.ajax({
             url: "/_admin/s/article/articles/" + id,
             type: "GET",
             success: function(data) {
-                if(data.code == 200) {
+                if (data.code == 200) {
                     article = data.data.article;
                     info = data.data.info;
                     initialForm(article, info);
@@ -132,7 +134,7 @@ $(function() {
             type: 'GET',
             async: true,
             success: function(result) {
-                if(result.code == 200) {
+                if (result.code == 200) {
                     var options = '';
                     result.data.map(function(value) {
                         options += '<option value="' + value + '">' + value + '</option>';
@@ -174,7 +176,7 @@ $(function() {
                         url: $fetchUrl.val()
                     },
                     success: function(data) {
-                        if(data.code == 200) {
+                        if (data.code == 200) {
                             ue.setContent(data.data.html);
                         } else {
                             $errorMsg.html(data.data.msg);
@@ -188,8 +190,8 @@ $(function() {
             });
         });
 
-        if(info.advertiserId1 == null && info.advertiserId2 == null) {
-
+        if (info.advertiserId1 == null && info.advertiserId2 == null) {
+            $beginDatetimepicker.data("DateTimePicker").defaultDate(moment(new Date()).format('YYYY-MM-DD HH:mm:ss'));
         } else {
             // initial Schedule info
             $scheduleId.val(info.id);
@@ -199,10 +201,10 @@ $(function() {
             $AdId2.val(info.advertiserId2);
             $Price2.val(info.price2);
             $Count2.val(info.limitViewCount2);
-            if(info.beginTime != null) {
+            if (info.beginTime != null) {
                 $beginDatetimepicker.data("DateTimePicker").defaultDate(moment(info.beginTime).format('YYYY-MM-DD HH:mm:ss'));
             }
-            if(info.endTime != null) {
+            if (info.endTime != null) {
                 $endDatetimepicker.data("DateTimePicker").defaultDate(moment(info.endTime).format('YYYY-MM-DD HH:mm:ss'));
             }
             $selectPlatform.find('option[value="' + info.limitDestination + '"]').attr('selected', true);
@@ -221,7 +223,7 @@ $(function() {
         $previewModal.modal('show');
     });
     $previewModal.on('shown.bs.modal', function() {
-        if($previewContent.width() > 558) {
+        if ($previewContent.width() > 558) {
             $(".previewImage").css("max-width", $previewContent.width() + 'px');
         }
     });
@@ -231,7 +233,7 @@ $(function() {
         $inputSrc.parent().removeClass('has-error');
     });
     $inputSrc.on('blur', function() {
-        if($inputSrc.val() !== "") {
+        if ($inputSrc.val() !== "") {
             $inputSrcHint.removeClass("form-hint-nec").addClass("form-hint-suc");
             $inputSrcHint.html('<span class="glyphicon glyphicon-ok"></span>');
         } else {
@@ -244,7 +246,7 @@ $(function() {
         $inputTitle.parent().removeClass('has-error');
     });
     $inputTitle.on('blur', function() {
-        if($inputTitle.val() !== "") {
+        if ($inputTitle.val() !== "") {
             $inputTitleHint.removeClass("form-hint-nec").addClass("form-hint-suc");
             $inputTitleHint.html('<span class="glyphicon glyphicon-ok"></span>');
         } else {
@@ -254,7 +256,7 @@ $(function() {
     });
 
     function setSchduleFormDisable(disableStatus) {
-        if(disableStatus == false) {
+        if (disableStatus == false) {
             $scheduleId.val('');
             $AdId1.val('');
             $Price1.val('');
@@ -282,7 +284,7 @@ $(function() {
         $confirmContent = $("#confirmContent");
         $deleteScheduleBtn = $("#deleteScheduleBtn");
         $deleteScheduleBtn.on('click', function() {
-            if($scheduleId.val() == "") {
+            if ($scheduleId.val() == "") {
                 $confirmContent.text("该文章无排期，请直接添加排期信息");
                 $deleteConfirmBtn.hide();
             } else {
@@ -299,7 +301,7 @@ $(function() {
                 type: "DELETE",
                 url: "/_admin/s/article/infos/" + $scheduleId.val(),
                 success: function(data) {
-                    if(data.code == 200) {
+                    if (data.code == 200) {
                         $confirmContent.text("删除成功!");
                         $confirmModal.modal('hide');
                         setSchduleFormDisable(false);
@@ -312,7 +314,7 @@ $(function() {
         $videoLinkBtn = $("#videoLinkBtn");
         $videoLinkBtn.on('click', function() {
             var html = getVideoHtmlTemplate($videoUrl.val());
-            if(html !== '') {
+            if (html !== '') {
                 $('#videoModal').modal('hide');
                 ue.execCommand('inserthtml', html);
                 $videoUrl.val('');
@@ -326,12 +328,12 @@ $(function() {
         console.log();
         $submitBtn = $("#submitBtn");
         $submitBtn.on('click', function(event) {
-            if($inputSrc.val() === "") {
+            if ($inputSrc.val() === "") {
                 $inputSrc.parent().addClass('has-error');
                 $inputSrc.focus();
                 return;
             }
-            if($inputTitle.val() === "") {
+            if ($inputTitle.val() === "") {
                 $inputTitle.parent().addClass('has-error');
                 $inputTitle.focus();
                 return;
@@ -348,7 +350,7 @@ $(function() {
                 processData: false,
                 contentType: false,
                 success: function(data) {
-                    if(data.code == 200) {
+                    if (data.code == 200) {
                         $successModal.modal({
                             backdrop: 'static',
                             show: true

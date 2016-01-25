@@ -5,7 +5,7 @@ $(function() {
             url: "/_admin/s/logout",
             type: 'GET',
             success: function(data) {
-                if(data.code == 200) {
+                if (data.code == 200) {
                     localStorage.removeItem('user');
                     location.href = '../index.html';
                 } else {
@@ -17,6 +17,9 @@ $(function() {
             }
         });
     });
+
+    var ids = [4, 42];
+    initialMenuTreeByIds(ids);
 
     var datatable;
     var $vipCreditTable;
@@ -30,28 +33,32 @@ $(function() {
     $filterDate = $("#filterDate");
     $inputKeyword = $("#inputKeyword");
 
-    var column = [
-        {"data": "id"},
-        {"data": "user.id"},
-        {"data": "user.phone"},
-        {"data": "points"},
-        {"data": "time"},
-        {"data": "profitreason"},
-        {"data": "status"}
-    ];
-    var tempdata = [
-        {
-            "id" : "1",
-            "user" : {
-                "id" : "1111",
-                "phone" : "13300000000"
-            },
-            "points" : "11",
-            "time" : "2015/12/15 15:30",
-            "reason" : "因为完成xx任务获得积分",
-            "status" : "1"
-        }
-    ];
+    var column = [{
+        "data": "id"
+    }, {
+        "data": "user.id"
+    }, {
+        "data": "user.phone"
+    }, {
+        "data": "points"
+    }, {
+        "data": "time"
+    }, {
+        "data": "profitreason"
+    }, {
+        "data": "status"
+    }];
+    var tempdata = [{
+        "id": "1",
+        "user": {
+            "id": "1111",
+            "phone": "13300000000"
+        },
+        "points": "11",
+        "time": "2015/12/15 15:30",
+        "reason": "因为完成xx任务获得积分",
+        "status": "1"
+    }];
 
     $.ajax({
         url: "../../lib/ProfitReason.json",
@@ -73,11 +80,11 @@ $(function() {
         datatable = $vipCreditTable.DataTable({
             processing: true,
             language: {
-                "search" : "内容搜索: ",
-                "searchPlaceholder" : "ID/手机号/...",
+                "search": "内容搜索: ",
+                "searchPlaceholder": "ID/手机号/...",
                 "processing": "数据加载中, 请稍后...",
                 "zeroRecords": "记录数为0...",
-                "emptyTable":  "记录数为0...",
+                "emptyTable": "记录数为0...",
                 "paginate": {
                     "first": "首页",
                     "previous": "上一页",
@@ -103,10 +110,10 @@ $(function() {
                     d.keyword = $("#inputKeyword").val();
                 },
                 dataSrc: function(json) {
-                    for(var i=0; i<json.data.length; i++) {
+                    for (var i = 0; i < json.data.length; i++) {
                         json.data[i]['time'] = moment(json.data[i]['time']).format('YYYY-MM-DD HH:mm:ss');
-                        for(var j=0; j<reasonData.length; j++) {
-                            if(json.data[i]['reason'] == reasonData[j]['code']) {
+                        for (var j = 0; j < reasonData.length; j++) {
+                            if (json.data[i]['reason'] == reasonData[j]['code']) {
                                 json.data[i]['profitreason'] = reasonData[j]['name'];
                             }
                         }

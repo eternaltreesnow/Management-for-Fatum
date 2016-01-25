@@ -5,7 +5,7 @@ $(function() {
             url: "/_admin/s/logout",
             type: 'GET',
             success: function(data) {
-                if(data.code == 200) {
+                if (data.code == 200) {
                     localStorage.removeItem('user');
                     location.href = '../index.html';
                 } else {
@@ -17,6 +17,9 @@ $(function() {
             }
         });
     });
+
+    var ids = [3, 31];
+    initialMenuTreeByIds(ids);
 
     var $submitBtn, $cancerBtn;
     var $selectType, $inputOwner, $inputTitle, $inputNick, $inputFile, $inputUrl;
@@ -42,16 +45,19 @@ $(function() {
 
     $submitBtn = $("#submitBtn");
     $submitBtn.on('click', function() {
-        if($inputOwner.val() === "") {
+        if ($inputOwner.val() === "") {
             $inputOwner.parent().addClass('has-error');
             $inputOwner.focus();
             return;
-        } else {
-            $inputOwnerHint.html('<span class="glyphicon glyphicon-ok"></span>');
         }
-        if($inputTitle.val() === "") {
+        if ($inputTitle.val() === "") {
             $inputTitle.parent().addClass('has-error');
             $inputTitle.focus();
+            return;
+        }
+        if ($inputFile.val() === "") {
+            $inputFile.parent().addClass('has-error');
+            $inputFile.focus();
             return;
         }
         var formdata = new FormData($("#addAdvertiseForm")[0]);
@@ -60,10 +66,10 @@ $(function() {
             url: '/_admin/s/article/advertises',
             cache: false,
             data: formdata,
-            processData: false,         // tell jQuery not to process the data
-            contentType: false,         // tell jQuery not to set the request header
+            processData: false, // tell jQuery not to process the data
+            contentType: false, // tell jQuery not to set the request header
             success: function(data) {
-                if(data.code == 200) {
+                if (data.code == 200) {
                     $successModal.modal({
                         backdrop: 'static',
                         show: true
@@ -83,7 +89,7 @@ $(function() {
         $inputOwner.parent().removeClass('has-error');
     });
     $inputOwner.on('blur', function() {
-        if($inputOwner.val() !== "") {
+        if ($inputOwner.val() !== "") {
             $inputOwnerHint.removeClass("form-hint-nec").addClass("form-hint-suc");
             $inputOwnerHint.html('<span class="glyphicon glyphicon-ok"></span>');
         } else {
@@ -96,7 +102,7 @@ $(function() {
         $inputTitle.parent().removeClass('has-error');
     });
     $inputTitle.on('blur', function() {
-        if($inputTitle.val() !== "") {
+        if ($inputTitle.val() !== "") {
             $inputTitleHint.removeClass("form-hint-nec").addClass("form-hint-suc");
             $inputTitleHint.html('<span class="glyphicon glyphicon-ok"></span>');
         } else {
@@ -105,10 +111,14 @@ $(function() {
         }
     });
 
+    $inputFile.on('change', function() {
+        $inputFile.parent().removeClass('has-error');
+    });
+
     $cancerModal = $("#cancerModal");
     $cancerBtn = $("#cancerBtn");
     $cancerBtn.on('click', function() {
-        if($inputOwner.val() !== "" || $inputTitle.val() !== "" || $inputNick.val() !== "" || $inputFile.val() !== "") {
+        if ($inputOwner.val() !== "" || $inputTitle.val() !== "" || $inputNick.val() !== "" || $inputFile.val() !== "") {
             $cancerModal.modal('show');
         } else {
             location.href = "AdvertiseManage.html";

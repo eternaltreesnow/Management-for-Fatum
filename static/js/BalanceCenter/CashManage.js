@@ -18,6 +18,9 @@ $(function() {
         });
     });
 
+    var ids = [5, 51];
+    initialMenuTreeByIds(ids);
+
     var datatable;
     var $cashTable;
     var $linkCheck, $linkPass, $linkModify;

@@ -5,7 +5,7 @@ $(function() {
             url: "/_admin/s/logout",
             type: 'GET',
             success: function(data) {
-                if(data.code == 200) {
+                if (data.code == 200) {
                     localStorage.removeItem('user');
                     location.href = '../index.html';
                 } else {
@@ -17,6 +17,9 @@ $(function() {
             }
         });
     });
+
+    var ids = [3, 31];
+    initialMenuTreeByIds(ids);
 
     var $advertiseId, $selectType, $inputOwner, $inputTitle, $inputNick, $inputUrl;
     var $submitBtn;
@@ -41,13 +44,13 @@ $(function() {
      * init 初始化
      */
     var url = location.search;
-    if(url.indexOf("?") != -1) {
+    if (url.indexOf("?") != -1) {
         var id = url.substr(1).split("&")[0].split("=")[1];
         $.ajax({
             url: "/_admin/s/article/advertises/" + id,
             type: "GET",
             success: function(data) {
-                if(data.code == 200) {
+                if (data.code == 200) {
                     advertise = data.data.advertise;
                     initialForm(advertise);
                 } else {
@@ -83,12 +86,12 @@ $(function() {
     $inputTitleHint = $("#inputTitleHint");
     $submitBtn = $("#submitBtn");
     $submitBtn.on('click', function() {
-        if($inputOwner.val() === "") {
+        if ($inputOwner.val() === "") {
             $inputOwner.parent().addClass('has-error');
             $inputOwner.focus();
             return;
         }
-        if($inputTitle.val() === "") {
+        if ($inputTitle.val() === "") {
             $inputTitle.parent().addClass('has-error');
             $inputTitle.focus();
             return;
@@ -99,10 +102,10 @@ $(function() {
             url: '/_admin/s/article/advertises/' + $advertiseId.val(),
             cache: false,
             data: formdata,
-            processData: false,         // tell jQuery not to process the data
-            contentType: false,         // tell jQuery not to set the request header
+            processData: false, // tell jQuery not to process the data
+            contentType: false, // tell jQuery not to set the request header
             success: function(data) {
-                if(data.code == 200) {
+                if (data.code == 200) {
                     $successModal.modal({
                         backdrop: 'static',
                         show: true

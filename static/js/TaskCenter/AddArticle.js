@@ -5,7 +5,7 @@ $(function() {
             url: "/_admin/s/logout",
             type: 'GET',
             success: function(data) {
-                if(data.code == 200) {
+                if (data.code == 200) {
                     localStorage.removeItem('user');
                     location.href = '../index.html';
                 } else {
@@ -18,19 +18,33 @@ $(function() {
         });
     });
 
+    var ids = [2, 22];
+    initialMenuTreeByIds(ids);
+
     var $submitBtn;
     var $selectDomain;
-    var $selectClassify, $time, $selectType, $inputSrc, $inputTitle;
+    var $selectClassify, $time, $selectType, $inputSrc, $inputTitle, $inputIntro, $inputFile, $inputUrl, $AdId, $profitLimit;
     var $successModal, $errorMsg, $errorModal;
     var $beginDatetimepicker, $endDatetimepicker;
     var $videoUrl, $videoLinkBtn;
 
-    var $inputTitleHint, $inputSrcHint;
+    var $inputTitleHint, $inputSrcHint, $inputIntroHint, $inputFileHint, $inputUrlHint, $AdIdHint, $profitLimitHint;
 
     $inputSrc = $("#inputSrc");
     $inputTitle = $("#inputTitle");
-    $inputTitleHint = $("#inputTitleHint");
+    $inputIntro = $("#inputIntro");
+    $inputFile = $("#inputFile");
+    $inputUrl = $("#inputUrl");
+    $AdId = $("#AdId");
+    $profitLimit = $("#profitLimit");
+
     $inputSrcHint = $("#inputSrcHint");
+    $inputTitleHint = $("#inputTitleHint");
+    $inputIntroHint = $("#inputIntroHint");
+    $inputFileHint = $("#inputFileHint");
+    $inputUrlHint = $("#inputUrlHint");
+    $AdIdHint = $("#AdIdHint");
+    $profitLimitHint = $("#profitLimitHint");
 
     $successModal = $("#successModal");
     $errorMsg = $("#errorMsg");
@@ -64,7 +78,7 @@ $(function() {
         type: 'GET',
         async: true,
         success: function(data) {
-            if(data.code == 200) {
+            if (data.code == 200) {
                 var options = '';
                 data.data.map(function(value) {
                     options += '<option value="' + value + '">' + value + '</option>';
@@ -89,30 +103,26 @@ $(function() {
     });
 
     // Form validation
-    $inputSrc.on('input', function() {
-        $inputSrc.parent().removeClass('has-error');
-    });
-    $inputSrc.on('blur', function() {
-        if($inputSrc.val() !== "") {
-            $inputSrcHint.removeClass("form-hint-nec").addClass("form-hint-suc");
-            $inputSrcHint.html('<span class="glyphicon glyphicon-ok"></span>');
-        } else {
-            $inputSrcHint.removeClass("form-hint-suc").addClass("form-hint-nec");
-            $inputSrcHint.html('(*必填)');
-        }
-    });
-
     $inputTitle.on('input', function() {
         $inputTitle.parent().removeClass('has-error');
     });
-    $inputTitle.on('blur', function() {
-        if($inputTitle.val() !== "") {
-            $inputTitleHint.removeClass("form-hint-nec").addClass("form-hint-suc");
-            $inputTitleHint.html('<span class="glyphicon glyphicon-ok"></span>');
-        } else {
-            $inputTitleHint.removeClass("form-hint-suc").addClass("form-hint-nec");
-            $inputTitleHint.html('(*必填)');
-        }
+    $inputSrc.on('input', function() {
+        $inputSrc.parent().removeClass('has-error');
+    });
+    $inputIntro.on('input', function() {
+        $inputIntro.parent().removeClass('has-error');
+    });
+    $inputFile.on('change', function() {
+        $inputFile.parent().removeClass('has-error');
+    });
+    $inputUrl.on('input', function() {
+        $inputUrl.parent().removeClass('has-error');
+    });
+    $AdId.on('input', function() {
+        $AdId.parent().removeClass('has-error');
+    });
+    $profitLimit.on('input', function() {
+        $profitLimit.parent().removeClass('has-error');
     });
 
     ue.ready(function() {
@@ -120,7 +130,7 @@ $(function() {
         $videoLinkBtn = $("#videoLinkBtn");
         $videoLinkBtn.on('click', function() {
             var html = getVideoHtmlTemplate($videoUrl.val());
-            if(html !== '') {
+            if (html !== '') {
                 $('#videoModal').modal('hide');
                 ue.execCommand('inserthtml', html);
                 $videoUrl.val('');
@@ -136,14 +146,39 @@ $(function() {
         $endtime = $("#endtime");
         $submitBtn = $("#submitBtn");
         $submitBtn.on('click', function(event) {
-            if($inputSrc.val() === "") {
+            if ($inputTitle.val() === "") {
+                $inputTitle.parent().addClass('has-error');
+                $inputTitle.focus();
+                return;
+            }
+            if ($inputSrc.val() === "") {
                 $inputSrc.parent().addClass('has-error');
                 $inputSrc.focus();
                 return;
             }
-            if($inputTitle.val() === "") {
-                $inputTitle.parent().addClass('has-error');
-                $inputTitle.focus();
+            if ($inputIntro.val() === "") {
+                $inputIntro.parent().addClass('has-error');
+                $inputIntro.focus();
+                return;
+            }
+            if ($inputFile.val() === "") {
+                $inputFile.parent().addClass('has-error');
+                $inputFile.focus();
+                return;
+            }
+            if ($selectClassify.val() == 2 && $inputUrl.val() === "") {
+                $inputUrl.parent().addClass('has-error');
+                $inputUrl.focus();
+                return;
+            }
+            if ($selectClassify.val() == 1 && $AdId.val() === "") {
+                $AdId.parent().addClass('has-error');
+                $AdId.focus();
+                return;
+            }
+            if ($profitLimit.val() === "") {
+                $profitLimit.parent().addClass('has-error');
+                $profitLimit.focus();
                 return;
             }
 
@@ -159,7 +194,7 @@ $(function() {
                 processData: false,
                 contentType: false,
                 success: function(data) {
-                    if(data.code == 200) {
+                    if (data.code == 200) {
                         $successModal.modal({
                             backdrop: 'static',
                             show: true
@@ -185,7 +220,8 @@ $(function() {
     $endDatetimepicker = $("#endDatetimepicker");
     $beginDatetimepicker.datetimepicker({
         sideBySide: true,
-        format: 'YYYY/MM/DD HH:mm'
+        format: 'YYYY/MM/DD HH:mm',
+        defaultDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
     });
     $endDatetimepicker.datetimepicker({
         sideBySide: true,
@@ -200,7 +236,7 @@ $(function() {
     });
 
     $selectClassify.on('change', function() {
-        if($selectClassify.val() == 1) {
+        if ($selectClassify.val() == 1) {
             $("#inputUrlContainer").hide();
             $("#adIdContainer").show();
             $("#editorContainer").show();

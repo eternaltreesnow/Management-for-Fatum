@@ -5,7 +5,7 @@ $(function() {
             url: "/_admin/s/logout",
             type: 'GET',
             success: function(data) {
-                if(data.code == 200) {
+                if (data.code == 200) {
                     localStorage.removeItem('user');
                     location.href = '../index.html';
                 } else {
@@ -17,6 +17,9 @@ $(function() {
             }
         });
     });
+
+    var ids = [5, 51];
+    initialMenuTreeByIds(ids);
 
     var withdraws;
     var $inputTimePicker;
@@ -33,7 +36,7 @@ $(function() {
         },
         cash: "300.00",
         time: '2015/12/05 11:11',
-        profitReason : "reasonreason"
+        profitReason: "reasonreason"
     };
 
     $cashId = $("#cashId");
@@ -52,21 +55,20 @@ $(function() {
      * init 初始化
      */
     var url = location.search;
-    if(url.indexOf("?") != -1) {
+    if (url.indexOf("?") != -1) {
         var id = url.substr(1).split("&")[0].split("=")[1];
         $.ajax({
             url: "/_admin/s/user_withdraw/" + id,
             type: "GET",
             success: function(data) {
-                if(data.code == 200) {
+                if (data.code == 200) {
                     withdraws = data.data.withdraws;
                     initialForm(withdraws);
                 } else {
                     alert(data.error);
                 }
             },
-            error: function(data) {
-            }
+            error: function(data) {}
         });
     } else {
 
@@ -97,7 +99,7 @@ $(function() {
             data: formdate,
             cache: false,
             success: function(data) {
-                if(data.code == 200) {
+                if (data.code == 200) {
                     $successModal.modal({
                         backdrop: 'static',
                         show: true

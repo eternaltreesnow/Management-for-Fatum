@@ -5,7 +5,7 @@ $(function() {
             url: "/_admin/s/logout",
             type: 'GET',
             success: function(data) {
-                if(data.code == 200) {
+                if (data.code == 200) {
                     localStorage.removeItem('user');
                     location.href = '../index.html';
                 } else {
@@ -18,6 +18,9 @@ $(function() {
         });
     });
 
+    var ids = [3, 31];
+    initialMenuTreeByIds(ids);
+
     // 变量声明
     var datatable, ajaxData;
     var $advertisementTable;
@@ -29,29 +32,32 @@ $(function() {
      * [tempcolumn 列数据格式]
      * @type {Array}
      */
-    var column = [
-        {"data": "id"},
-        {"data": "type"},
-        {"data": "name"},
-        {"data": "alias"},
-        {"data": "status"},
-        {"data": ""}
-    ];
+    var column = [{
+        "data": "id"
+    }, {
+        "data": "type"
+    }, {
+        "data": "name"
+    }, {
+        "data": "alias"
+    }, {
+        "data": "status"
+    }, {
+        "data": ""
+    }];
     /**
      * [tempdata 行数据格式]
      * @type {Array}
      */
-    var tempdata = [
-        {
-            "id" : "1",
-            "type" : "1",
-            "name" : "广告1",
-            "alias" : "ad1",
-            "advertiser" : "d",
-            "status" : "1",
-            "image" : "imagesrc"
-        }
-    ];
+    var tempdata = [{
+        "id": "1",
+        "type": "1",
+        "name": "广告1",
+        "alias": "ad1",
+        "advertiser": "d",
+        "status": "1",
+        "image": "imagesrc"
+    }];
 
     /**
      * 初始化表格
@@ -61,11 +67,11 @@ $(function() {
     datatable = $advertisementTable.DataTable({
         processing: true,
         language: {
-            "search" : "内容搜索: ",
-            "searchPlaceholder" : "输入搜索条件",
+            "search": "内容搜索: ",
+            "searchPlaceholder": "输入搜索条件",
             "processing": "数据加载中, 请稍后...",
             "zeroRecords": "记录数为0...",
-            "emptyTable":  "记录数为0...",
+            "emptyTable": "记录数为0...",
             "paginate": {
                 "first": "首页",
                 "previous": "上一页",
@@ -82,8 +88,8 @@ $(function() {
             url: '/_admin/s/article/advertises',
             type: 'GET',
             data: function(d) {
-                delete d.columns;   // delete request parameters columns
-                delete d.order;     // delete request parameters order
+                delete d.columns; // delete request parameters columns
+                delete d.order; // delete request parameters order
                 d.limit = d.length; // reset length as limit
                 delete d.length;
                 d.keyword = $("#searchInput").val();
@@ -96,13 +102,13 @@ $(function() {
             }
         },
         sortClasses: false,
-        columnDefs: [ {
-          "targets" : -1,
-          "data" : null,
-          "defaultContent" : '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
-                             '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
-                             '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
-        } ],
+        columnDefs: [{
+            "targets": -1,
+            "data": null,
+            "defaultContent": '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="preview">预览</a>' +
+                '<a href="javascript:void(0);" class="btn btn-success btn-xs" data-link="modify">修改</a>' +
+                '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="delete">删除</a>'
+        }],
         drawCallback: function(settings, json) {
             bindBtnEvent();
         }
@@ -110,7 +116,7 @@ $(function() {
 
     $searchBtn = $("#searchBtn");
     $searchBtn.on('click', function() {
-        datatable.ajax.reload( function ( json ) {
+        datatable.ajax.reload(function(json) {
             bindBtnEvent();
         });
     });
@@ -150,15 +156,15 @@ $(function() {
         $linkDelete.on('click', function() {
             var $this = $(this);
             var id = $this.parents("tr").children(":first").html();
-            if(confirm("确定要删除该广告？")) {
+            if (confirm("确定要删除该广告？")) {
                 deleteAdvertisebyId(id);
             }
         });
     }
 
     function resetData(json) {
-        for(var i=0; i<json.data.length; i++) {
-            if(json.data[i]['status'] == 1) {
+        for (var i = 0; i < json.data.length; i++) {
+            if (json.data[i]['status'] == 1) {
                 json.data[i]['status'] = '上线';
             } else {
                 json.data[i]['status'] = '下线';
@@ -173,9 +179,9 @@ $(function() {
      */
     function getPreviewContent(ajaxData, id) {
         var url;
-        for(var i = 0; i < ajaxData.data.length; i++) {
-            if(ajaxData.data[i].id == id) {
-                if(ajaxData.data[i].url != null) {
+        for (var i = 0; i < ajaxData.data.length; i++) {
+            if (ajaxData.data[i].id == id) {
+                if (ajaxData.data[i].url != null) {
                     url = ajaxData.data[i].url;
                 } else {
                     url = '#';
@@ -199,9 +205,9 @@ $(function() {
             type: "DELETE",
             url: "/_admin/s/article/advertises/" + id,
             success: function(data) {
-                if(data.code == 200) {
+                if (data.code == 200) {
                     alert("删除成功!");
-                    datatable.ajax.reload( function ( json ) {
+                    datatable.ajax.reload(function(json) {
                         bindBtnEvent();
                     });
                 } else {

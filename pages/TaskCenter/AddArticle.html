@@ -19,6 +19,10 @@
 
         <link rel="stylesheet" href="../../static/css/frame.css">
         <link rel="stylesheet" href="../../static/css/AddArticle.css">
+        <!-- ReactJS -->
+        <script src="../../lib/React/react.min.js"></script>
+        <script src="../../lib/React/react-dom.js"></script>
+        <script src="../../lib/React/babel-browser.min.js"></script>
 
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!-- Warning: Respond.js doesn't work if you view the page via file:// -->
@@ -53,54 +57,8 @@
                         </li>
                     </ul>
                 </div>
-                <!-- Sidebar Menu Items -->
-                <div class="collapse navbar-collapse navbar-ex1-collapse">
-                    <ul class="nav side-nav">
-                        <li>
-                            <a href="../index.html">首页</a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);" data-toggle="collapse" data-target="#task-drop">
-                                <span>任务中心</span>
-                                <span class="caret"></span>
-                            </a>
-                            <ul id="task-drop" class="">
-                                <li><a href="../TaskCenter/AdvertiseManage.html">广告管理</a></li>
-                                <li class="active"><a href="../TaskCenter/ArticleManage.html">文章管理</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);" data-toggle="collapse" data-target="#article-drop">
-                                <span>文章中心</span>
-                                <span class="caret"></span>
-                            </a>
-                            <ul id="article-drop" class="collapse">
-                                <li><a href="../ArticleCenter/AdvertiseManage.html">广告管理</a></li>
-                                <li><a href="../ArticleCenter/ArticleManage.html">文章管理</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);" data-toggle="collapse" data-target="#vip-drop">
-                                <span>会员信息</span>
-                                <span class="caret"></span>
-                            </a>
-                            <ul id="vip-drop" class="collapse">
-                                <li><a href="../VipCenter/VipInfo.html">基本信息</a></li>
-                                <li><a href="../VipCenter/VipCredit.html">积分信息</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);" data-toggle="collapse" data-target="#account-drop">
-                                <span>结算管理</span>
-                                <span class="caret"></span>
-                            </a>
-                            <ul id="account-drop" class="collapse">
-                                <li><a href="../BalanceCenter/CashManage.html">提现管理</a></li>
-                                <li><a href="../BalanceCenter/CheatManage.html">作弊管理</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
+                <!-- MenuTree React Plugin -->
+                <div class="collapse navbar-collapse navbar-ex1-collapse" id="menu"></div>
             </div>
         </div>
         <div class="row main-page">
@@ -156,12 +114,14 @@
                                 <div class="col-lg-7">
                                     <input type="text" class="form-control" id="inputIntro" name="intro" placeholder="请输入文章简介...">
                                 </div>
+                                <span id="inputIntroHint" class="col-lg-2 form-hint form-hint-nec">(*必填)</span>
                             </div>
                             <div class="form-group">
                                 <label for="inputFile" class="col-lg-3 control-label">文章题图</label>
                                 <div class="col-lg-7">
                                     <input type="file" class="form-control" id="inputFile" name="thumbnails">
                                 </div>
+                                <span id="inputFileHint" class="col-lg-2 form-hint form-hint-nec">(*必填)</span>
                             </div>
                             <div class="form-group">
                                 <label for="selectDomain" class="col-lg-3 control-label">可用域名</label>
@@ -174,6 +134,7 @@
                                 <div class="col-lg-7">
                                     <input type="text" class="form-control" id="inputUrl" name="url" placeholder="请输入跳转链接...">
                                 </div>
+                                <span id="inputUrlHint" class="col-lg-2 form-hint form-hint-nec">(*必填)</span>
                             </div>
                             <div class="form-group">
                                 <label for="selectStatus" class="col-lg-3 control-label">状态</label>
@@ -196,6 +157,7 @@
                                 <div class="col-lg-7">
                                     <input type="text" class="form-control" id="AdId" name="advertiseId1" placeholder="请输入广告ID...">
                                 </div>
+                                <span id="AdIdHint" class="col-lg-2 form-hint form-hint-nec">(*必填)</span>
                             </div>
                             <div class="form-group">
                                 <label for="firstPrice" class="col-lg-3 control-label">单价</label>
@@ -232,6 +194,7 @@
                                 <div class="col-lg-7">
                                     <input type="text" class="form-control" id="profitLimit" name="limitProfit" placeholder="请输入收益上限...">
                                 </div>
+                                <span id="profitLimitHint" class="col-lg-2 form-hint form-hint-nec">(*必填)</span>
                             </div>
                             <div class="form-group">
                                 <label for="selectPlatform" class="col-lg-3 control-label">限制平台</label>
@@ -336,6 +299,9 @@
         <!-- PapaParse -->
         <script src="../../lib/PapaParse/papaparse.min.js"></script>
         <script src="../../static/js/plugin/video_template.js"></script>
+
+        <!-- MenuTree React Plugin -->
+        <script src="../../static/js/plugin/MenuTree.js"></script>
 
         <script src="../../static/js/TaskCenter/AddArticle.js"></script>
     </body>

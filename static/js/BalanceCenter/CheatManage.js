@@ -5,7 +5,7 @@ $(function() {
             url: "/_admin/s/logout",
             type: 'GET',
             success: function(data) {
-                if(data.code == 200) {
+                if (data.code == 200) {
                     localStorage.removeItem('user');
                     location.href = '../index.html';
                 } else {
@@ -18,31 +18,38 @@ $(function() {
         });
     });
 
+    var ids = [5, 52];
+    initialMenuTreeByIds(ids);
+
     var datatable;
     var $cheatTable, $searchBtn;
 
-    var tempcolumn = [
-        {"data": "id"},
-        {"data": "user.id"},
-        {"data": "user.phone"},
-        {"data": "user.alipay"},
-        {"data": "cash"},
-        {"data": "time"},
-        {"data": "reason"}
-    ];
-    var tempdata = [
-        {
-            "id" : "1",
-            "user" : {
-                "id" : "1",
-                "phone" : "13300000000",
-                "alipay" : "13300000000"
-            },
-            "cash" : "500.00",
-            "time" : '2015/11/30 15:30',
-            "reason" : '1'
-        }
-    ];
+    var tempcolumn = [{
+        "data": "id"
+    }, {
+        "data": "user.id"
+    }, {
+        "data": "user.phone"
+    }, {
+        "data": "user.alipay"
+    }, {
+        "data": "cash"
+    }, {
+        "data": "time"
+    }, {
+        "data": "reason"
+    }];
+    var tempdata = [{
+        "id": "1",
+        "user": {
+            "id": "1",
+            "phone": "13300000000",
+            "alipay": "13300000000"
+        },
+        "cash": "500.00",
+        "time": '2015/11/30 15:30',
+        "reason": '1'
+    }];
 
     /**
      * 初始化表格
@@ -52,11 +59,11 @@ $(function() {
     datatable = $cheatTable.DataTable({
         processing: true,
         language: {
-            "search" : "内容搜索: ",
-            "searchPlaceholder" : "输入搜索条件",
+            "search": "内容搜索: ",
+            "searchPlaceholder": "输入搜索条件",
             "processing": "数据加载中, 请稍后...",
             "zeroRecords": "记录数为0...",
-            "emptyTable":  "记录数为0...",
+            "emptyTable": "记录数为0...",
             "paginate": {
                 "first": "首页",
                 "previous": "上一页",
@@ -73,15 +80,15 @@ $(function() {
             url: '/_admin/s/user_cheatings',
             type: 'GET',
             data: function(d) {
-                delete d.columns;   // delete request parameters columns
-                delete d.order;     // delete request parameters order
+                delete d.columns; // delete request parameters columns
+                delete d.order; // delete request parameters order
                 d.limit = d.length; // reset length as limit
                 delete d.length;
                 d.keyword = $("#searchInput").val();
                 d.search.value = $("#searchInput").val();
             },
             dataSrc: function(json) {
-                for(var i=0; i<json.data.length; i++) {
+                for (var i = 0; i < json.data.length; i++) {
                     json.data[i]['time'] = moment(json.data[i]['time']).format('YYYY-MM-DD HH:mm:ss');
                 }
                 return json.data;

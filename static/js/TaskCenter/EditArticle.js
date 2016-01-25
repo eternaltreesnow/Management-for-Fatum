@@ -5,7 +5,7 @@ $(function() {
             url: "/_admin/s/logout",
             type: 'GET',
             success: function(data) {
-                if(data.code == 200) {
+                if (data.code == 200) {
                     localStorage.removeItem('user');
                     location.href = '../index.html';
                 } else {
@@ -17,6 +17,9 @@ $(function() {
             }
         });
     });
+
+    var ids = [2, 22];
+    initialMenuTreeByIds(ids);
 
     var article, info;
     var $articleId, $selectClassify, $selectType, $inputSrc, $inputTitle, $inputAdder, $inputFile, $selectStatus, $selectDomain, $inputUrl, $inputIntro;
@@ -87,13 +90,13 @@ $(function() {
      * init 初始化
      */
     var url = location.search;
-    if(url.indexOf("?") != -1) {
+    if (url.indexOf("?") != -1) {
         var id = url.substr(1).split("&")[0].split("=")[1];
         $.ajax({
             url: "/_admin/s/task/articles/" + id,
             type: "GET",
             success: function(data) {
-                if(data.code == 200) {
+                if (data.code == 200) {
                     article = data.data.article;
                     info = data.data.info;
                     initialForm(article, info);
@@ -129,7 +132,7 @@ $(function() {
             type: 'GET',
             async: true,
             success: function(result) {
-                if(result.code == 200) {
+                if (result.code == 200) {
                     var options = '';
                     result.data.map(function(value) {
                         options += '<option value="' + value + '">' + value + '</option>';
@@ -159,7 +162,7 @@ $(function() {
         });
 
         // judge the classify
-        if(data.classify == 1) {
+        if (data.classify == 1) {
             ue.ready(function() {
                 ue.setContent(data.content);
                 bindBtnEvent();
@@ -175,17 +178,18 @@ $(function() {
             $("#editorContainer").hide();
         }
 
-        if(info.advertiserId1 == null && info.advertiserId2 == null) {
+        if (info.advertiserId1 == null && info.advertiserId2 == null) {
+            $beginDatetimepicker.data("DateTimePicker").defaultDate(moment(new Date()).format('YYYY-MM-DD HH:mm:ss'));
         } else {
             // initial Schedule info
             $scheduleId.val(info.id);
             $AdId.val(info.advertiserId1);
             $Price.val(info.price1);
             $Count.val(info.limitRetweetCount1);
-            if(info.beginTime != null) {
+            if (info.beginTime != null) {
                 $beginDatetimepicker.data("DateTimePicker").defaultDate(moment(info.beginTime).format('YYYY-MM-DD HH:mm:ss'));
             }
-            if(info.endTime != null) {
+            if (info.endTime != null) {
                 $endDatetimepicker.data("DateTimePicker").defaultDate(moment(info.endTime).format('YYYY-MM-DD HH:mm:ss'));
             }
             $profitLimit.val(info.limitProfit);
@@ -205,7 +209,7 @@ $(function() {
         $previewModal.modal('show');
     });
     $previewModal.on('shown.bs.modal', function() {
-        if($previewContent.width() > 558) {
+        if ($previewContent.width() > 558) {
             $(".previewImage").css("max-width", $previewContent.width() + 'px');
         }
     });
@@ -215,7 +219,7 @@ $(function() {
         $inputSrc.parent().removeClass('has-error');
     });
     $inputSrc.on('blur', function() {
-        if($inputSrc.val() !== "") {
+        if ($inputSrc.val() !== "") {
             $inputSrcHint.removeClass("form-hint-nec").addClass("form-hint-suc");
             $inputSrcHint.html('<span class="glyphicon glyphicon-ok"></span>');
         } else {
@@ -228,7 +232,7 @@ $(function() {
         $inputTitle.parent().removeClass('has-error');
     });
     $inputTitle.on('blur', function() {
-        if($inputTitle.val() !== "") {
+        if ($inputTitle.val() !== "") {
             $inputTitleHint.removeClass("form-hint-nec").addClass("form-hint-suc");
             $inputTitleHint.html('<span class="glyphicon glyphicon-ok"></span>');
         } else {
@@ -238,7 +242,7 @@ $(function() {
     });
 
     $selectClassify.on('change', function() {
-        if($selectClassify.val() == 1) {
+        if ($selectClassify.val() == 1) {
             $("#inputUrlContainer").hide();
             $("#adIdContainer").show();
             $("#editorContainer").show();
@@ -250,7 +254,7 @@ $(function() {
     });
 
     function setSchduleFormDisable(disableStatus) {
-        if(disableStatus == false) {
+        if (disableStatus == false) {
             $scheduleId.val('');
             $AdId.val('');
             $Price.val('');
@@ -274,7 +278,7 @@ $(function() {
         $confirmContent = $("#confirmContent");
         $deleteScheduleBtn = $("#deleteScheduleBtn");
         $deleteScheduleBtn.on('click', function() {
-            if($scheduleId.val() == "") {
+            if ($scheduleId.val() == "") {
                 $confirmContent.text("该文章无排期，请直接添加排期信息");
                 $deleteConfirmBtn.hide();
             } else {
@@ -291,7 +295,7 @@ $(function() {
                 type: "DELETE",
                 url: "/_admin/s/task/infos/" + $scheduleId.val(),
                 success: function(data) {
-                    if(data.code == 200) {
+                    if (data.code == 200) {
                         $confirmContent.text("删除成功!");
                         $confirmModal.modal('hide');
                         setSchduleFormDisable(false);
@@ -304,7 +308,7 @@ $(function() {
         $videoLinkBtn = $("#videoLinkBtn");
         $videoLinkBtn.on('click', function() {
             var html = getVideoHtmlTemplate($videoUrl.val());
-            if(html !== '') {
+            if (html !== '') {
                 $('#videoModal').modal('hide');
                 ue.execCommand('inserthtml', html);
                 $videoUrl.val('');
@@ -317,12 +321,12 @@ $(function() {
 
         $submitBtn = $("#submitBtn");
         $submitBtn.on('click', function(event) {
-            if($inputSrc.val() === "") {
+            if ($inputSrc.val() === "") {
                 $inputSrc.parent().addClass('has-error');
                 $inputSrc.focus();
                 return;
             }
-            if($inputTitle.val() === "") {
+            if ($inputTitle.val() === "") {
                 $inputTitle.parent().addClass('has-error');
                 $inputTitle.focus();
                 return;
@@ -339,7 +343,7 @@ $(function() {
                 processData: false,
                 contentType: false,
                 success: function(data) {
-                    if(data.code == 200) {
+                    if (data.code == 200) {
                         $successModal.modal({
                             backdrop: 'static',
                             show: true

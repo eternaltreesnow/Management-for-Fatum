@@ -5,7 +5,7 @@ $(function() {
             url: "/_admin/s/logout",
             type: 'GET',
             success: function(data) {
-                if(data.code == 200) {
+                if (data.code == 200) {
                     localStorage.removeItem('user');
                     location.href = '../index.html';
                 } else {
@@ -18,8 +18,11 @@ $(function() {
         });
     });
 
+    var ids = [3, 32];
+    initialMenuTreeByIds(ids);
+
     var $submitBtn;
-    var $selectDomain, $selectType, $time, $inputSrc, $inputTitle;
+    var $selectDomain, $selectType, $time, $inputSrc, $inputTitle, $inputIntro, $inputFile, $AdId1, $AdId2;
     var $successModal, $errorMsg, $errorModal;
     var $beginDatetimepicker, $endDatetimepicker;
     var $fetchUrl, $fetchBtn;
@@ -29,6 +32,11 @@ $(function() {
 
     $inputSrc = $("#inputSrc");
     $inputTitle = $("#inputTitle");
+    $inputIntro = $("#inputIntro");
+    $inputFile = $("#inputFile");
+    $AdId1 = $("#AdId1");
+    $AdId2 = $("#AdId2");
+
     $inputTitleHint = $("#inputTitleHint");
     $inputSrcHint = $("#inputSrcHint");
 
@@ -38,6 +46,31 @@ $(function() {
     $successModal = $("#successModal");
     $errorMsg = $("#errorMsg");
     $errorModal = $("#errorModal");
+
+    /**
+     * [$beginDatetimepicker 排期起始时间选择器]
+     * [$endDatetimepicker 排期结束时间选择器]
+     * dp.change 通过监听change事件设置结束时间大于起始时间
+     */
+    $beginDatetimepicker = $("#beginDatetimepicker");
+    $endDatetimepicker = $("#endDatetimepicker");
+    $beginDatetimepicker.datetimepicker({
+        sideBySide: true,
+        format: 'YYYY/MM/DD HH:mm',
+        defaultDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+    });
+    $endDatetimepicker.datetimepicker({
+        sideBySide: true,
+        format: 'YYYY/MM/DD HH:mm',
+        useCurrent: false,
+        minDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+    });
+    $beginDatetimepicker.on("dp.change", function(e) {
+        $endDatetimepicker.data("DateTimePicker").minDate(e.date);
+    });
+    $endDatetimepicker.on("dp.change", function(e) {
+        $beginDatetimepicker.data("DateTimePicker").maxDate(e.date);
+    });
 
     /**
      * 初始化分类
@@ -66,7 +99,7 @@ $(function() {
         type: 'GET',
         async: true,
         success: function(data) {
-            if(data.code == 200) {
+            if (data.code == 200) {
                 var options = '';
                 data.data.map(function(value) {
                     options += '<option value="' + value + '">' + value + '</option>';
@@ -97,27 +130,17 @@ $(function() {
     $inputSrc.on('input', function() {
         $inputSrc.parent().removeClass('has-error');
     });
-    $inputSrc.on('blur', function() {
-        if($inputSrc.val() !== "") {
-            $inputSrcHint.removeClass("form-hint-nec").addClass("form-hint-suc");
-            $inputSrcHint.html('<span class="glyphicon glyphicon-ok"></span>');
-        } else {
-            $inputSrcHint.removeClass("form-hint-suc").addClass("form-hint-nec");
-            $inputSrcHint.html('(*必填)');
-        }
-    });
-
     $inputTitle.on('input', function() {
         $inputTitle.parent().removeClass('has-error');
     });
-    $inputTitle.on('blur', function() {
-        if($inputTitle.val() !== "") {
-            $inputTitleHint.removeClass("form-hint-nec").addClass("form-hint-suc");
-            $inputTitleHint.html('<span class="glyphicon glyphicon-ok"></span>');
-        } else {
-            $inputTitleHint.removeClass("form-hint-suc").addClass("form-hint-nec");
-            $inputTitleHint.html('(*必填)');
-        }
+    $inputFile.on('change', function() {
+        $inputFile.parent().removeClass('has-error');
+    });
+    $AdId1.on('input', function() {
+        $AdId1.parent().removeClass('has-error');
+    });
+    $AdId2.on('input', function() {
+        $AdId2.parent().removeClass('has-error');
     });
 
     function bindBtnEvent() {
@@ -132,7 +155,7 @@ $(function() {
                     url: $fetchUrl.val()
                 },
                 success: function(data) {
-                    if(data.code == 200) {
+                    if (data.code == 200) {
                         ue.setContent(data.data.html);
                     } else {
                         $errorMsg.html(data.data.msg);
@@ -149,7 +172,7 @@ $(function() {
         $videoLinkBtn = $("#videoLinkBtn");
         $videoLinkBtn.on('click', function() {
             var html = getVideoHtmlTemplate($videoUrl.val());
-            if(html !== '') {
+            if (html !== '') {
                 $('#videoModal').modal('hide');
                 ue.execCommand('inserthtml', html);
                 $videoUrl.val('');
@@ -165,17 +188,31 @@ $(function() {
         $endtime = $("#endtime");
         $submitBtn = $("#submitBtn");
         $submitBtn.on('click', function() {
-            if($inputSrc.val() === "") {
-                $inputSrc.parent().addClass('has-error');
-                $inputSrc.focus();
-                return;
-            }
-            if($inputTitle.val() === "") {
+            if ($inputTitle.val() === "") {
                 $inputTitle.parent().addClass('has-error');
                 $inputTitle.focus();
                 return;
             }
-
+            if ($inputSrc.val() === "") {
+                $inputSrc.parent().addClass('has-error');
+                $inputSrc.focus();
+                return;
+            }
+            if ($inputFile.val() === "") {
+                $inputFile.parent().addClass('has-error');
+                $inputFile.focus();
+                return;
+            }
+            if ($AdId1.val() === "") {
+                $AdId1.parent().addClass('has-error');
+                $AdId1.focus();
+                return;
+            }
+            if ($AdId2.val() === "") {
+                $AdId2.parent().addClass('has-error');
+                $AdId2.focus();
+                return;
+            }
             $time.val(event.timeStamp);
             $begintime.val(moment($("#beginTime").val()).format('x'));
             $endtime.val(moment($("#endTime").val()).format('x'));
@@ -188,7 +225,7 @@ $(function() {
                 processData: false,
                 contentType: false,
                 success: function(data) {
-                    if(data.code == 200) {
+                    if (data.code == 200) {
                         $successModal.modal({
                             backdrop: 'static',
                             show: true
@@ -205,29 +242,6 @@ $(function() {
         });
     }
 
-    /**
-     * [$beginDatetimepicker 排期起始时间选择器]
-     * [$endDatetimepicker 排期结束时间选择器]
-     * dp.change 通过监听change事件设置结束时间大于起始时间
-     */
-    $beginDatetimepicker = $("#beginDatetimepicker");
-    $endDatetimepicker = $("#endDatetimepicker");
-    $beginDatetimepicker.datetimepicker({
-        sideBySide: true,
-        format: 'YYYY/MM/DD HH:mm',
-        defaultDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
-    });
-    $endDatetimepicker.datetimepicker({
-        sideBySide: true,
-        format: 'YYYY/MM/DD HH:mm',
-        useCurrent: false,
-        minDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
-    });
-    $beginDatetimepicker.on("dp.change", function(e) {
-        $endDatetimepicker.data("DateTimePicker").minDate(e.date);
-    });
-    $endDatetimepicker.on("dp.change", function(e) {
-        $beginDatetimepicker.data("DateTimePicker").maxDate(e.date);
-    });
+
 
 });

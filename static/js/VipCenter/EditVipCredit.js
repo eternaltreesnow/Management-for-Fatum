@@ -18,6 +18,9 @@ $(function() {
         });
     });
 
+    var ids = [4, 42];
+    initialMenuTreeByIds(ids);
+
     var profitDetails;
     var $inputTimePicker;
     var $creditId, $userId, $inputCredit, $inputTime, $inputReason, $selectStatus, $time;
