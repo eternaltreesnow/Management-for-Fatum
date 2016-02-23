@@ -26,6 +26,38 @@ var validateError = function(error) {
     $validateErrorInfo.css('visibility', 'visible');
     setTimeout("$('#validateErrorInfo').css('visibility', 'hidden')", 5000);
 }
+var transModuleId = function(modules) {
+    var ids = [1];
+    modules.map(function(module) {
+        switch(module) {
+            case 'taskAdvertise':
+                ids.push(2, 21);
+                break;
+            case 'taskArticle':
+                ids.push(2, 22);
+                break;
+            case 'articleAdvertise':
+                ids.push(3, 31);
+                break;
+            case 'articleArticle':
+                ids.push(3, 32);
+                break;
+            case 'userInfo':
+                ids.push(4, 41);
+                break;
+            case 'userProfit':
+                ids.push(4, 42);
+                break;
+            case 'userWithdraw':
+                ids.push(5, 51);
+                break;
+            case 'userCheating':
+                ids.push(5, 52);
+                break;
+        }
+    });
+    return ids;
+}
 $(function() {
     var $loginBtn = $("#loginBtn");
     var $userName = $("#inputUsername");
@@ -49,6 +81,7 @@ $(function() {
                 success: function(data) {
                     if(data.code == 200) {
                         localStorage['user'] = data.data.manager.username;
+                        localStorage['moduleIds'] = transModuleId(data.data.modules);
                         location.href = 'index.html';
                     } else {
                         validateError(data.error);
