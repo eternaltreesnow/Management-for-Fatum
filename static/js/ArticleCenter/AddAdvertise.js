@@ -7,6 +7,7 @@ $(function() {
             success: function(data) {
                 if (data.code == 200) {
                     localStorage.removeItem('user');
+                    localStorage.removeItem('moduleIds');
                     location.href = '../index.html';
                 } else {
                     console.log(data.error);
@@ -21,11 +22,17 @@ $(function() {
     var ids = [3, 31];
     initialMenuTreeByIds(ids);
 
+    if (!initalModulePage(31)) {
+        return;
+    }
+
     var $submitBtn, $cancerBtn;
     var $selectType, $inputOwner, $inputTitle, $inputNick, $inputFile, $inputUrl;
     var $selectTypeHint, $inputOwnerHint, $inputTitleHint, $inputNickHint;
     var $successModal, $cancerModal;
     var $errorModal, $errorMsg;
+    var $permissionModal;
+    $permissionModal = $("#permissionModal");
 
     $selectType = $("#selectType");
     $inputOwner = $("#inputOwner");
@@ -74,6 +81,8 @@ $(function() {
                         backdrop: 'static',
                         show: true
                     });
+                } else if (data.code == 403) {
+                    $permissionModal.modal('show');
                 } else {
                     $errorMsg.html(data.error);
                     $errorModal.modal('show');

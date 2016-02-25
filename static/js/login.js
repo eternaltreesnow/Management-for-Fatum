@@ -6,20 +6,20 @@
  * @return {[boolean]} 1 [正确提交]
  */
 var checkValidateForm = function(username, password) {
-    if(username.length === 0) {
-        validateError('请输入用户名...');
-        return 0;
+        if (username.length === 0) {
+            validateError('请输入用户名...');
+            return 0;
+        }
+        if (password.length === 0) {
+            validateError('请输入密码...');
+            return 0;
+        }
+        return 1;
     }
-    if(password.length === 0) {
-        validateError('请输入密码...');
-        return 0;
-    }
-    return 1;
-}
-/**
- * [validateError 根据错误类型显示错误提示]
- * @param  {[String]} error 错误提示
- */
+    /**
+     * [validateError 根据错误类型显示错误提示]
+     * @param  {[String]} error 错误提示
+     */
 var validateError = function(error) {
     var $validateErrorInfo = $("#validateErrorInfo");
     $validateErrorInfo.html(error);
@@ -29,7 +29,7 @@ var validateError = function(error) {
 var transModuleId = function(modules) {
     var ids = [1];
     modules.map(function(module) {
-        switch(module) {
+        switch (module) {
             case 'taskAdvertise':
                 ids.push(2, 21);
                 break;
@@ -68,7 +68,7 @@ $(function() {
         var username = $userName.val();
         var password = $password.val();
         // 验证表单后，提交loginForm表单
-        if(checkValidateForm(username, password)) {
+        if (checkValidateForm(username, password)) {
             var requestData = {
                 username: username,
                 password: $.md5(password)
@@ -79,10 +79,9 @@ $(function() {
                 data: requestData,
                 dataType: 'json',
                 success: function(data) {
-                    if(data.code == 200) {
+                    if (data.code == 200) {
                         localStorage['user'] = data.data.manager.username;
-                        moduleIds =  transModuleId(data.data.modules);
-                        initalModuleNodes(moduleIds);
+                        localStorage['moduleIds'] = transModuleId(data.data.modules);
                         location.href = 'index.html';
                     } else {
                         validateError(data.error);

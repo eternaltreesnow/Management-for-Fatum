@@ -103,7 +103,7 @@ var MenuNodes = React.createClass({
 var menuTreeNodes = [{
     id: 1,
     text: "首页",
-    url: "../index.html",
+    url: "/public/management/pages/index.html",
     status: "hidden",
     active: "",
     nodes: []
@@ -118,14 +118,14 @@ var menuTreeNodes = [{
     nodes: [{
         id: 21,
         text: "广告管理",
-        url: "../TaskCenter/AdvertiseManage.html",
+        url: "/public/management/pages/TaskCenter/AdvertiseManage.html",
         status: "hidden",
         active: "",
         nodes: []
     }, {
         id: 22,
         text: "文章管理",
-        url: "../TaskCenter/ArticleManage.html",
+        url: "/public/management/pages/TaskCenter/ArticleManage.html",
         status: "hidden",
         active: "",
         nodes: []
@@ -141,14 +141,14 @@ var menuTreeNodes = [{
     nodes: [{
         id: 31,
         text: "广告管理",
-        url: "../ArticleCenter/AdvertiseManage.html",
+        url: "/public/management/pages/ArticleCenter/AdvertiseManage.html",
         status: "hidden",
         active: "",
         nodes: []
     }, {
         id: 32,
         text: "文章管理",
-        url: "../ArticleCenter/ArticleManage.html",
+        url: "/public/management/pages/ArticleCenter/ArticleManage.html",
         status: "hidden",
         active: "",
         nodes: []
@@ -164,14 +164,14 @@ var menuTreeNodes = [{
     nodes: [{
         id: 41,
         text: "基本信息",
-        url: "../VipCenter/VipInfo.html",
+        url: "/public/management/pages/VipCenter/VipInfo.html",
         status: "hidden",
         active: "",
         nodes: []
     }, {
         id: 42,
         text: "积分信息",
-        url: "../VipCenter/VipCredit.html",
+        url: "/public/management/pages/VipCenter/VipCredit.html",
         status: "hidden",
         active: "",
         nodes: []
@@ -187,14 +187,14 @@ var menuTreeNodes = [{
     nodes: [{
         id: 51,
         text: "提现管理",
-        url: "../BalanceCenter/CashManage.html",
+        url: "/public/management/pages/BalanceCenter/CashManage.html",
         status: "hidden",
         active: "",
         nodes: []
     }, {
         id: 52,
         text: "作弊管理",
-        url: "../BalanceCenter/CheatManage.html",
+        url: "/public/management/pages/BalanceCenter/CheatManage.html",
         status: "hidden",
         active: "",
         nodes: []
@@ -217,27 +217,33 @@ var setModuleNodes = function(id, nodes) {
         return;
     } else {
         nodes.map(function(node) {
-            if(node.id == id) {
+            if (node.id == id) {
                 node.status = "";
             }
             setModuleNodes(id, node.nodes);
         });
     }
 }
-var initalModuleNodes = function(ids) {
-    ids.map(function(moduleId) {
-        setModuleNodes(moduleId, menuTreeNodes);
+var initalModulePage = function(id) {
+    var moduleIds = localStorage['moduleIds'].split(',');
+    var legal = false;
+    moduleIds.map(function(moduleId) {
+        if (moduleId == id) {
+            legal = true;
+        }
     });
-    console.log(menuTreeNodes);
-    localStorage['menuTreeNodes'] = menuTreeNodes;
+    if (!legal) {
+        alert("页面访问权限错误！");
+        location.href = "/public/management/pages/index.html";
+        return 0;
+    }
+    return 1;
 }
 var initialMenuTreeByIds = function(ids) {
-    // var moduleIds = localStorage['moduleIds'].split(',');
-    // moduleIds.map(function(moduleId) {
-    //     setModuleNodes(moduleId, menuTreeNodes);
-    // });
-    menuTreeNodes = localStorage['menuTreeNodes'];
-    console.log(menuTreeNodes);
+    var moduleIds = localStorage['moduleIds'].split(',');
+    moduleIds.map(function(moduleId) {
+        setModuleNodes(moduleId, menuTreeNodes);
+    });
     ids.map(function(id) {
         setActiveNodes(id, menuTreeNodes);
     });

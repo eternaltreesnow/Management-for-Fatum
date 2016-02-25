@@ -7,6 +7,7 @@ $(function() {
             success: function(data) {
                 if (data.code == 200) {
                     localStorage.removeItem('user');
+                    localStorage.removeItem('moduleIds');
                     location.href = '../index.html';
                 } else {
                     console.log(data.error);
@@ -21,6 +22,10 @@ $(function() {
     var ids = [2, 22];
     initialMenuTreeByIds(ids);
 
+    if (!initalModulePage(22)) {
+        return;
+    }
+
     var $submitBtn;
     var $selectDomain;
     var $selectClassify, $time, $selectType, $inputSrc, $inputTitle, $inputIntro, $inputFile, $inputUrl, $AdId, $profitLimit, $endTime;
@@ -29,6 +34,9 @@ $(function() {
     var $videoUrl, $videoLinkBtn;
 
     var $inputTitleHint, $inputSrcHint, $inputIntroHint, $inputFileHint, $inputUrlHint, $AdIdHint, $profitLimitHint;
+
+    var $permissionModal;
+    $permissionModal = $("#permissionModal");
 
     $inputSrc = $("#inputSrc");
     $inputTitle = $("#inputTitle");
@@ -85,6 +93,8 @@ $(function() {
                     options += '<option value="' + value + '">' + value + '</option>';
                 });
                 $selectDomain.append(options);
+            } else if (data.code == 403) {
+                $permissionModal.modal('show');
             } else {
                 console.log(data.error);
             }
@@ -204,6 +214,8 @@ $(function() {
                             backdrop: 'static',
                             show: true
                         });
+                    } else if (data.code == 403) {
+                        $permissionModal.modal('show');
                     } else {
                         $errorMsg.html(data.error);
                         $errorModal.modal('show');

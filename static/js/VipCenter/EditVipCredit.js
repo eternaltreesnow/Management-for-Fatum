@@ -5,8 +5,9 @@ $(function() {
             url: "/_admin/s/logout",
             type: 'GET',
             success: function(data) {
-                if(data.code == 200) {
+                if (data.code == 200) {
                     localStorage.removeItem('user');
+                    localStorage.removeItem('moduleIds');
                     location.href = '../index.html';
                 } else {
                     console.log(data.error);
@@ -21,25 +22,27 @@ $(function() {
     var ids = [4, 42];
     initialMenuTreeByIds(ids);
 
+    if (!initalModulePage(42)) {
+        return;
+    }
+
     var profitDetails;
     var $inputTimePicker;
     var $creditId, $userId, $inputCredit, $inputTime, $inputReason, $selectStatus, $time;
     var $submitBtn;
     var $successModal, $errorModal, $errorMsg;
 
-    var tempdata = [
-        {
-            "id" : "1",
-            "user" : {
-                "id" : "1111",
-                "phone" : "13300000000"
-            },
-            "points" : "11",
-            "time" : "2015/12/15 15:30",
-            "reason" : "因为完成xx任务获得积分",
-            "status" : "1"
-        }
-    ];
+    var tempdata = [{
+        "id": "1",
+        "user": {
+            "id": "1111",
+            "phone": "13300000000"
+        },
+        "points": "11",
+        "time": "2015/12/15 15:30",
+        "reason": "因为完成xx任务获得积分",
+        "status": "1"
+    }];
 
     $creditId = $("#creditId");
     $userId = $("#userId");
@@ -53,21 +56,20 @@ $(function() {
      * init 初始化
      */
     var url = location.search;
-    if(url.indexOf("?") != -1) {
+    if (url.indexOf("?") != -1) {
         var id = url.substr(1).split("&")[0].split("=")[1];
         $.ajax({
             url: "/_admin/s/user_profit_details/" + id,
             type: "GET",
             success: function(data) {
-                if(data.code == 200) {
+                if (data.code == 200) {
                     profitDetails = data.data.profitDetails;
                     initialForm(profitDetails);
                 } else {
                     console.log(data.error);
                 }
             },
-            error: function(data) {
-            }
+            error: function(data) {}
         });
     } else {
 
@@ -105,7 +107,7 @@ $(function() {
             data: formdata,
             cache: false,
             success: function(data) {
-                if(data.code == 200) {
+                if (data.code == 200) {
                     $successModal.modal({
                         backdrop: 'static',
                         show: true

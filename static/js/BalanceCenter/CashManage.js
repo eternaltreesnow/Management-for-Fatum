@@ -5,8 +5,9 @@ $(function() {
             url: "/_admin/s/logout",
             type: 'GET',
             success: function(data) {
-                if(data.code == 200) {
+                if (data.code == 200) {
                     localStorage.removeItem('user');
+                    localStorage.removeItem('moduleIds');
                     location.href = '../index.html';
                 } else {
                     console.log(data.error);
@@ -20,6 +21,10 @@ $(function() {
 
     var ids = [5, 51];
     initialMenuTreeByIds(ids);
+
+    if (!initalModulePage(51)) {
+        return;
+    }
 
     var datatable;
     var $cashTable;
@@ -36,31 +41,37 @@ $(function() {
     $checkContent = $("#checkContent");
     $passContent = $("#passContent");
 
-    var column = [
-        {"data": "id"},
-        {"data": "user.id"},
-        {"data": "user.phone"},
-        {"data": "user.alipay"},
-        {"data": "cash"},
-        {"data": "time"},
-        {"data": "permitted"},
-        {"data": "withdraw"},
-        {"data": "edit"}
-    ];
-    var tempdata = [
-        {
-            "id" : "1",
-            "user" : {
-                "id" : "1",
-                "phone" : "13300000000",
-                "alipay" : "13300000000"
-            },
-            "cash" : "500.00",
-            "time" : '2015/11/30 15:30',
-            "isPermitted" : "0",
-            "isWithdraw" : "0"
-        }
-    ];
+    var column = [{
+        "data": "id"
+    }, {
+        "data": "user.id"
+    }, {
+        "data": "user.phone"
+    }, {
+        "data": "user.alipay"
+    }, {
+        "data": "cash"
+    }, {
+        "data": "time"
+    }, {
+        "data": "permitted"
+    }, {
+        "data": "withdraw"
+    }, {
+        "data": "edit"
+    }];
+    var tempdata = [{
+        "id": "1",
+        "user": {
+            "id": "1",
+            "phone": "13300000000",
+            "alipay": "13300000000"
+        },
+        "cash": "500.00",
+        "time": '2015/11/30 15:30',
+        "isPermitted": "0",
+        "isWithdraw": "0"
+    }];
 
     /**
      * 初始化表格
@@ -70,11 +81,11 @@ $(function() {
     datatable = $cashTable.DataTable({
         processing: true,
         language: {
-            "search" : "内容搜索: ",
-            "searchPlaceholder" : "输入搜索条件",
+            "search": "内容搜索: ",
+            "searchPlaceholder": "输入搜索条件",
             "processing": "数据加载中, 请稍后...",
             "zeroRecords": "记录数为0...",
-            "emptyTable":  "记录数为0...",
+            "emptyTable": "记录数为0...",
             "paginate": {
                 "first": "首页",
                 "previous": "上一页",
@@ -99,11 +110,11 @@ $(function() {
                 d.keyword = $("#searchInput").val();
             },
             dataSrc: function(json) {
-                for(var i=0; i<json.data.length; i++) {
+                for (var i = 0; i < json.data.length; i++) {
                     json.data[i]['time'] = moment(json.data[i]['time']).format('YYYY-MM-DD HH:mm:ss');
-                    if(json.data[i]['isPermitted'] == 1) {
+                    if (json.data[i]['isPermitted'] == 1) {
                         json.data[i]['permitted'] = "通过审核";
-                        if(json.data[i]['isWithdraw'] == 1) {
+                        if (json.data[i]['isWithdraw'] == 1) {
                             json.data[i]['withdraw'] = "已提现";
                             json.data[i]['edit'] = '';
                         } else {
@@ -127,7 +138,7 @@ $(function() {
 
     $searchBtn = $("#searchBtn");
     $searchBtn.on('click', function() {
-        datatable.ajax.reload(function ( json ) {
+        datatable.ajax.reload(function(json) {
             bindBtnEvent();
         });
     });
@@ -163,18 +174,20 @@ $(function() {
     $checkModalBtn = $("#checkModalBtn");
     $checkModalBtn.on('click', function() {
         var requestData = {
-            "isPermitted" : 1
+            "isPermitted": 1
         };
         $.ajax({
             type: "POST",
             url: "/_admin/s/user_withdraw/" + $checkId.val(),
             data: requestData,
             success: function(data) {
-                if(data.code == 200) {
+                if (data.code == 200) {
                     $checkContent.text("审核成功！");
-                    datatable.ajax.reload(function ( json ) {
+                    datatable.ajax.reload(function(json) {
                         bindBtnEvent();
                     });
+                } else if (data.code == 403) {
+                    $permissionModal.modal('show');
                 } else {
                     $checkContent.text(data.error);
                 }
@@ -195,11 +208,13 @@ $(function() {
             url: "/_admin/s/user_withdraw/" + $passId.val(),
             data: requestData,
             success: function(data) {
-                if(data.code == 200) {
+                if (data.code == 200) {
                     $passContent.text("提现修改成功！");
-                    datatable.ajax.reload(function ( json ) {
+                    datatable.ajax.reload(function(json) {
                         bindBtnEvent();
                     });
+                } else if (data.code == 403) {
+                    $permissionModal.modal('show');
                 } else {
                     $passContent.text(data.error);
                 }

@@ -7,6 +7,7 @@ $(function() {
             success: function(data) {
                 if (data.code == 200) {
                     localStorage.removeItem('user');
+                    localStorage.removeItem('moduleIds');
                     location.href = '../index.html';
                 } else {
                     console.log(data.error);
@@ -21,6 +22,10 @@ $(function() {
     var ids = [3, 32];
     initialMenuTreeByIds(ids);
 
+    if (!initalModulePage(32)) {
+        return;
+    }
+
     var datatable, ajaxData;
     var $articleTable;
     var $linkPreview, $linkModify, $linkDelete;
@@ -30,6 +35,8 @@ $(function() {
     var $linkThumbnails, $thumbnailsModal, $thumbnailsContent;
 
     var $successModal, $errorModal, $errorMsg;
+    var $permissionModal;
+    $permissionModal = $("#permissionModal");
 
     $successModal = $("#successModal");
     $errorModal = $("#errorModal");
@@ -181,6 +188,8 @@ $(function() {
                         $previewId.val(scheduleId);
                         $previewContent.attr('src', '/public/share/article.html?id=' + articleId + '&info_id=' + scheduleId);
                         $previewModal.modal('show');
+                    } else if (data.code == 403) {
+                        $permissionModal.modal('show');
                     } else {
                         console.log(data.error);
                     }
@@ -288,6 +297,8 @@ $(function() {
                     } else if (data.code == 400) {
                         $errorMsg.text("请选择要删除的文章");
                         $errorModal.modal('show');
+                    } else if (data.code == 403) {
+                        $permissionModal.modal('show');
                     } else {
                         $errorMsg.text(data.error);
                         $errorModal.modal('show');
@@ -316,6 +327,8 @@ $(function() {
                     datatable.ajax.reload(function(json) {
                         bindBtnEvent();
                     });
+                } else if (data.code == 403) {
+                    $permissionModal.modal('show');
                 } else {
                     console.log(data.error);
                 }

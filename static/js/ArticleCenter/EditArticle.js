@@ -7,6 +7,7 @@ $(function() {
             success: function(data) {
                 if (data.code == 200) {
                     localStorage.removeItem('user');
+                    localStorage.removeItem('moduleIds');
                     location.href = '../index.html';
                 } else {
                     console.log(data.error);
@@ -21,6 +22,10 @@ $(function() {
     var ids = [3, 32];
     initialMenuTreeByIds(ids);
 
+    if (!initalModulePage(32)) {
+        return;
+    }
+
     var article, info;
     var $articleId, $selectType, $inputSrc, $inputTitle, $inputAdder, $inputFile, $selectStatus, $selectDomain, $inputIntro;
     var $scheduleId, $AdId1, $Price1, $Count1, $AdId2, $Price2, $Count2, $beginTime, $endTime, $begintime, $endtime, $time, $selectPlatform;
@@ -34,6 +39,8 @@ $(function() {
 
     var $inputTitleHint, $inputSrcHint;
     var ue;
+    var $permissionModal;
+    $permissionModal = $("#permissionModal");
 
     $inputTitleHint = $("#inputTitleHint");
     $inputSrcHint = $("#inputSrcHint");
@@ -103,6 +110,8 @@ $(function() {
                     article = data.data.article;
                     info = data.data.info;
                     initialForm(article, info);
+                } else if (data.code == 403) {
+                    $permissionModal.modal('show');
                 } else {
                     console.log(data.error);
                 }
@@ -141,6 +150,8 @@ $(function() {
                     });
                     $selectDomain.append(options);
                     $selectType.find('option[value="' + data.domain + '"]').attr('selected', true);
+                } else if (data.code == 403) {
+                    $permissionModal.modal('show');
                 } else {
                     console.log(result.error);
                 }
@@ -178,6 +189,8 @@ $(function() {
                     success: function(data) {
                         if (data.code == 200) {
                             ue.setContent(data.data.html);
+                        } else if (data.code == 403) {
+                            $permissionModal.modal('show');
                         } else {
                             $errorMsg.html(data.data.msg);
                             $errorModal.modal('show');
@@ -305,6 +318,8 @@ $(function() {
                         $confirmContent.text("删除成功!");
                         $confirmModal.modal('hide');
                         setSchduleFormDisable(false);
+                    } else if (data.code == 403) {
+                        $permissionModal.modal('show');
                     }
                 }
             });
@@ -355,6 +370,8 @@ $(function() {
                             backdrop: 'static',
                             show: true
                         });
+                    } else if (data.code == 403) {
+                        $permissionModal.modal('show');
                     } else {
                         $errorMsg.html(data.error);
                         $errorModal.modal('show');

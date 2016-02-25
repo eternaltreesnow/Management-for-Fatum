@@ -7,6 +7,7 @@ $(function() {
             success: function(data) {
                 if (data.code == 200) {
                     localStorage.removeItem('user');
+                    localStorage.removeItem('moduleIds');
                     location.href = '../index.html';
                 } else {
                     console.log(data.error);
@@ -21,11 +22,16 @@ $(function() {
     var ids = [2, 21];
     initialMenuTreeByIds(ids);
 
+    if (!initalModulePage(21)) {
+        return;
+    }
+
     var $submitBtn, $cancerBtn;
     var $selectType, $inputOwner, $inputTitle, $inputNick, $inputFile, $inputUrl;
     var $selectTypeHint, $inputOwnerHint, $inputTitleHint, $inputNickHint;
     var $successModal, $cancerModal;
     var $errorModal, $errorMsg;
+    var $permissionModal;
 
     $selectType = $("#selectType");
     $inputOwner = $("#inputOwner");
@@ -42,6 +48,8 @@ $(function() {
 
     $errorModal = $("#errorModal");
     $errorMsg = $("#errorMsg");
+
+    $permissionModal = $("#permissionModal");
 
     $submitBtn = $("#submitBtn");
     $submitBtn.on('click', function() {
@@ -69,6 +77,8 @@ $(function() {
                         backdrop: 'static',
                         show: true
                     });
+                } else if (data.code == 403) {
+                    $permissionModal.modal('show');
                 } else {
                     $errorMsg.html(data.error);
                     $errorModal.modal('show');

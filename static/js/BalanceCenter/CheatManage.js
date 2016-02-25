@@ -7,6 +7,7 @@ $(function() {
             success: function(data) {
                 if (data.code == 200) {
                     localStorage.removeItem('user');
+                    localStorage.removeItem('moduleIds');
                     location.href = '../index.html';
                 } else {
                     console.log(data.error);
@@ -20,6 +21,10 @@ $(function() {
 
     var ids = [5, 52];
     initialMenuTreeByIds(ids);
+
+    if (!initalModulePage(52)) {
+        return;
+    }
 
     var datatable;
     var $cheatTable, $searchBtn;

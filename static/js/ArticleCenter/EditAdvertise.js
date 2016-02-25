@@ -7,6 +7,7 @@ $(function() {
             success: function(data) {
                 if (data.code == 200) {
                     localStorage.removeItem('user');
+                    localStorage.removeItem('moduleIds');
                     location.href = '../index.html';
                 } else {
                     console.log(data.error);
@@ -21,6 +22,10 @@ $(function() {
     var ids = [3, 31];
     initialMenuTreeByIds(ids);
 
+    if (!initalModulePage(31)) {
+        return;
+    }
+
     var $advertiseId, $selectType, $inputOwner, $inputTitle, $inputNick, $inputUrl;
     var $submitBtn;
     var $inputOwnerHint, $inputTitleHint;
@@ -28,6 +33,8 @@ $(function() {
     var $successModal;
     var $errorModal, $errorMsg;
     var advertise;
+    var $permissionModal;
+    $permissionModal = $("#permissionModal");
 
     $advertiseId = $("#advertiseId");
     $selectType = $("#selectType");
@@ -53,6 +60,8 @@ $(function() {
                 if (data.code == 200) {
                     advertise = data.data.advertise;
                     initialForm(advertise);
+                } else if (data.code == 403) {
+                    $permissionModal.modal('show');
                 } else {
                     console.log(data.error);
                 }
@@ -110,6 +119,8 @@ $(function() {
                         backdrop: 'static',
                         show: true
                     });
+                } else if (data.code == 403) {
+                    $permissionModal.modal('show');
                 } else {
                     $errorMsg.html(data.error);
                     $errorModal.modal('show');

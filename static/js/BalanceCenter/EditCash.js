@@ -7,6 +7,7 @@ $(function() {
             success: function(data) {
                 if (data.code == 200) {
                     localStorage.removeItem('user');
+                    localStorage.removeItem('moduleIds');
                     location.href = '../index.html';
                 } else {
                     console.log(data.error);
@@ -20,6 +21,10 @@ $(function() {
 
     var ids = [5, 51];
     initialMenuTreeByIds(ids);
+
+    if (!initalModulePage(51)) {
+        return;
+    }
 
     var withdraws;
     var $inputTimePicker;
@@ -64,8 +69,10 @@ $(function() {
                 if (data.code == 200) {
                     withdraws = data.data.withdraws;
                     initialForm(withdraws);
+                } else if (data.code == 403) {
+                    $permissionModal.modal('show');
                 } else {
-                    alert(data.error);
+                    console.log(data.error);
                 }
             },
             error: function(data) {}
@@ -104,6 +111,8 @@ $(function() {
                         backdrop: 'static',
                         show: true
                     });
+                } else if (data.code == 403) {
+                    $permissionModal.modal('show');
                 } else {
                     $errorMsg.html(data.error);
                     $errorModal.modal('show');

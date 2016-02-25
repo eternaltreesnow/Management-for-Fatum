@@ -7,6 +7,7 @@ $(function() {
             success: function(data) {
                 if (data.code == 200) {
                     localStorage.removeItem('user');
+                    localStorage.removeItem('moduleIds');
                     location.href = '../index.html';
                 } else {
                     console.log(data.error);
@@ -21,6 +22,10 @@ $(function() {
     var ids = [3, 32];
     initialMenuTreeByIds(ids);
 
+    if (!initalModulePage(32)) {
+        return;
+    }
+
     var $submitBtn;
     var $selectDomain, $selectType, $time, $inputSrc, $inputTitle, $inputIntro, $inputFile, $AdId1, $AdId2, $endTime;
     var $successModal, $errorMsg, $errorModal;
@@ -29,6 +34,8 @@ $(function() {
     var $videoUrl, $videoLinkBtn;
 
     var $inputTitleHint, $inputSrcHint;
+    var $permissionModal;
+    $permissionModal = $("#permissionModal");
 
     $inputSrc = $("#inputSrc");
     $inputTitle = $("#inputTitle");
@@ -106,6 +113,8 @@ $(function() {
                     options += '<option value="' + value + '">' + value + '</option>';
                 });
                 $selectDomain.append(options);
+            } else if (data.code == 403) {
+                $permissionModal.modal('show');
             } else {
                 console.log(data.error);
             }
@@ -158,6 +167,8 @@ $(function() {
                 success: function(data) {
                     if (data.code == 200) {
                         ue.setContent(data.data.html);
+                    } else if (data.code == 403) {
+                        $permissionModal.modal('show');
                     } else {
                         $errorMsg.html(data.data.msg);
                         $errorModal.modal('show');
@@ -235,6 +246,8 @@ $(function() {
                             backdrop: 'static',
                             show: true
                         });
+                    } else if (data.code == 403) {
+                        $permissionModal.modal('show');
                     } else {
                         $errorMsg.html(data.error);
                         $errorModal.modal('show');

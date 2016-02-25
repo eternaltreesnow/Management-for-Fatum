@@ -7,6 +7,7 @@ $(function() {
             success: function(data) {
                 if (data.code == 200) {
                     localStorage.removeItem('user');
+                    localStorage.removeItem('moduleIds');
                     location.href = '../index.html';
                 } else {
                     console.log(data.error);
@@ -21,12 +22,18 @@ $(function() {
     var ids = [3, 31];
     initialMenuTreeByIds(ids);
 
+    if (!initalModulePage(31)) {
+        return;
+    }
+
     // 变量声明
     var datatable, ajaxData;
     var $advertisementTable;
     var $linkPreview, $linkModify, $linkDelete;
     var $previewModal, $previewId, $previewContent;
     var $searchBtn;
+    var $permissionModal;
+    $permissionModal = $("#permissionModal");
 
     /**
      * [tempcolumn 列数据格式]
@@ -210,6 +217,8 @@ $(function() {
                     datatable.ajax.reload(function(json) {
                         bindBtnEvent();
                     });
+                } else if (data.code == 403) {
+                    $permissionModal.modal('show');
                 } else {
                     console.log(data.error);
                 }

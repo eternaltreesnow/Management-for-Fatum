@@ -7,6 +7,7 @@ $(function() {
             success: function(data) {
                 if (data.code == 200) {
                     localStorage.removeItem('user');
+                    localStorage.removeItem('moduleIds');
                     location.href = '../index.html';
                 } else {
                     console.log(data.error);
@@ -21,12 +22,18 @@ $(function() {
     var ids = [2, 21];
     initialMenuTreeByIds(ids);
 
+    if (!initalModulePage(21)) {
+        return;
+    }
+
     var datatable, ajaxData;
     var $advertisementTable;
     var $linkPreview, $linkModify, $linkDelete;
     var $previewModal, $previewId, $previewContent;
     var $searchBtn;
     var $checkAll;
+    var $permissionModal;
+    $permissionModal = $("#permissionModal");
 
     var column = [
         // {
@@ -88,9 +95,6 @@ $(function() {
                 delete d.length;
                 d.keyword = $("#searchInput").val();
                 d.search.value = $("#searchInput").val();
-            },
-            success: function(json) {
-                console.log(json);
             },
             dataSrc: function(json) {
                 ajaxData = json;
@@ -266,6 +270,8 @@ $(function() {
                     datatable.ajax.reload(function(json) {
                         bindBtnEvent();
                     });
+                } else if (data.code == 403) {
+                    $permissionModal.modal('show');
                 } else {
                     console.log(data.error);
                 }
