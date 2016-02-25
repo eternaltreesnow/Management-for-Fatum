@@ -81,7 +81,8 @@ $(function() {
                 success: function(data) {
                     if(data.code == 200) {
                         localStorage['user'] = data.data.manager.username;
-                        localStorage['moduleIds'] = transModuleId(data.data.modules);
+                        moduleIds =  transModuleId(data.data.modules);
+                        initalModuleNodes(moduleIds);
                         location.href = 'index.html';
                     } else {
                         validateError(data.error);

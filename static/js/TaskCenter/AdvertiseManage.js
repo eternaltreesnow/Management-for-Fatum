@@ -89,6 +89,9 @@ $(function() {
                 d.keyword = $("#searchInput").val();
                 d.search.value = $("#searchInput").val();
             },
+            success: function(json) {
+                console.log(json);
+            },
             dataSrc: function(json) {
                 ajaxData = json;
                 resetData(json);

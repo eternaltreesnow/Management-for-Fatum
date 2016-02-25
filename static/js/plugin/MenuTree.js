@@ -14,7 +14,7 @@ var MenuChildNode = React.createClass({
     render: function() {
         return (
             React.createElement("li", {
-                    className: this.props.data.status
+                    className: this.props.data.status + " " + this.props.data.active
                 },
                 React.createElement("a", {
                     href: this.props.data.url
@@ -29,11 +29,13 @@ var MenuParentNode = React.createClass({
     render: function() {
         var target = "#" + this.props.data.target;
         var collapse = "collapse";
-        if (this.props.data.status.indexOf('active') != -1) {
+        if (this.props.data.active.indexOf('active') != -1) {
             collapse = "collapse in";
         }
         return (
-            React.createElement("li", null,
+            React.createElement("li", {
+                    className: this.props.data.status
+                },
                 React.createElement("a", {
                         href: "javascript:void(0);",
                         "data-toggle": "collapse",
@@ -103,12 +105,14 @@ var menuTreeNodes = [{
     text: "首页",
     url: "../index.html",
     status: "hidden",
+    active: "",
     nodes: []
 }, {
     id: 2,
     text: "任务中心",
     url: "",
     status: "hidden",
+    active: "",
     isparent: true,
     target: "task-drop",
     nodes: [{
@@ -116,12 +120,14 @@ var menuTreeNodes = [{
         text: "广告管理",
         url: "../TaskCenter/AdvertiseManage.html",
         status: "hidden",
+        active: "",
         nodes: []
     }, {
         id: 22,
         text: "文章管理",
         url: "../TaskCenter/ArticleManage.html",
         status: "hidden",
+        active: "",
         nodes: []
     }]
 }, {
@@ -129,6 +135,7 @@ var menuTreeNodes = [{
     text: "文章中心",
     url: "",
     status: "hidden",
+    active: "",
     isparent: true,
     target: "article-drop",
     nodes: [{
@@ -136,12 +143,14 @@ var menuTreeNodes = [{
         text: "广告管理",
         url: "../ArticleCenter/AdvertiseManage.html",
         status: "hidden",
+        active: "",
         nodes: []
     }, {
         id: 32,
         text: "文章管理",
         url: "../ArticleCenter/ArticleManage.html",
         status: "hidden",
+        active: "",
         nodes: []
     }]
 }, {
@@ -149,6 +158,7 @@ var menuTreeNodes = [{
     text: "会员信息",
     url: "",
     status: "hidden",
+    active: "",
     isparent: true,
     target: "vip-drop",
     nodes: [{
@@ -156,12 +166,14 @@ var menuTreeNodes = [{
         text: "基本信息",
         url: "../VipCenter/VipInfo.html",
         status: "hidden",
+        active: "",
         nodes: []
     }, {
         id: 42,
         text: "积分信息",
         url: "../VipCenter/VipCredit.html",
         status: "hidden",
+        active: "",
         nodes: []
     }]
 }, {
@@ -169,6 +181,7 @@ var menuTreeNodes = [{
     text: "结算管理",
     url: "",
     status: "hidden",
+    active: "",
     isparent: true,
     target: "account-drop",
     nodes: [{
@@ -176,12 +189,14 @@ var menuTreeNodes = [{
         text: "提现管理",
         url: "../BalanceCenter/CashManage.html",
         status: "hidden",
+        active: "",
         nodes: []
     }, {
         id: 52,
         text: "作弊管理",
         url: "../BalanceCenter/CheatManage.html",
         status: "hidden",
+        active: "",
         nodes: []
     }]
 }];
@@ -191,7 +206,7 @@ var setActiveNodes = function(id, nodes) {
     } else {
         nodes.map(function(node) {
             if (node.id == id) {
-                node.status += " active";
+                node.active = "active";
             }
             setActiveNodes(id, node.nodes);
         });
@@ -209,11 +224,20 @@ var setModuleNodes = function(id, nodes) {
         });
     }
 }
-var initialMenuTreeByIds = function(ids) {
-    var moduleIds = localStorage['moduleIds'].split(',');
-    moduleIds.map(function(moduleId) {
+var initalModuleNodes = function(ids) {
+    ids.map(function(moduleId) {
         setModuleNodes(moduleId, menuTreeNodes);
     });
+    console.log(menuTreeNodes);
+    localStorage['menuTreeNodes'] = menuTreeNodes;
+}
+var initialMenuTreeByIds = function(ids) {
+    // var moduleIds = localStorage['moduleIds'].split(',');
+    // moduleIds.map(function(moduleId) {
+    //     setModuleNodes(moduleId, menuTreeNodes);
+    // });
+    menuTreeNodes = localStorage['menuTreeNodes'];
+    console.log(menuTreeNodes);
     ids.map(function(id) {
         setActiveNodes(id, menuTreeNodes);
     });
