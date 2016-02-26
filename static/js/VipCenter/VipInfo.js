@@ -140,6 +140,11 @@ $(function() {
             } else {
                 json.data[i]['status'] = '封号';
             }
+            if(json.data[i]['gender'] == 0) {
+                json.data[i]['gender'] = "男";
+            } else {
+                json.data[i]['gender'] = "女";
+            }
         }
         return json;
     }

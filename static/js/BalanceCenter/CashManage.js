@@ -31,7 +31,7 @@ $(function() {
     var $linkCheck, $linkPass, $linkModify;
     var $checkId, $passId;
     var $checkModal, $passModal;
-    var $checkModalBtn, $uncheckModalBtn, $passModalBtn, $unpassModalBtn;
+    var $checkModalBtn, $uncheckModalBtn, $passModalBtn, $returnModalBtn;
     var $checkContent, $passContent;
 
     $checkId = $("#checkId");
@@ -112,7 +112,11 @@ $(function() {
             dataSrc: function(json) {
                 for (var i = 0; i < json.data.length; i++) {
                     json.data[i]['time'] = moment(json.data[i]['time']).format('YYYY-MM-DD HH:mm:ss');
-                    if (json.data[i]['isPermitted'] == 1) {
+                    if(json.data[i]['isPermitted'] == -1) {
+                        json.data[i]['permitted'] = "已驳回";
+                        json.data[i]['withdraw'] = "";
+                        json.data[i]['edit'] = '';
+                    } else if (json.data[i]['isPermitted'] == 1) {
                         json.data[i]['permitted'] = "通过审核";
                         if (json.data[i]['isWithdraw'] == 1) {
                             json.data[i]['withdraw'] = "已提现";
@@ -153,6 +157,8 @@ $(function() {
             $checkId.val($this.parents("tr").children(":first").html());
             $checkContent.text("是否审核该提现信息？");
             $checkModalBtn.show();
+            $uncheckModalBtn.show();
+            $returnModalBtn.hide();
             $checkModal.modal('show');
         });
 
@@ -170,8 +176,9 @@ $(function() {
             location.href = "EditCash.html?id=" + id;
         });
     }
-
+    $returnModalBtn = $("#returnModalBtn");
     $checkModalBtn = $("#checkModalBtn");
+    $uncheckModalBtn = $("#uncheckModalBtn");
     $checkModalBtn.on('click', function() {
         var requestData = {
             "isPermitted": 1
@@ -192,6 +199,36 @@ $(function() {
                     $checkContent.text(data.error);
                 }
                 $checkModalBtn.hide();
+                $uncheckModalBtn.hide();
+                $returnModalBtn.show();
+            },
+            error: function(data) {
+                console.log(data);
+            }
+        });
+    });
+    $uncheckModalBtn.on('click', function() {
+        var requestData = {
+            "isPermitted": -1
+        };
+        $.ajax({
+            type: "POST",
+            url: "/_admin/s/user_withdraw/" + $checkId.val(),
+            data: requestData,
+            success: function(data) {
+                if (data.code == 200) {
+                    $checkContent.text("驳回成功！");
+                    datatable.ajax.reload(function(json) {
+                        bindBtnEvent();
+                    });
+                } else if (data.code == 403) {
+                    $permissionModal.modal('show');
+                } else {
+                    $checkContent.text(data.error);
+                }
+                $checkModalBtn.hide();
+                $uncheckModalBtn.hide();
+                $returnModalBtn.show();
             },
             error: function(data) {
                 console.log(data);
