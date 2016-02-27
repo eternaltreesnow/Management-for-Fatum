@@ -30,10 +30,13 @@ $(function() {
     var $cashTable;
     var $linkCheck, $linkPass, $linkModify;
     var $checkId, $passId;
+    var $datetimepicker;
     var $checkModal, $passModal;
     var $checkModalBtn, $uncheckModalBtn, $passModalBtn, $returnModalBtn;
     var $checkContent, $passContent;
+    var $filterDate;
 
+    $filterDate = $("#filterDate");
     $checkId = $("#checkId");
     $checkModal = $("#checkModal");
     $passId = $("#passId");
@@ -59,18 +62,6 @@ $(function() {
         "data": "withdraw"
     }, {
         "data": "edit"
-    }];
-    var tempdata = [{
-        "id": "1",
-        "user": {
-            "id": "1",
-            "phone": "13300000000",
-            "alipay": "13300000000"
-        },
-        "cash": "500.00",
-        "time": '2015/11/30 15:30',
-        "isPermitted": "0",
-        "isWithdraw": "0"
     }];
 
     /**
@@ -106,6 +97,7 @@ $(function() {
                 delete d.order;
                 d.limit = d.length;
                 delete d.length;
+                d.search.time = moment($filterDate.val()).format('x');
                 d.search.keyword = $("#searchInput").val();
                 d.keyword = $("#searchInput").val();
             },
@@ -145,6 +137,12 @@ $(function() {
         datatable.ajax.reload(function(json) {
             bindBtnEvent();
         });
+    });
+
+    $datetimepicker = $("#datetimepicker");
+    $datetimepicker.datetimepicker({
+        sideBySide: true,
+        format: 'YYYY-MM-DD'
     });
 
     function bindBtnEvent() {

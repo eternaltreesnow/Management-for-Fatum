@@ -142,8 +142,10 @@ $(function() {
             }
             if(json.data[i]['gender'] == 0) {
                 json.data[i]['gender'] = "男";
-            } else {
+            } else if (json.data[i]['gender'] == 1) {
                 json.data[i]['gender'] = "女";
+            } else {
+                json.data[i]['gender'] = '';
             }
         }
         return json;
