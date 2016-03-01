@@ -53,6 +53,14 @@ $(function() {
     }, {
         "data": "user.alipay"
     }, {
+        "data": "profit.totalCash"
+    }, {
+        "data": "profit.withdrawCash"
+    }, {
+        "data": "profit.frozenCash"
+    }, {
+        "data": "profit.incomeCash"
+    }, {
         "data": "cash"
     }, {
         "data": "time"
@@ -104,6 +112,11 @@ $(function() {
             dataSrc: function(json) {
                 for (var i = 0; i < json.data.length; i++) {
                     json.data[i]['time'] = moment(json.data[i]['time']).format('YYYY-MM-DD HH:mm:ss');
+                    json.data[i]['profit']['totalCash'] = json.data[i]['profit']['totalCash'].toFixed(2);
+                    json.data[i]['profit']['withdrawCash'] = json.data[i]['profit']['withdrawCash'].toFixed(2);
+                    json.data[i]['profit']['frozenCash'] = json.data[i]['profit']['frozenCash'].toFixed(2);
+                    json.data[i]['profit']['incomeCash'] = json.data[i]['profit']['incomeCash'].toFixed(2);
+                    json.data[i]['cash'] = json.data[i]['cash'].toFixed(2);
                     if(json.data[i]['isPermitted'] == -1) {
                         json.data[i]['permitted'] = "已驳回";
                         json.data[i]['withdraw'] = "";
