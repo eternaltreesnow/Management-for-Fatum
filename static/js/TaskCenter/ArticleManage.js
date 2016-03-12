@@ -65,12 +65,6 @@ $(function() {
     }, {
         "data": "domain"
     }, {
-        "data": "likeCount"
-    }, {
-        "data": "viewCount"
-    }, {
-        "data": "managerName"
-    }, {
         "data": ""
     }];
 
