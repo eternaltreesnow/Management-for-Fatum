@@ -122,15 +122,31 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">提现审核</h4>
+                        <h4 class="modal-title">提现审核通过确认</h4>
                     </div>
                     <div class="modal-body" id="checkContent">
-                        是否审核该提现信息？
                     </div>
                     <div class="modal-footer">
-                        <a href="javascript:void(0);" class="btn btn-default" data-dismiss="modal" id="returnModalBtn" style="display: none;">返回</a>
-                        <a href="javascript:void(0);" class="btn btn-default" id="uncheckModalBtn">驳回</a>
+                        <a href="javascript:void(0);" class="btn btn-default" data-dismiss="modal">返回</a>
                         <a href="javascript:void(0);" class="btn btn-primary" id="checkModalBtn">审核通过</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="uncheckModal" class="modal fade">
+            <input type="hidden" id="checkId">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">提现驳回确认</h4>
+                    </div>
+                    <div class="modal-body" id="uncheckContent">
+                    </div>
+                    <div class="modal-footer">
+                        <a href="javascript:void(0);" class="btn btn-default" data-dismiss="modal">返回</a>
+                        <a href="javascript:void(0);" class="btn btn-primary" id="uncheckModalBtn">驳回</a>
                     </div>
                 </div>
             </div>

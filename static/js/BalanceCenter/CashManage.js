@@ -28,20 +28,22 @@ $(function() {
 
     var datatable;
     var $cashTable;
-    var $linkCheck, $linkPass, $linkModify;
+    var $linkCheck, $linkPass, $linkModify, $linkUncheck;
     var $checkId, $passId;
     var $datetimepicker;
-    var $checkModal, $passModal;
+    var $checkModal, $passModal, $uncheckModal;
     var $checkModalBtn, $uncheckModalBtn, $passModalBtn, $returnModalBtn;
-    var $checkContent, $passContent;
+    var $checkContent, $passContent, $uncheckContent;
     var $filterDate;
 
     $filterDate = $("#filterDate");
     $checkId = $("#checkId");
     $checkModal = $("#checkModal");
+    $uncheckModal = $("#uncheckModal");
     $passId = $("#passId");
     $passModal = $("#passModal");
     $checkContent = $("#checkContent");
+    $uncheckContent = $("#uncheckContent");
     $passContent = $("#passContent");
 
     var column = [{
@@ -117,7 +119,7 @@ $(function() {
                     json.data[i]['profit']['frozenCash'] = json.data[i]['profit']['frozenCash'].toFixed(2);
                     json.data[i]['profit']['incomeCash'] = json.data[i]['profit']['incomeCash'].toFixed(2);
                     json.data[i]['cash'] = json.data[i]['cash'].toFixed(2);
-                    if(json.data[i]['isPermitted'] == -1) {
+                    if (json.data[i]['isPermitted'] == -1) {
                         json.data[i]['permitted'] = "已驳回";
                         json.data[i]['withdraw'] = "";
                         json.data[i]['edit'] = '';
@@ -133,7 +135,8 @@ $(function() {
                     } else {
                         json.data[i]['permitted'] = "未审核";
                         json.data[i]['withdraw'] = "未提现";
-                        json.data[i]['edit'] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="check">审核</a>'
+                        json.data[i]['edit'] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" data-link="check">审核</a>' +
+                            '<a href="javascript:void(0);" class="btn btn-default btn-xs" data-link="uncheck">驳回</a>'
                     }
                 }
                 return json.data;
@@ -162,15 +165,14 @@ $(function() {
         $linkCheck = $('[data-link="check"]');
         $linkPass = $('[data-link="pass"]');
         $linkModify = $('[data-link="modify"]');
+        $linkUncheck = $('[data-link="uncheck"]');
 
         $linkCheck.on('click', function() {
             var $this = $(this);
             $checkId.val($this.parents("tr").children(":first").html());
             $checkContent.text("是否审核该提现信息？");
-            $checkModalBtn.show();
-            $uncheckModalBtn.show();
-            $returnModalBtn.hide();
             $checkModal.modal('show');
+            $checkModalBtn.show();
         });
 
         $linkPass.on('click', function() {
@@ -185,6 +187,14 @@ $(function() {
             var $this = $(this);
             var id = $this.parents("tr").children(":first").html();
             location.href = "EditCash.html?id=" + id;
+        });
+
+        $linkUncheck.on('click', function() {
+            var $this = $(this);
+            $checkId.val($this.parents("tr").children(":first").html());
+            $uncheckContent.text("是否驳回该提现信息？");
+            $uncheckModal.modal('show');
+            $uncheckModalBtn.show();
         });
     }
     $returnModalBtn = $("#returnModalBtn");
@@ -204,14 +214,12 @@ $(function() {
                     datatable.ajax.reload(function(json) {
                         bindBtnEvent();
                     });
+                    $checkModalBtn.hide();
                 } else if (data.code == 403) {
                     $permissionModal.modal('show');
                 } else {
                     $checkContent.text(data.error);
                 }
-                $checkModalBtn.hide();
-                $uncheckModalBtn.hide();
-                $returnModalBtn.show();
             },
             error: function(data) {
                 console.log(data);
@@ -228,18 +236,16 @@ $(function() {
             data: requestData,
             success: function(data) {
                 if (data.code == 200) {
-                    $checkContent.text("驳回成功！");
+                    $uncheckContent.text("驳回成功！");
                     datatable.ajax.reload(function(json) {
                         bindBtnEvent();
                     });
+                    $uncheckModalBtn.hide();
                 } else if (data.code == 403) {
                     $permissionModal.modal('show');
                 } else {
-                    $checkContent.text(data.error);
+                    $uncheckContent.text(data.error);
                 }
-                $checkModalBtn.hide();
-                $uncheckModalBtn.hide();
-                $returnModalBtn.show();
             },
             error: function(data) {
                 console.log(data);

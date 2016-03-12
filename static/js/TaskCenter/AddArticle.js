@@ -28,12 +28,12 @@ $(function() {
 
     var $submitBtn;
     var $selectDomain;
-    var $selectClassify, $time, $selectType, $inputSrc, $inputTitle, $inputIntro, $inputFile, $inputUrl, $AdId, $profitLimit, $endTime;
+    var $selectClassify, $time, $selectType, $inputSrc, $inputTitle, $inputIntro, $inputFile, $inputUrl, $AdId1, $AdId2, $profitLimit, $endTime;
     var $successModal, $errorMsg, $errorModal;
     var $beginDatetimepicker, $endDatetimepicker;
     var $videoUrl, $videoLinkBtn;
 
-    var $inputTitleHint, $inputSrcHint, $inputIntroHint, $inputFileHint, $inputUrlHint, $AdIdHint, $profitLimitHint;
+    var $inputTitleHint, $inputSrcHint, $inputIntroHint, $inputFileHint, $inputUrlHint, $AdId1Hint, $AdId2Hint, $profitLimitHint;
 
     var $permissionModal;
     $permissionModal = $("#permissionModal");
@@ -43,7 +43,8 @@ $(function() {
     $inputIntro = $("#inputIntro");
     $inputFile = $("#inputFile");
     $inputUrl = $("#inputUrl");
-    $AdId = $("#AdId");
+    $AdId1 = $("#AdId1");
+    $AdId2 = $("#AdId2");
     $profitLimit = $("#profitLimit");
     $endTime = $("#endTime");
 
@@ -52,7 +53,8 @@ $(function() {
     $inputIntroHint = $("#inputIntroHint");
     $inputFileHint = $("#inputFileHint");
     $inputUrlHint = $("#inputUrlHint");
-    $AdIdHint = $("#AdIdHint");
+    $AdId1Hint = $("#AdId1Hint");
+    $AdId2Hint = $("#AdId2Hint");
     $profitLimitHint = $("#profitLimitHint");
 
     $successModal = $("#successModal");
@@ -129,8 +131,11 @@ $(function() {
     $inputUrl.on('input', function() {
         $inputUrl.parent().removeClass('has-error');
     });
-    $AdId.on('input', function() {
-        $AdId.parent().removeClass('has-error');
+    $AdId1.on('input', function() {
+        $AdId1.parent().removeClass('has-error');
+    });
+    $AdId2.on('input', function() {
+        $AdId2.parent().removeClass('has-error');
     });
     $profitLimit.on('input', function() {
         $profitLimit.parent().removeClass('has-error');
@@ -182,9 +187,14 @@ $(function() {
                 $inputUrl.focus();
                 return;
             }
-            if ($selectClassify.val() == 1 && $AdId.val() === "") {
-                $AdId.parent().addClass('has-error');
-                $AdId.focus();
+            if ($selectClassify.val() == 1 && $AdId1.val() === "") {
+                $AdId1.parent().addClass('has-error');
+                $AdId1.focus();
+                return;
+            }
+            if ($selectClassify.val() == 1 && $AdId2.val() === "") {
+                $AdId2.parent().addClass('has-error');
+                $AdId2.focus();
                 return;
             }
             if ($endTime.val() === "") {
