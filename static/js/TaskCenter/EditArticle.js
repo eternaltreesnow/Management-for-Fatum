@@ -28,7 +28,7 @@ $(function() {
 
     var article, info;
     var $articleId, $selectClassify, $selectType, $inputSrc, $inputTitle, $inputAdder, $inputFile, $selectStatus, $selectDomain, $inputUrl, $inputIntro;
-    var $scheduleId, $AdId, $Price, $Count, $beginTime, $endTime, $begintime, $endtime, $time, $profitLimit, $selectPlatform;
+    var $scheduleId, $AdId, $Price, $Count, $beginTime, $endTime, $begintime, $endtime, $profitLimit, $selectPlatform;
     var $submitBtn;
     var $deleteScheduleBtn, $deleteConfirmBtn, $confirmModal, $confirmContent;
     var $previewBtn, $previewModal, $previewContent;
@@ -63,7 +63,6 @@ $(function() {
     $endTime = $("#endTime");
     $begintime = $("#begintime");
     $endtime = $("#endtime");
-    $time = $("#time");
     $profitLimit = $("#profitLimit");
     $selectPlatform = $("#selectPlatform");
 
@@ -188,7 +187,7 @@ $(function() {
             $("#editorContainer").hide();
         }
 
-        if (info.advertiserId1 == null && info.advertiserId2 == null) {
+        if (info.beginTime == null) {
             $beginDatetimepicker.data("DateTimePicker").defaultDate(moment(new Date()).format('YYYY-MM-DD HH:mm:ss'));
         } else {
             // initial Schedule info
@@ -343,7 +342,6 @@ $(function() {
                 $inputTitle.focus();
                 return;
             }
-            $time.val(event.timeStamp);
             $begintime.val(moment($("#beginTime").val()).format('x'));
             $endtime.val(moment($("#endTime").val()).format('x'));
             var formdata = new FormData($("#editArticleForm")[0]);

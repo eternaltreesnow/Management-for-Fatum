@@ -44,7 +44,7 @@ $(function() {
     $inputFile = $("#inputFile");
     $inputUrl = $("#inputUrl");
     $AdId1 = $("#AdId1");
-    $AdId2 = $("#AdId2");
+    // $AdId2 = $("#AdId2");
     $profitLimit = $("#profitLimit");
     $endTime = $("#endTime");
 
@@ -54,7 +54,7 @@ $(function() {
     $inputFileHint = $("#inputFileHint");
     $inputUrlHint = $("#inputUrlHint");
     $AdId1Hint = $("#AdId1Hint");
-    $AdId2Hint = $("#AdId2Hint");
+    // $AdId2Hint = $("#AdId2Hint");
     $profitLimitHint = $("#profitLimitHint");
 
     $successModal = $("#successModal");
@@ -134,9 +134,9 @@ $(function() {
     $AdId1.on('input', function() {
         $AdId1.parent().removeClass('has-error');
     });
-    $AdId2.on('input', function() {
-        $AdId2.parent().removeClass('has-error');
-    });
+    // $AdId2.on('input', function() {
+    //     $AdId2.parent().removeClass('has-error');
+    // });
     $profitLimit.on('input', function() {
         $profitLimit.parent().removeClass('has-error');
     });
@@ -156,7 +156,6 @@ $(function() {
                 $errorModal.modal('show');
             }
         });
-
         $time = $("#time");
         $begintime = $("#begintime");
         $endtime = $("#endtime");
@@ -192,11 +191,6 @@ $(function() {
                 $AdId1.focus();
                 return;
             }
-            if ($selectClassify.val() == 1 && $AdId2.val() === "") {
-                $AdId2.parent().addClass('has-error');
-                $AdId2.focus();
-                return;
-            }
             if ($endTime.val() === "") {
                 $endTime.focus();
                 return;
@@ -207,7 +201,7 @@ $(function() {
                 return;
             }
 
-            $time.val(event.timeStamp);
+            $time.val(moment(new Date()).format('x'));
             $begintime.val(moment($("#beginTime").val()).format('x'));
             $endtime.val(moment($("#endTime").val()).format('x'));
             var formdata = new FormData($("#addArticleForm")[0]);
