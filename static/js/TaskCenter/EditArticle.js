@@ -283,6 +283,10 @@ $(function() {
         }
     });
 
+    $Price.on('input', function() {
+        $Price.parent().removeClass('has-error');
+    });
+
     $selectClassify.on('change', function() {
         if ($scheduleId.val() != "") {
             $classifyModal.modal('show');
@@ -452,6 +456,11 @@ $(function() {
         if ($Count.val() === "") {
             $Count.parent().addClass('has-error');
             $Count.focus();
+            return 0;
+        }
+        if ($Price.val() === "") {
+            $Price.parent().addClass('has-error');
+            $Price.focus();
             return 0;
         }
         return 1;

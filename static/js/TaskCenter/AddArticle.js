@@ -28,7 +28,7 @@ $(function() {
 
     var $submitBtn;
     var $selectDomain;
-    var $selectClassify, $time, $selectType, $inputSrc, $inputTitle, $inputIntro, $inputFile, $inputUrl, $AdId1, $Count, $profitLimit, $endTime;
+    var $selectClassify, $time, $selectType, $inputSrc, $inputTitle, $inputIntro, $inputFile, $inputUrl, $AdId1, $Price, $Count, $profitLimit, $endTime;
     var $successModal, $errorMsg, $errorModal;
     var $beginDatetimepicker, $endDatetimepicker;
     var $videoUrl, $videoLinkBtn;
@@ -47,6 +47,7 @@ $(function() {
     $Count = $("#Count");
     $profitLimit = $("#profitLimit");
     $endTime = $("#endTime");
+    $Price = $("#Price");
 
     $inputSrcHint = $("#inputSrcHint");
     $inputTitleHint = $("#inputTitleHint");
@@ -133,6 +134,9 @@ $(function() {
     });
     $AdId1.on('input', function() {
         $AdId1.parent().removeClass('has-error');
+    });
+    $Price.on('input', function() {
+        $Price.parent().removeClass('has-error');
     });
     $Count.on('input', function() {
         $Count.parent().removeClass('has-error');
@@ -225,6 +229,10 @@ $(function() {
         if ($selectClassify.val() == 1 && $AdId1.val() === "") {
             $AdId1.parent().addClass('has-error');
             $AdId1.focus();
+            return 0;
+        }
+        if ($Price.val() === "") {
+            $Price.focus();
             return 0;
         }
         if ($Count.val() === "") {
