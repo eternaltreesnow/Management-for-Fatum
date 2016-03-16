@@ -37,13 +37,14 @@ $(function() {
     var $errorModal, $errorMsg;
     var $videoUrl, $videoLinkBtn;
 
-    var $inputTitleHint, $inputSrcHint;
+    var $inputTitleHint, $inputSrcHint, $inputIntroHint;
     var ue;
     var $permissionModal;
     $permissionModal = $("#permissionModal");
 
     $inputTitleHint = $("#inputTitleHint");
     $inputSrcHint = $("#inputSrcHint");
+    $inputIntroHint = $("#inputIntroHint");
 
     $articleId = $("#articleId");
     $selectType = $("#selectType");
@@ -268,6 +269,19 @@ $(function() {
         }
     });
 
+    $inputIntro.on('input', function() {
+        $inputIntro.parent().removeClass('has-error');
+    });
+    $inputIntro.on('blur', function() {
+        if ($inputIntro.val() !== "") {
+            $inputIntroHint.removeClass("form-hint-nec").addClass("form-hint-suc");
+            $inputIntroHint.html('<span class="glyphicon glyphicon-ok"></span>');
+        } else {
+            $inputIntroHint.removeClass("form-hint-suc").addClass("form-hint-nec");
+            $inputIntroHint.html('(*必填)');
+        }
+    });
+
     function setSchduleFormDisable(disableStatus) {
         if (disableStatus == false) {
             $scheduleId.val('');
@@ -340,17 +354,9 @@ $(function() {
             }
         });
 
-        console.log();
         $submitBtn = $("#submitBtn");
         $submitBtn.on('click', function(event) {
-            if ($inputSrc.val() === "") {
-                $inputSrc.parent().addClass('has-error');
-                $inputSrc.focus();
-                return;
-            }
-            if ($inputTitle.val() === "") {
-                $inputTitle.parent().addClass('has-error');
-                $inputTitle.focus();
+            if (!checkFormValidation()) {
                 return;
             }
             $time.val(event.timeStamp);
@@ -382,5 +388,24 @@ $(function() {
                 }
             });
         });
+    }
+
+    function checkFormValidation() {
+        if ($inputSrc.val() === "") {
+            $inputSrc.parent().addClass('has-error');
+            $inputSrc.focus();
+            return 0;
+        }
+        if ($inputTitle.val() === "") {
+            $inputTitle.parent().addClass('has-error');
+            $inputTitle.focus();
+            return 0;
+        }
+        if ($inputIntro.val() === "") {
+            $inputIntro.parent().addClass('has-error');
+            $inputIntro.focus();
+            return 0;
+        }
+        return 1;
     }
 });

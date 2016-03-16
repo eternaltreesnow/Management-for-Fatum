@@ -37,13 +37,14 @@ $(function() {
     var $videoUrl, $videoLinkBtn;
     var ue;
 
-    var $inputTitleHint, $inputSrcHint;
+    var $inputTitleHint, $inputSrcHint, $inputIntroHint;
 
     var $permissionModal;
     $permissionModal = $("#permissionModal");
 
     $inputTitleHint = $("#inputTitleHint");
     $inputSrcHint = $("#inputSrcHint");
+    $inputIntroHint = $("#inputIntroHint");
 
     $articleId = $("#articleId");
     $selectClassify = $("#selectClassify");
@@ -250,6 +251,19 @@ $(function() {
         }
     });
 
+    $inputIntro.on('input', function() {
+        $inputIntro.parent().removeClass('has-error');
+    });
+    $inputIntro.on('blur', function() {
+        if ($inputIntro.val() !== "") {
+            $inputIntroHint.removeClass("form-hint-nec").addClass("form-hint-suc");
+            $inputIntroHint.html('<span class="glyphicon glyphicon-ok"></span>');
+        } else {
+            $inputIntroHint.removeClass("form-hint-suc").addClass("form-hint-nec");
+            $inputIntroHint.html('(*必填)');
+        }
+    });
+
     $selectClassify.on('change', function() {
         if ($selectClassify.val() == 1) {
             $("#inputUrlContainer").hide();
@@ -332,14 +346,7 @@ $(function() {
 
         $submitBtn = $("#submitBtn");
         $submitBtn.on('click', function(event) {
-            if ($inputSrc.val() === "") {
-                $inputSrc.parent().addClass('has-error');
-                $inputSrc.focus();
-                return;
-            }
-            if ($inputTitle.val() === "") {
-                $inputTitle.parent().addClass('has-error');
-                $inputTitle.focus();
+            if (!checkFormValidation()) {
                 return;
             }
             $begintime.val(moment($("#beginTime").val()).format('x'));
@@ -370,5 +377,24 @@ $(function() {
                 }
             });
         });
+    }
+
+    function checkFormValidation() {
+        if ($inputSrc.val() === "") {
+            $inputSrc.parent().addClass('has-error');
+            $inputSrc.focus();
+            return 0;
+        }
+        if ($inputTitle.val() === "") {
+            $inputTitle.parent().addClass('has-error');
+            $inputTitle.focus();
+            return 0;
+        }
+        if ($inputIntro.val() === "") {
+            $inputIntro.parent().addClass('has-error');
+            $inputIntro.focus();
+            return 0;
+        }
+        return 1;
     }
 });
