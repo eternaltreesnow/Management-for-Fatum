@@ -37,14 +37,20 @@ $(function() {
     var $videoUrl, $videoLinkBtn;
     var ue;
 
-    var $inputTitleHint, $inputSrcHint, $inputIntroHint;
+    var $inputTitleHint, $inputSrcHint, $inputIntroHint, $CountHint;
 
     var $permissionModal;
     $permissionModal = $("#permissionModal");
 
+    var $classifyModal, $confirmDeleteBtn, $classifyContent;
+    $classifyModal = $("#classifyModal");
+    $classifyContent = $("#classifyContent");
+    $confirmDeleteBtn = $("#confirmDeleteBtn");
+
     $inputTitleHint = $("#inputTitleHint");
     $inputSrcHint = $("#inputSrcHint");
     $inputIntroHint = $("#inputIntroHint");
+    $CountHint = $("#CountHint");
 
     $articleId = $("#articleId");
     $selectClassify = $("#selectClassify");
@@ -264,16 +270,64 @@ $(function() {
         }
     });
 
-    $selectClassify.on('change', function() {
-        if ($selectClassify.val() == 1) {
-            $("#inputUrlContainer").hide();
-            $("#adIdContainer").show();
-            $("#editorContainer").show();
+    $Count.on('input', function() {
+        $Count.parent().removeClass('has-error');
+    });
+    $Count.on('blur', function() {
+        if ($Count.val() !== "") {
+            $CountHint.removeClass("form-hint-nec").addClass("form-hint-suc");
+            $CountHint.html('<span class="glyphicon glyphicon-ok"></span>');
         } else {
-            $("#inputUrlContainer").show();
-            $("#adIdContainer").hide();
-            $("#editorContainer").hide();
+            $CountHint.removeClass("form-hint-suc").addClass("form-hint-nec");
+            $CountHint.html('(*必填)');
         }
+    });
+
+    $selectClassify.on('change', function() {
+        if ($scheduleId.val() != "") {
+            $classifyModal.modal('show');
+        } else {
+            if ($selectClassify.val() == 1) {
+                $("#inputUrlContainer").hide();
+                $("#adIdContainer").show();
+                $("#editorContainer").show();
+            } else {
+                $("#inputUrlContainer").show();
+                $("#adIdContainer").hide();
+                $("#editorContainer").hide();
+            }
+        }
+    });
+
+    $confirmDeleteBtn.on('click', function() {
+        $classifyContent.text('重置中...');
+        $.ajax({
+            type: "DELETE",
+            url: "/_admin/s/task/infos/" + $scheduleId.val(),
+            success: function(data) {
+                if (data.code == 200) {
+                    $classifyContent.text("重置成功!");
+                    $classifyModal.modal('hide');
+                    if ($selectClassify.val() == 1) {
+                        $("#inputUrlContainer").hide();
+                        $("#adIdContainer").show();
+                        $("#editorContainer").show();
+                    } else {
+                        $("#inputUrlContainer").show();
+                        $("#adIdContainer").hide();
+                        $("#editorContainer").hide();
+                    }
+                    setSchduleFormDisable(false);
+                } else if (data.code == 403) {
+                    $permissionModal.modal('show');
+                } else {
+                    console.log(data);
+                }
+            },
+            error: function(data) {
+                console.log(data);
+            }
+        });
     });
 
     function setSchduleFormDisable(disableStatus) {
@@ -393,6 +447,11 @@ $(function() {
         if ($inputIntro.val() === "") {
             $inputIntro.parent().addClass('has-error');
             $inputIntro.focus();
+            return 0;
+        }
+        if ($Count.val() === "") {
+            $Count.parent().addClass('has-error');
+            $Count.focus();
             return 0;
         }
         return 1;

@@ -28,7 +28,7 @@ $(function() {
 
     var $submitBtn;
     var $selectDomain;
-    var $selectClassify, $time, $selectType, $inputSrc, $inputTitle, $inputIntro, $inputFile, $inputUrl, $AdId1, $AdId2, $profitLimit, $endTime;
+    var $selectClassify, $time, $selectType, $inputSrc, $inputTitle, $inputIntro, $inputFile, $inputUrl, $AdId1, $Count, $profitLimit, $endTime;
     var $successModal, $errorMsg, $errorModal;
     var $beginDatetimepicker, $endDatetimepicker;
     var $videoUrl, $videoLinkBtn;
@@ -44,7 +44,7 @@ $(function() {
     $inputFile = $("#inputFile");
     $inputUrl = $("#inputUrl");
     $AdId1 = $("#AdId1");
-    // $AdId2 = $("#AdId2");
+    $Count = $("#Count");
     $profitLimit = $("#profitLimit");
     $endTime = $("#endTime");
 
@@ -134,9 +134,9 @@ $(function() {
     $AdId1.on('input', function() {
         $AdId1.parent().removeClass('has-error');
     });
-    // $AdId2.on('input', function() {
-    //     $AdId2.parent().removeClass('has-error');
-    // });
+    $Count.on('input', function() {
+        $Count.parent().removeClass('has-error');
+    });
     $profitLimit.on('input', function() {
         $profitLimit.parent().removeClass('has-error');
     });
@@ -161,43 +161,7 @@ $(function() {
         $endtime = $("#endtime");
         $submitBtn = $("#submitBtn");
         $submitBtn.on('click', function(event) {
-            if ($inputTitle.val() === "") {
-                $inputTitle.parent().addClass('has-error');
-                $inputTitle.focus();
-                return;
-            }
-            if ($inputSrc.val() === "") {
-                $inputSrc.parent().addClass('has-error');
-                $inputSrc.focus();
-                return;
-            }
-            if ($inputIntro.val() === "") {
-                $inputIntro.parent().addClass('has-error');
-                $inputIntro.focus();
-                return;
-            }
-            if ($inputFile.val() === "") {
-                $inputFile.parent().addClass('has-error');
-                $inputFile.focus();
-                return;
-            }
-            if ($selectClassify.val() == 2 && $inputUrl.val() === "") {
-                $inputUrl.parent().addClass('has-error');
-                $inputUrl.focus();
-                return;
-            }
-            if ($selectClassify.val() == 1 && $AdId1.val() === "") {
-                $AdId1.parent().addClass('has-error');
-                $AdId1.focus();
-                return;
-            }
-            if ($endTime.val() === "") {
-                $endTime.focus();
-                return;
-            }
-            if ($profitLimit.val() === "") {
-                $profitLimit.parent().addClass('has-error');
-                $profitLimit.focus();
+            if (!checkFormValidation()) {
                 return;
             }
 
@@ -232,6 +196,53 @@ $(function() {
         });
     });
 
+    function checkFormValidation() {
+        if ($inputTitle.val() === "") {
+            $inputTitle.parent().addClass('has-error');
+            $inputTitle.focus();
+            return 0;
+        }
+        if ($inputSrc.val() === "") {
+            $inputSrc.parent().addClass('has-error');
+            $inputSrc.focus();
+            return 0;
+        }
+        if ($inputIntro.val() === "") {
+            $inputIntro.parent().addClass('has-error');
+            $inputIntro.focus();
+            return 0;
+        }
+        if ($inputFile.val() === "") {
+            $inputFile.parent().addClass('has-error');
+            $inputFile.focus();
+            return 0;
+        }
+        if ($selectClassify.val() == 2 && $inputUrl.val() === "") {
+            $inputUrl.parent().addClass('has-error');
+            $inputUrl.focus();
+            return 0;
+        }
+        if ($selectClassify.val() == 1 && $AdId1.val() === "") {
+            $AdId1.parent().addClass('has-error');
+            $AdId1.focus();
+            return 0;
+        }
+        if ($Count.val() === "") {
+            $Count.focus();
+            return 0;
+        }
+        if ($endTime.val() === "") {
+            $endTime.focus();
+            return 0;
+        }
+        if ($profitLimit.val() === "") {
+            $profitLimit.parent().addClass('has-error');
+            $profitLimit.focus();
+            return 0;
+        }
+        return 1;
+    }
+
     /**
      * [$beginDatetimepicker 排期起始时间选择器]
      * [$endDatetimepicker 排期结束时间选择器]
@@ -256,15 +267,18 @@ $(function() {
         $beginDatetimepicker.data("DateTimePicker").maxDate(e.date);
     });
 
+    $inputUrlContainer = $("#inputUrlContainer");
+    $adIdContainer = $("#adIdContainer");
+    $editorContainer = $("#editorContainer");
     $selectClassify.on('change', function() {
         if ($selectClassify.val() == 1) {
-            $("#inputUrlContainer").hide();
-            $("#adIdContainer").show();
-            $("#editorContainer").show();
+            $inputUrlContainer.hide();
+            $adIdContainer.show();
+            $editorContainer.show();
         } else {
-            $("#inputUrlContainer").show();
-            $("#adIdContainer").hide();
-            $("#editorContainer").hide();
+            $inputUrlContainer.show();
+            $adIdContainer.hide();
+            $editorContainer.hide();
         }
     });
 });
